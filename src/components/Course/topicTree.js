@@ -1,47 +1,79 @@
 import React, { Component } from 'react';
 import SortableTree from 'react-sortable-tree';
 import 'react-sortable-tree/style.css'; // This only needs to be imported once in your app
-
+import Card from '../UI/Card';
 
 export default class Tree extends Component {
   constructor(props) {
-    console.log('tree');
-    console.log(props.treeData);
+
     super(props);
-    
+
     this.state = {
       treeData: props.treeData,
       treeFunction: props.treeFunction
     };
   }
 
-  componentDidUpdate (prevProps) {
-      console.log("did update");
-      if (this.props.treeData!==prevProps.treeData){
-        this.setState({treeData: this.props.treeData});
+  handleTreeOnChange = treeData => {
+    this.setState({ treeData });
+    this.props.setTreeData(treeData);
+    if (treeData.lenght < 1) {
+      this.props.setButtonDisabled(true);
+    } else {
+      if (treeData.length === 1 && treeData[0].title === "empty") {
+        this.props.setButtonDisabled(true);
+      } else {
+
+        this.props.setButtonDisabled(false);
       }
+    }
+  };
+
+  componentDidMount() {
+
+
+    this.setState({ treeData: this.props.treeData });
+    this.props.setTreeData(this.props.treeData);
+    if (this.props.treeData.lenght < 1) {
+      this.props.setButtonDisabled(true);
+    } else {
+      if (this.props.treeData.length === 1 && this.props.treeData[0].title === "empty") {
+        this.props.setButtonDisabled(true);
+      } else {
+
+        this.props.setButtonDisabled(false);
+      }
+     
+    }
+
   }
 
-  lineClick(id) {
-      console.log(id);
-      this.props.onSelectedTopic(id);
+  lineClick(id, treeData) {
+    console.log(id);
+
+    this.props.onSelectedTopic(id);
   }
 
- 
+  saveCourseHandler(event) {
+    //console.log(topics);
+  }
+
 
   render() {
     return (
-      <div style={{ height: 400 }}>
-        <SortableTree
-          treeData={this.state.treeData}
-          onChange={treeData => this.setState({ treeData })
-            }
-            getNodeKey = {({ node }) => node.id}
-            generateNodeProps = {rowInfo =>({
-                onClick: () => this.lineClick(rowInfo.node.id)
+      <section className="ingredient-form" style={{ height: 400 }}>
+        <Card style={{ height: 400 }}>
+          <SortableTree
+            treeData={this.state.treeData}
+            onChange={this.handleTreeOnChange}
+            getNodeKey={({ node }) => node.id}
+            generateNodeProps={rowInfo => ({
+              onClick: () => this.lineClick(rowInfo.node.id)
             })}
-        />
-      </div>
+          />
+
+        </Card>
+      </section>
     );
   }
 }

@@ -4,7 +4,7 @@ import './IngredientList.css';
 import Card from '../UI/Card';
 import Area from './Area';
 import axios from 'axios';
-import domain from './Domain';
+
 
 const Areas = (props) => {
 
@@ -12,7 +12,8 @@ const Areas = (props) => {
   const [selectedArea, setSelectedArea] = useState('');
 
   useEffect(()=>{
-        axios.get('http://localhost:3000/react/get-areas',{ params: { domainId: ((props.selectedDomain!=='')?props.selectedDomain:'-1') }})
+    console.log(props.selectedDomain);
+        axios.get('http://localhost:3000/react/get-areas',{ params: { domainId: ((props.selectedDomain&&props.selectedDomain!=='')?props.selectedDomain:'-1') }})
     .then(areas =>{
      
       setAreas(areas.data);
@@ -22,9 +23,7 @@ const Areas = (props) => {
     });
   },[props.selectedDomain]);
 
-  useEffect(()=>{
-    console.log('Area processing');
-  });
+  
 
   const onAreaChange = areaId => {
     props.onChangeArea(areaId);

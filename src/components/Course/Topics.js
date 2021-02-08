@@ -34,6 +34,7 @@ const Topics = React.memo(props => {
     console.log('topics');
     console.log(selectedTopics);
     props.onSelectedTopics(selectedTopics);
+    props.onShowPreview(true);
     event.preventDefault();
   };
 

@@ -51,18 +51,7 @@ const Results = React.memo(props => {
     }
 
 
-    return (
-        <section className="ingredient-form">
-            <Card>
-                <h3 style={{display:"inline"}}>Selected topics</h3> (Press to see preview)
-               
-                
-                
-                            {topicsToDisplay}
-                            <button type="button" onClick={saveCourseHandler} disabled={buttonDisabled}>Save</button>
-                           
-            </Card>
-        </section>
+    return ( null
     );
 });
 
