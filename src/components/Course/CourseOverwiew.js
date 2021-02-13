@@ -8,10 +8,14 @@ import Card from '../UI/Card';
 const CourseOverview = React.memo(props => {
 
 
+    console.log("courseoverview");
+    console.log(props.topics);
 
 const topicsToDisplay = props.topics.map(topic => {
 
-      return <TopicForOverview key={topic.id} topic={topic}/>;//<Topic topic={topic} />
+    console.log("topic");
+    console.log(topic);
+      return <TopicForOverview key={topic.id} topic={topic} nodeClick={props.nodeClick}/>;//<Topic topic={topic} />
   });
 
  
@@ -19,15 +23,13 @@ const topicsToDisplay = props.topics.map(topic => {
     const processCourses = () => {
       
         return (
-            <section className="ingredient-form">
-      <Card>
+          
             <table>
                 <tbody>
                     {topicsToDisplay}
                 </tbody>
             </table>
-            </Card>
-            </section>
+         
         );
     }
 

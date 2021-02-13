@@ -14,13 +14,10 @@ const Results = React.memo(props => {
     useEffect(() => {
         console.log('output');
         console.log(props.selectedTopics.length);
-        axios.get('http://localhost:3000/react/get-selected-topics', { params: { id: ((props.selectedTopics.length>0)?props.selectedTopics:['-1']) } })
+        axios.get('http://localhost:3000/react/get-selected-topics', { params: { id: ((props.selectedTopics && props.selectedTopics.length > 0) ? props.selectedTopics : ['-1']) } })
             .then(topics => {
-                console.log('topics1');
-                console.log(topics);
                 setTopics(topics.data);
-                console.log('length='+topics.data.length);
-                if (topics.data.length>0){
+                if (topics.data.length > 0) {
                     setButtonDisabled(false);
                 } else {
                     setButtonDisabled(true);
@@ -35,7 +32,7 @@ const Results = React.memo(props => {
     //   // ...
     // };
 
-    const onTopicClick = (topicId) =>{
+    const onTopicClick = (topicId) => {
         props.onSelectedTopic(topicId);
         console.log(topicId);
 
@@ -43,15 +40,15 @@ const Results = React.memo(props => {
 
     const topicsToDisplay = topics.map(topic => {
 
-        return <Result par={topic.teaser} name={topic.name} key={topic.id} topicId = {topic.id} contentHtml={topic.contentHtml} onClick={onTopicClick}/>
+        return <Result par={topic.teaser} name={topic.name} key={topic.id} topicId={topic.id} contentHtml={topic.contentHtml} onClick={onTopicClick} />
     });
 
-    const saveCourseHandler = event =>{
+    const saveCourseHandler = event => {
         console.log(topics);
     }
 
 
-    return ( null
+    return (null
     );
 });
 

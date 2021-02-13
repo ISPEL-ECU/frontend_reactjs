@@ -4,44 +4,69 @@ import Card from '../UI/Card';
 
 import Domain from './Domain'
 import './IngredientForm.css';
+import Form from 'react-bootstrap/Form';
+import FormGroup from 'react-bootstrap/FormGroup';
 
 import axios from 'axios';
 
 const Domains = React.memo(props => {
   const [domains, setDomains] = useState([]);
+  const [showDomains, setShowDomains] = useState(true);
 
-  useEffect(()=>{
+  useEffect(() => {
     axios.get('http://localhost:3000/react/get-domains')
-        .then(domains =>{
-          
-            setDomains(domains.data);
-            onDomainChange(domains.data[0].id);
-           
-        });
-  },[]);
+      .then(domains => {
+
+        setDomains(domains.data);
+        onDomainChange(domains.data[0].id);
+
+      });
+  }, []);
   const onDomainChange = domainId => {
     props.onChangeDomain(domainId);
-    
+
     //event.preventDefault();
     // ...
   };
 
-  const domainsToDisplay = domains.map(domain =>{
-   
+  const handleSearchCheck = (event) =>{
+    if (event.target.checked){
+      props.showSearch(true);
+      setShowDomains(false);
+    } else{
+      props.showSearch(false);
+      setShowDomains(true);
+    }
+  }
+
+  const domainsToDisplay = domains.map(domain => {
+
     return <Domain id={domain.id} name={domain.name} key={domain.id} />
-});
+  });
+  
+  const HandleShowDomains = () =>{
+    if (showDomains) {
+      return(
+        null
+      )
+    }
+  }
 
   return (
-    <section className="ingredient-form">
-      <Card>
-      <div>
-                <select  style={{display:"inline"}}  onChange={(event)=>onDomainChange(event.target.value)}>
-                 {domainsToDisplay}
-                 </select> Select domain
-               
-            </div>
-      </Card>
-    </section>
+    <FormGroup>
+    <Form.Check 
+    type = "checkbox"
+    label = "Advanced Search"
+    id = "advancedSearch"
+    onChange = {handleSearchCheck}
+    />
+    <label htmlFor="domainSelect" hidden ={!showDomains}>Select Domain</label>
+    <Form.Control as="select"  hidden ={!showDomains} id="domainSelect" style={{ display: "inline" }} onChange={(event) => onDomainChange(event.target.value)}>
+      {domainsToDisplay}
+    </Form.Control>
+    </FormGroup>
+
+
   );
 });
 

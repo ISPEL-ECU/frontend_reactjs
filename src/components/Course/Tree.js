@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import * as d3 from 'd3';
 import * as forceModule from "d3-force";
+import { Graph } from "react-d3-graph";
 
 
 const Tree = React.memo(props => {
@@ -13,77 +14,105 @@ const Tree = React.memo(props => {
 
   let myRef = React.createRef();
 
+  let nodes = props.nodes;
+  let edges = props.edges;
+
+  const data = {
+    nodes: nodes,
+    links: edges,
+   
+  };
+
 
   // define links as edges, e.g. if you have 5 topics
   // then these topics index are 0, 1, 2, 3, 4
 
-  useEffect(() => {
+  // the graph configuration, just override the ones you need
+  const myConfig = {
+    automaticRearrangeAfterDropNode: true,
+    collapsible: false,
+    directed: false,
+    focusAnimationDuration: 0.75,
+    focusZoom: 10,
+    freezeAllDragEvents: false,
+    height: 400,
+    highlightDegree: 1,
+    highlightOpacity: 1,
+    linkHighlightBehavior: false,
+    maxZoom: 8,
+    minZoom: 0.1,
+    nodeHighlightBehavior: false,
+    panAndZoom: true,
+    staticGraph: false,
+    staticGraphWithDragAndDrop: false,
+    width: 800,
+    d3: {
+      alphaTarget: 0.05,
+      gravity: -750,
+      linkLength: 100,
+      linkStrength: 1,
+      disableLinkForce: false
+    },
+    node: {
+      color: "#d3d3d3",
+      fontColor: "black",
+      fontSize: 14,
+      fontWeight: "normal",
+      highlightColor: "SAME",
+      highlightFontSize: 8,
+      highlightFontWeight: "normal",
+      highlightStrokeColor: "SAME",
+      highlightStrokeWidth: "SAME",
+      labelProperty: "name",
+      mouseCursor: "pointer",
+      opacity: 1,
+      renderLabel: true,
+      size: 200,
+      strokeColor: "none",
+      strokeWidth: 1.5,
+      svg: "",
+      symbolType: "circle"
+    },
+    link: {
+      color: "#d3d3d3",
+      fontColor: "black",
+      fontSize: 8,
+      fontWeight: "normal",
+      highlightColor: "SAME",
+      highlightFontSize: 8,
+      highlightFontWeight: "normal",
+      labelProperty: "label",
+      mouseCursor: "pointer",
+      opacity: 1,
+      renderLabel: false,
+      semanticStrokeWidth: false,
+      strokeWidth: 1.5,
+      markerHeight: 6,
+      markerWidth: 6,
+      strokeDasharray: 0,
+      strokeDashoffset: 0,
+      strokeLinecap: "butt"
+    }
 
-    
+  };
 
-    let nodes = props.nodes;
-    let edges = props.edges;
+  const onClickNode = function (nodeId) {
+    props.nodeClick(nodeId);
+  };
 
-    
-
-    let svg = d3.select(myRef.current)
-    .append('svg')
-    .attr('width', w)
-    .attr('height', h);
-
-    let rect_width = 95;
-   svg.selectAll("rect")
-      .data(nodes)
-      .enter()
-      .append("rect")
-      .attr("x", (d, i) => 5 + i*(rect_width + 5))
-      .attr("y", d => (500 - d))
-      .attr("width", rect_width)
-      .attr("height", d => d)
-      .attr('fill', "teal");
-
-    let force = d3.forceSimulation(nodes)
-      .force("charge", d3.forceManyBody().strength([-60]))
-      .force("link", d3.forceLink(edges))
-      .force("x", d3.forceX(w / 2))
-      .force("y", d3.forceY(h / 2))
-
-
-    // force.on('tick', ()=> {
-    //   edges.attr("x1", function (d) { return d.source.x; })
-    //     .attr("y1", function (d) { return d.source.y; })
-    //     .attr("x2", function (d) { return d.target.x; })
-    //     .attr("y2", function (d) { return d.target.y; });
-    //   nodes.attr("cx", function (d) { return d.x; })
-    //     .attr("cy", function (d) { return d.y; });
-
-
-
-    // })
-
-  }, []);
-
+  
 
 
 
   return (
-    <div ref={myRef}>
-    </div>
+    <Graph
+      id="graph-id" // id is mandatory
+      data={data}
+      config={myConfig}
+      onClickNode={onClickNode}
+      //onClickLink={onClickLink}
 
-    // <svg width={w} height={h}>
-    //   {props.edges.map((link, index) => (
-    //     <line
-    //       x1={link.source.x}
-    //       y1={link.source.y}
-    //       x2={link.target.x}
-    //       y2={link.target.y}
-    //       key={`line-${index}`}
-    //       stroke="black" />
-    //   ))}
-    //   {props.nodes.map((node, index) => (
-    //     <circle r={node.r} cx={node.x} cy={node.y} fill="red" key={index} />
-    //   ))}
-    // </svg>
+    />
   )
 
 })
