@@ -1,79 +1,85 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
+import axios from 'axios';
+
 import SortableTree from 'react-sortable-tree';
 import 'react-sortable-tree/style.css'; // This only needs to be imported once in your app
-import Card from '../UI/Card';
+import FormGroup from 'react-bootstrap/FormGroup';
 
-export default class Tree extends Component {
-  constructor(props) {
+const Tree = React.memo(props => {
 
-    super(props);
+  const [treeData, setTreeData] = useState(props.treeData);
+  const [topics, setTopics] = useState([]);
+  
+  // treeFunction: props.treeFunction,
+  // selectedTopics: props.selectedTopics
 
-    this.state = {
-      treeData: props.treeData,
-      treeFunction: props.treeFunction
-    };
-  }
-
-  handleTreeOnChange = treeData => {
-    this.setState({ treeData });
-    this.props.setTreeData(treeData);
+  const handleTreeOnChange = tData => {
+    setTreeData( tData.concat([]) );
+    props.setTreeData(tData);
     if (treeData.lenght < 1) {
-      this.props.setButtonDisabled(true);
+      props.setButtonDisabled(true);
     } else {
       if (treeData.length === 1 && treeData[0].title === "empty") {
-        this.props.setButtonDisabled(true);
+        props.setButtonDisabled(true);
       } else {
-
-        this.props.setButtonDisabled(false);
+        props.setButtonDisabled(false);
       }
     }
   };
 
-  componentDidMount() {
+  useEffect(() => {
+    console.log('output');
+    console.log(props.selectedTopics.length);
+    axios.get('http://localhost:3000/react/get-selected-topics', { params: { id: ((props.selectedTopics && props.selectedTopics.length > 0) ? props.selectedTopics : ['-1']) } })
+        .then(topics => {
+            setTopics(topics.data);
+            if (topics.data.length > 0) {
+              props.setButtonDisabled(false);
+            } else {
+              props.setButtonDisabled(true);
+            }
+            props.onTopicExtracted(topics.data);
+        });
+        if (treeData.lenght < 1) {
+          props.setButtonDisabled(true);
+        } else {
+          if (treeData.length === 1 && treeData[0].title === "empty") {
+            props.setButtonDisabled(true);
+          } else {
+    
+            props.setButtonDisabled(false);
+          }
+    
+        }
+}, [props.selectedTopics]);
 
 
-    this.setState({ treeData: this.props.treeData });
-    this.props.setTreeData(this.props.treeData);
-    if (this.props.treeData.lenght < 1) {
-      this.props.setButtonDisabled(true);
-    } else {
-      if (this.props.treeData.length === 1 && this.props.treeData[0].title === "empty") {
-        this.props.setButtonDisabled(true);
-      } else {
 
-        this.props.setButtonDisabled(false);
-      }
-     
-    }
+//  const lineClick = (id, treeData) => {
+//     console.log(id);
 
-  }
+//     this.props.onSelectedTopic(id);
+//   }
 
-  lineClick(id, treeData) {
-    console.log(id);
+ 
 
-    this.props.onSelectedTopic(id);
-  }
-
-  saveCourseHandler(event) {
-    //console.log(topics);
-  }
-
-
-  render() {
+ 
     return (
-      <section className="ingredient-form" style={{ height: 400 }}>
-        <Card style={{ height: 400 }}>
-          <SortableTree
-            treeData={this.state.treeData}
-            onChange={this.handleTreeOnChange}
-            getNodeKey={({ node }) => node.id}
-            generateNodeProps={rowInfo => ({
-              onClick: () => this.lineClick(rowInfo.node.id)
-            })}
-          />
 
-        </Card>
-      </section>
+      <FormGroup style={{ height: 400 }}>
+        <SortableTree
+          treeData={treeData}
+          onChange={handleTreeOnChange}
+          getNodeKey={({ node }) => node.id}
+        // generateNodeProps={rowInfo => ({
+        //   onClick: () => this.lineClick(rowInfo.node.id)
+        // })}
+        />
+
+      </FormGroup>
+
     );
-  }
-}
+ 
+});
+
+export default Tree;
