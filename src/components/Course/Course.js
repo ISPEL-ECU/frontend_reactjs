@@ -4,8 +4,8 @@ import axios from 'axios';
 import Domains from './Domains';
 import Areas from './Areas';
 import Topics from './Topics';
-import Results from './Results';
 import Display from './Display';
+import Search from './Search';
 
 import Tree from './topicTree';
 import TreeGraph from './Tree';
@@ -17,7 +17,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import CourseOverview from './CourseOverwiew';
 
-function Ingredients() {
+function CourseBuilder() {
 
   const color_original = '#4c72ff';
   const color_root_node = '#ff0000';
@@ -29,7 +29,7 @@ function Ingredients() {
   const [topics, setTopics] = useState([]);
   const [treeData, setTreeData] = useState([]);
   const [buttonDisabled, setButtonDisabled] = useState(true);
-  const [showPreview, setShowPreview] = useState(true);
+  const [searchTopicName, setSearchTopicName] = useState('');
   const [processedTopics, setProcessedTopics] = useState([]);
   const [processedEdges, setProcessedEdges] = useState([]);
   const [topicsForCourse, setTopicsForCourse] = useState([]);
@@ -59,124 +59,130 @@ function Ingredients() {
         } else {
           setButtonDisabled(true);
         }
-        
+
       });
   }
 
-const changeTopicHandler = topics => {
-  console.log(topics);
-  setSelectedTopics(selectedTopics.concat(topics));
-  extractTopicsHandler(topics);
-};
+  const changeTopicHandler = topics => {
+    setSelectedTopics(selectedTopics.concat(topics));
+    extractTopicsHandler(topics);
+  };
 
-const selectTopicHandler = topicId => {
-  setSelectedTopic(topicId);
-};
+  const selectTopicHandler = topicId => {
+    setSelectedTopic(topicId);
+  };
 
-const buildTree = () => {
-  if (topics.length < 1) return (
-    [{ title: 'empty' }]
-  );
-  let treeData = [];
-  for (let i = 0; i < topics.length; i++) {
-    treeData.push({ title: topics[i].name, id: topics[i].id, subtitle: topics[i].teaser, url: topics[i].contentHtml });
+  const buildTree = () => {
+    if (topics.length < 1) return (
+      [{ title: 'empty' }]
+    );
+    let treeData = [];
+    for (let i = 0; i < topics.length; i++) {
+      treeData.push({ title: topics[i].name, id: topics[i].id, subtitle: topics[i].teaser, url: topics[i].contentHtml });
+    }
+
+    return treeData;
+
   }
 
-  return treeData;
+  const treeNodeClickHandler = (nodeId) => {
+    setSelectedTopic(nodeId);
+  }
 
-}
-
-const treeNodeClickHandler = (nodeId) => {
-  setSelectedTopic(nodeId);
-}
-
-const processTreeData = () => {
-  let nodes = [];
-  let edges = [];
-  const processChildren = (currentNode, rootPosition) => {
-    if (currentNode.children) {
-      for (let i = 0; i < currentNode.children.length; i++) {
-        const childPosition = nodes.push({ name: currentNode.children[i].title, url: "http://localhost:3000/author/topic/" + currentNode.children[i].id, id: currentNode.children[i].id, color: color_original });
-        edges.push({ source: currentNode.id, target: +currentNode.children[i].id });
-        if (currentNode.children[i].children) {
-          processChildren(currentNode.children[i], childPosition);
+  const processTreeData = () => {
+    let nodes = [];
+    let edges = [];
+    const processChildren = (currentNode, rootPosition) => {
+      if (currentNode.children) {
+        for (let i = 0; i < currentNode.children.length; i++) {
+          const childPosition = nodes.push({ name: currentNode.children[i].title, url: "http://localhost:3000/author/topic/" + currentNode.children[i].id, id: currentNode.children[i].id, color: color_original });
+          edges.push({ source: currentNode.id, target: +currentNode.children[i].id });
+          if (currentNode.children[i].children) {
+            processChildren(currentNode.children[i], childPosition);
+          }
         }
       }
     }
+    for (let i = 0; i < treeData.length; i++) {
+      const currentNode = treeData[i];
+      const currentPosition = nodes.push({ name: currentNode.title, url: "http://localhost:3000/author/topic/" + currentNode.id, id: currentNode.id, teaser: currentNode.subtitle, color: ((i === 0) ? color_root_node : color_original) });
+      processChildren(currentNode, currentPosition);
+    }
+    setProcessedTopics(nodes);
+    setProcessedEdges(edges);
   }
-  for (let i = 0; i < treeData.length; i++) {
-    const currentNode = treeData[i];
-    const currentPosition = nodes.push({ name: currentNode.title, url: "http://localhost:3000/author/topic/" + currentNode.id, id: currentNode.id, teaser: currentNode.subtitle, color: ((i === 0) ? color_root_node : color_original) });
-    processChildren(currentNode, currentPosition);
+
+  const saveCourseHandler = event => {
+    setTopicsForCourse(topics);
+    processTreeData();
   }
-  setProcessedTopics(nodes);
-  setProcessedEdges(edges);
-}
 
-const saveCourseHandler = event => {
-  setTopicsForCourse(topics);
-  processTreeData();
-}
+  const onSearchHandler = (value) => {
+      setSearchTopicName(value);
+  }
 
-const HandleAreaSearch = () => {
-  if (!showSearch) {
+  const HandleAreaSearch = () => {
+    if (!showSearch) {
+      return (
+        <Areas selectedDomain={selectedDomain} onChangeArea={changeAreaHandler} />
+      )
+    }
+    setSelectedArea('%');
     return (
-      <Areas selectedDomain={selectedDomain} onChangeArea={changeAreaHandler} />
-    )
+      null
+    );
   }
-  setSelectedArea('%');
-  return null;
-}
 
 
-return (
-  <div className="App" >
-    <Container fluid>
-      <Row>
-        <Col sm={2}>
-          <Form>
-            <Card>
-              <Domains onChangeDomain={changeDomainHandler} showSearch={setShowSearch} />
-              <HandleAreaSearch />
-              <Topics selectedArea={selectedArea} onSelectedTopics={changeTopicHandler} />
-              <Tree key={buildTree()}
-                treeData={buildTree()}
-                treeFunction={buildTree}
-                setTreeData={setTreeData}
-                setButtonDisabled={setButtonDisabled}
-                setShowPreview={setShowPreview}
-                selectedTopics={selectedTopics}
-                onTopicExtracted={setTopics}
-                onSelectedTopic={selectTopicHandler}
-              />
-              {/* <Results
+  return (
+    <div className="App" >
+      <Container fluid>
+        <Row>
+          <Col sm={2}>
+            <Form>
+              <Card>
+                <Domains
+                  onChangeDomain={changeDomainHandler}
+                  showSearch={setShowSearch}
+                />
+                <HandleAreaSearch />
+                <Topics
+                  selectedArea={selectedArea}
+                  showSearch = {showSearch}
+                  onSelectedTopics={changeTopicHandler}
+                  searchTopicName={searchTopicName}
+                />
+                <Tree key={buildTree()}
+                  treeData={buildTree()}
+                  treeFunction={buildTree}
+                  setTreeData={setTreeData}
+                  setButtonDisabled={setButtonDisabled}
                   selectedTopics={selectedTopics}
-                  onSelectedTopic={selectTopicHandler}
                   onTopicExtracted={setTopics}
-                  visibility="hidden"
-                /> */}
-              <Button variant="primary" onClick={saveCourseHandler} disabled={buttonDisabled}>Save</Button>
+                  onSelectedTopic={selectTopicHandler}
+                />
+                <Button
+                  variant="primary"
+                  onClick={saveCourseHandler}
+                  disabled={buttonDisabled}>
+                  Save
+                </Button>
+              </Card>
+            </Form>
+          </Col>
+          <Col sm={5}>
+            <Card>
+              <CourseOverview topics={topicsForCourse} nodeClick={treeNodeClickHandler} />
+              <TreeGraph nodes={processedTopics} edges={processedEdges} nodeClick={treeNodeClickHandler} />
             </Card>
-
-          </Form>
-        </Col>
-        <Col sm={5}>
-          <Card>
-            <CourseOverview topics={topicsForCourse} nodeClick={treeNodeClickHandler} />
-            <TreeGraph nodes={processedTopics} edges={processedEdges} nodeClick={treeNodeClickHandler} />
-          </Card>
-
-        </Col>
-        <Col sm={5}>
-
-          <Display selectedTopic={selectedTopic} />
-
-
-        </Col>
-      </Row>
-    </Container>
-  </div>
-);
+          </Col>
+          <Col sm={5}>
+            <Display selectedTopic={selectedTopic} />
+          </Col>
+        </Row>
+      </Container>
+    </div>
+  );
 }
 
-export default Ingredients;
+export default CourseBuilder;
