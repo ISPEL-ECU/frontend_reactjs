@@ -33,7 +33,7 @@ const Topics = React.memo(props => {
     if (props.showSearch){
     inputRef.current.focus();
     }
-  }, [topics]);
+  }, [props.showSearch,topics]);
 
   const searchHandler = (event) =>{
     searchValueRef.current =  event.target.value;

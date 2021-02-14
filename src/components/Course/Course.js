@@ -5,17 +5,17 @@ import Domains from './Domains';
 import Areas from './Areas';
 import Topics from './Topics';
 import Display from './Display';
-import Search from './Search';
-
 import Tree from './topicTree';
+import CourseOverview from './CourseOverwiew';
 import TreeGraph from './Tree';
+
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import CourseOverview from './CourseOverwiew';
+
 
 function CourseBuilder() {
 
@@ -29,7 +29,6 @@ function CourseBuilder() {
   const [topics, setTopics] = useState([]);
   const [treeData, setTreeData] = useState([]);
   const [buttonDisabled, setButtonDisabled] = useState(true);
-  const [searchTopicName, setSearchTopicName] = useState('');
   const [processedTopics, setProcessedTopics] = useState([]);
   const [processedEdges, setProcessedEdges] = useState([]);
   const [topicsForCourse, setTopicsForCourse] = useState([]);
@@ -117,9 +116,6 @@ function CourseBuilder() {
     processTreeData();
   }
 
-  const onSearchHandler = (value) => {
-      setSearchTopicName(value);
-  }
 
   const HandleAreaSearch = () => {
     if (!showSearch) {
@@ -150,7 +146,7 @@ function CourseBuilder() {
                   selectedArea={selectedArea}
                   showSearch = {showSearch}
                   onSelectedTopics={changeTopicHandler}
-                  searchTopicName={searchTopicName}
+                  
                 />
                 <Tree key={buildTree()}
                   treeData={buildTree()}

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 import './IngredientList.css';
-import Card from '../UI/Card';
 import Area from './Area';
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
@@ -11,7 +10,7 @@ import FormGroup from 'react-bootstrap/FormGroup';
 const Areas = (props) => {
 
   const [areas, setAreas] = useState([]);
-  const [selectedArea, setSelectedArea] = useState('');
+ 
 
   useEffect(() => {
     console.log(props.selectedDomain);
@@ -45,7 +44,7 @@ const Areas = (props) => {
 
       <FormGroup>
         <label htmlFor="areaSelect">Select Area</label>
-        <Form.Control as="select" id="areaSelect" style={{ display: "inline" }} value={selectedArea} onChange={(event) => onAreaChange(event.target.value)}>
+        <Form.Control as="select" id="areaSelect" style={{ display: "inline" }}  onChange={(event) => onAreaChange(event.target.value)}>
           {areasToDisplay}
         </Form.Control>
 

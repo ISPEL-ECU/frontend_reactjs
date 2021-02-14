@@ -1,19 +1,9 @@
-import React, { useEffect } from 'react';
-import * as d3 from 'd3';
-import * as forceModule from "d3-force";
+import React from 'react';
 import { Graph } from "react-d3-graph";
 
 
 const Tree = React.memo(props => {
-  var w = 500;
-  var h = 400;
-
-  var color_original = '#4c72ff';
-  var color_root_node = '#ff0000';
-  var color_hover = '#93de94';
-
-  let myRef = React.createRef();
-
+  
   let nodes = props.nodes;
   let edges = props.edges;
 
@@ -45,7 +35,7 @@ const Tree = React.memo(props => {
     panAndZoom: true,
     staticGraph: false,
     staticGraphWithDragAndDrop: false,
-    width: 800,
+    width: 400,
     d3: {
       alphaTarget: 0.05,
       gravity: -750,

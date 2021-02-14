@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import Card from '../UI/Card';
-
 import Domain from './Domain'
-import './IngredientForm.css';
+
 import Form from 'react-bootstrap/Form';
 import FormGroup from 'react-bootstrap/FormGroup';
 
@@ -44,14 +42,6 @@ const Domains = React.memo(props => {
     return <Domain id={domain.id} name={domain.name} key={domain.id} />
   });
   
-  const HandleShowDomains = () =>{
-    if (showDomains) {
-      return(
-        null
-      )
-    }
-  }
-
   return (
     <FormGroup>
     <Form.Check 
