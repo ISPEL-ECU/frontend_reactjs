@@ -19,27 +19,27 @@ const Tree = React.memo(props => {
 
   // the graph configuration, just override the ones you need
   const myConfig = {
-    automaticRearrangeAfterDropNode: true,
+    automaticRearrangeAfterDropNode: false,
     collapsible: false,
     directed: false,
     focusAnimationDuration: 0.75,
     focusZoom: 10,
     freezeAllDragEvents: false,
-    height: 400,
+    height: 200,
     highlightDegree: 1,
     highlightOpacity: 1,
     linkHighlightBehavior: false,
     maxZoom: 8,
     minZoom: 0.1,
     nodeHighlightBehavior: false,
-    panAndZoom: true,
+    panAndZoom: false,
     staticGraph: false,
     staticGraphWithDragAndDrop: false,
-    width: 400,
+    width: 500,
     d3: {
       alphaTarget: 0.05,
-      gravity: -750,
-      linkLength: 100,
+      gravity: -150,
+      linkLength: 50,
       linkStrength: 1,
       disableLinkForce: false
     },

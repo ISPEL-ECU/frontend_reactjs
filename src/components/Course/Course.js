@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+import Menu from '../UI/Menu';
+import Navbar from '../UI/Navbar';
+
 import Domains from './Domains';
 import Areas from './Areas';
 import Topics from './Topics';
@@ -8,6 +11,7 @@ import Display from './Display';
 import Tree from './topicTree';
 import CourseOverview from './CourseOverwiew';
 import TreeGraph from './Tree';
+import Name from './CourseName';
 
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
@@ -17,7 +21,9 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 
-function CourseBuilder() {
+
+
+function CourseBuilder(props) {
 
   const color_original = '#4c72ff';
   const color_root_node = '#ff0000';
@@ -33,6 +39,8 @@ function CourseBuilder() {
   const [processedEdges, setProcessedEdges] = useState([]);
   const [topicsForCourse, setTopicsForCourse] = useState([]);
   const [showSearch, setShowSearch] = useState(false);
+  const [courseName, setCourseName] = useState('');
+
 
   const changeDomainHandler = domainId => {
     setSelectedDomain(domainId);
@@ -64,7 +72,7 @@ function CourseBuilder() {
 
   const changeTopicHandler = topics => {
     setSelectedTopics(selectedTopics.concat(topics));
-    extractTopicsHandler(topics);
+    extractTopicsHandler(selectedTopics.concat(topics));
   };
 
   const selectTopicHandler = topicId => {
@@ -82,6 +90,10 @@ function CourseBuilder() {
 
     return treeData;
 
+  }
+
+  const onNameHandler = (value) => {
+    setCourseName(value);
   }
 
   const treeNodeClickHandler = (nodeId) => {
@@ -120,7 +132,7 @@ function CourseBuilder() {
   const HandleAreaSearch = () => {
     if (!showSearch) {
       return (
-        <Areas selectedDomain={selectedDomain} onChangeArea={changeAreaHandler} />
+        <Areas selectedDomain={selectedDomain} onChangeArea={changeAreaHandler} showSearch={showSearch} />
       )
     }
     setSelectedArea('%');
@@ -131,12 +143,20 @@ function CourseBuilder() {
 
 
   return (
-    <div className="App" >
-      <Container fluid>
-        <Row>
-          <Col sm={2}>
-            <Form>
-              <Card>
+    <div className="App" style={{ height: 100 + "%" }}>
+
+      <Container fluid style={{ height: 100 + "%" }}>
+
+        <Menu isAuth={props.isAuth} setIsAuth={props.setIsAuth} />
+        <Navbar/>
+
+        <Row style={{ paddingLeft: 60, paddingRight: 50, height: 95 + "%" }}>
+
+          <Col sm={2} style={{ height: 100 + "%" }}>
+            <Form style={{ height: 100 + "%" }}>
+              <Card style={{ height: 100 + "%" }}>
+                <Name onNameHandler={onNameHandler} />
+                <h6>Course content:</h6>
                 <Domains
                   onChangeDomain={changeDomainHandler}
                   showSearch={setShowSearch}
@@ -144,9 +164,9 @@ function CourseBuilder() {
                 <HandleAreaSearch />
                 <Topics
                   selectedArea={selectedArea}
-                  showSearch = {showSearch}
+                  showSearch={showSearch}
                   onSelectedTopics={changeTopicHandler}
-                  
+
                 />
                 <Tree key={buildTree()}
                   treeData={buildTree()}
@@ -161,18 +181,22 @@ function CourseBuilder() {
                   variant="primary"
                   onClick={saveCourseHandler}
                   disabled={buttonDisabled}>
-                  Save
+                  Apply
                 </Button>
               </Card>
             </Form>
           </Col>
           <Col sm={5}>
-            <Card>
-              <CourseOverview topics={topicsForCourse} nodeClick={treeNodeClickHandler} />
-              <TreeGraph nodes={processedTopics} edges={processedEdges} nodeClick={treeNodeClickHandler} />
+            <Card style={{height:100+'%'}}>
+              
+                <CourseOverview topics={topicsForCourse} courseName={courseName} nodeClick={treeNodeClickHandler} />
+              
+              <Row style={{ height: 30 + "%", overflow: "auto" }}>
+                <TreeGraph nodes={processedTopics} edges={processedEdges} nodeClick={treeNodeClickHandler} />
+              </Row>
             </Card>
           </Col>
-          <Col sm={5}>
+          <Col sm={5} style={{ overflow: "auto" }}>
             <Display selectedTopic={selectedTopic} />
           </Col>
         </Row>

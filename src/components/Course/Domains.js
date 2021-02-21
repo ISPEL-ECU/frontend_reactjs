@@ -27,11 +27,12 @@ const Domains = React.memo(props => {
     // ...
   };
 
-  const handleSearchCheck = (event) =>{
-    if (event.target.checked){
+  const handleSearchCheck = (event) => {
+    if (event.target.checked) {
       props.showSearch(true);
+      console.log('showing search');
       setShowDomains(false);
-    } else{
+    } else {
       props.showSearch(false);
       setShowDomains(true);
     }
@@ -41,19 +42,19 @@ const Domains = React.memo(props => {
 
     return <Domain id={domain.id} name={domain.name} key={domain.id} />
   });
-  
+
   return (
     <FormGroup>
-    <Form.Check 
-    type = "checkbox"
-    label = "Advanced Search"
-    id = "advancedSearch"
-    onChange = {handleSearchCheck}
-    />
-    <label htmlFor="domainSelect" hidden ={!showDomains}>Select Domain</label>
-    <Form.Control as="select"  hidden ={!showDomains} id="domainSelect" style={{ display: "inline" }} onChange={(event) => onDomainChange(event.target.value)}>
-      {domainsToDisplay}
-    </Form.Control>
+      <Form.Check
+        type="checkbox"
+        label="Advanced Search"
+        id="advancedSearch"
+        onChange={handleSearchCheck}
+      />
+      <label htmlFor="domainSelect" hidden={!showDomains}>Select Domain</label>
+      <Form.Control as="select" hidden={!showDomains} id="domainSelect" style={{ display: "inline" }} onChange={(event) => onDomainChange(event.target.value)}>
+        {domainsToDisplay}
+      </Form.Control>
     </FormGroup>
 
 

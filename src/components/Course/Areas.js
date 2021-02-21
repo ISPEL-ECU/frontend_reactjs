@@ -13,15 +13,16 @@ const Areas = (props) => {
  
 
   useEffect(() => {
-    console.log(props.selectedDomain);
+    if (!props.showSearch)
+    {
     axios.get('http://localhost:3000/react/get-areas', { params: { domainId: ((props.selectedDomain && props.selectedDomain !== '') ? props.selectedDomain : '-1') } })
       .then(areas => {
-
+        console.log('i am here ' + props.showSearch);
         setAreas(areas.data);
         if (areas.data.length > 0)
           onAreaChange(areas.data[0].id);
         // console.log(domains);
-      });
+      });}
   }, [props.selectedDomain]);
 
 

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-import Card from '../UI/Card';
+import Card from 'react-bootstrap/Card';
 
 
-import './IngredientForm.css';
+
 
 import axios from 'axios';
 
@@ -33,11 +33,11 @@ const Display = React.memo(props => {
 
 
     return (
-        <section style={{height:100+'%'}} >
-            <Card style={{height:100+'%'}}>
+        <section id="displaySection" >
+            <Card id="displayCard">
                
                 
-            <div  style={{height:100+'%'}}>
+            <div id="displayDiv">
                             <iframe title="Preview"  src={((topic!=='')?('http://localhost:3000/author/topic/'+topic):'http://localhost:3000/author/topic/rmdhtml/preview.html')} id="frame"   frameBorder="0"></iframe>
                         </div>
                  

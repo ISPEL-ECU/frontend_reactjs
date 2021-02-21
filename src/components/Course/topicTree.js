@@ -63,7 +63,7 @@ export default class Tree extends Component {
   render() {
     return (
       
-        <FormGroup style={{ height: 400 }}>
+        <FormGroup style={{ height: 100+"%" }}>
           <SortableTree
             treeData={this.state.treeData}
             onChange={this.handleTreeOnChange}

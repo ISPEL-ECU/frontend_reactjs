@@ -1,6 +1,9 @@
 import React from 'react';
 import TopicForOverview from './TopicForOverview';
 
+import Card from 'react-bootstrap/Card';
+import Row from 'react-bootstrap/Row';
+
 const CourseOverview = React.memo(props => {
 
 
@@ -15,13 +18,17 @@ const CourseOverview = React.memo(props => {
     });
 
     return (
-        <div>
-            <table>
+
+        <Row style={{ height: 70 + "%", overflow: "auto", width: 100 + "%" }}>
+            <h2>{props.courseName}</h2>
+            <hr></hr>
+            <table id="topicsOverview">
                 <tbody>
                     {topicsToDisplay}
                 </tbody>
             </table>
-        </div>
+        </Row>
+
     );
 });
 

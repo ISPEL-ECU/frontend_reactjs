@@ -1,21 +1,108 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap');
-
 * {
   box-sizing: border-box;
 }
 
-html,
-body {
+/* Position and sizing of burger button */
+
+.bm-burger-button {
+  position: fixed;
+  width: 36px;
+  height: 4%;
+  left: 36px;
+  top: 5px;
+}
+
+/* Color/shape of burger icon bars */
+
+.bm-burger-bars {
+  background: #ffffff;
+}
+
+/* Color/shape of burger icon bars on hover*/
+
+.bm-burger-bars-hover {
+  background: #ffffff;
+}
+
+/* Position and sizing of clickable cross button */
+
+.bm-cross-button {
+  height: 24px;
+  width: 24px;
+}
+
+/* Color/shape of close button cross */
+
+.bm-cross {
+  background: #bdc3c7;
+}
+
+/*
+Sidebar wrapper styles
+Note: Beware of modifying this element as it can break the animations - you should not need to touch it in most cases
+*/
+
+.bm-menu-wrap {
+  position: fixed;
+  height: 100%;
+}
+
+/* General sidebar styles */
+
+.bm-menu {
+  background: #582c83;
+  padding: 2.5em 1.5em 0;
+  font-size: 1em;
+}
+
+.bm-menu a  {
+  color: #ffffff;
+  font-weight: bold;
+  outline: 0;
+}
+
+.bm-menu a:hover {
+  text-decoration: none;
+  color: #585852;
+}
+
+/* Morph shape necessary with bubble or elastic */
+
+.bm-morph-shape {
+  fill: #373a47;
+}
+
+/* Wrapper for item list */
+
+.bm-item-list {
+  color: #b8b7ad;
+  padding: 0.8em;
+}
+
+/* Individual item */
+
+.bm-item {
+  display: inline-block;
+}
+
+/* Styling of overlay */
+
+.bm-overlay {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+html, body {
   font-family: 'Open Sans', sans-serif;
   margin: 0;
-  height:100%;
+  height: 100%;
 }
 
 .App {
- height: 100%; 
+  height: 100%;
 }
 
-#root{
+#root {
   height: 100%;
 }
 
@@ -31,16 +118,13 @@ button {
 }
 
 Container {
-
   height: 100%;
-  
 }
 
 .first-td {
   height: 100%;
   width: 20%;
   vertical-align: top;
-  
 }
 
 .second-td {
@@ -53,19 +137,62 @@ Container {
   width: 40%;
 }
 
-
 iframe {
-
   height: 100%;
   width: 100%;
 }
 
-
-button:hover,
-button:active {
+button:hover, button:active {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.26);
 }
 
 button:focus {
   outline: none;
+}
+
+.bg-ecu {
+  background-color: #582c83;
+}
+
+.bg-ecu .navbar-brand, .navbar-light .navbar-brand, .navbar-custom .nav-item .nav-link {
+  color: #ffffff;
+}
+
+.navbar-light .navbar-brand {
+  color: rgba(223, 30, 30, 0.9);
+}
+
+svg {
+  height: 100%;
+}
+
+#graph-id-graph-wrapper {
+  height: 100%;
+}
+
+.card#loginCard {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  margin: 10px;
+}
+
+.card#displayCard {
+  height: 100%;
+}
+
+div#displayDiv {
+  height: 100%;
+}
+
+section#displaySection {
+  height: 100%;
+}
+
+table#topicsOverview {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.row {
+  margin-left: 0;
+  margin-right: 0;
 }

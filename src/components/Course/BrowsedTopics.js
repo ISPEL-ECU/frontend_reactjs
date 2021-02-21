@@ -7,15 +7,16 @@ import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import FormGroup from 'react-bootstrap/esm/FormGroup';
+import ListGroup from 'react-bootstrap/ListGroup';
 
-import Topic from './Topic'
+import Topic from './BrowsedTopic'
 
 
 
 
-const Topics = React.memo(props => {
+const BrowsedTopics = React.memo(props => {
   const [topics, setTopics] = useState([]);
-  const [selectedTopics, setSelectedTopics] = useState([]);
+  const [prevTopic, setPrevTopic] = useState();
   const searchValueRef = useRef('');
   const inputRef = useRef();
   useEffect(() => {
@@ -71,29 +72,35 @@ const Topics = React.memo(props => {
 
   })
 
-  const topicsToDisplay = topics.map(topic => {
-    return <Topic id={topic.id} name={topic.name} key={topic.id} />
-  });
-
-  const selectTopics = event => {
-    props.onSelectedTopics(selectedTopics);
+  const selectTopics = (event) => {
+    props.onSelectedTopic(event.target.id);
+    if (prevTopic) {
+      prevTopic.style.backgroundColor = 'initial';
+      prevTopic.style.color = 'initial';
+    }
+    event.target.style.backgroundColor = '#582c83';
+    event.target.style.color = '#ffffff';
+    setPrevTopic(event.target);
     event.preventDefault();
+   
   };
 
-  const onChangeHandler = event => {
-    setSelectedTopics(Array.from(event.target.selectedOptions, option => option.value));
-  }
+  const topicsToDisplay = topics.map(topic => {
+    return <Topic id={topic.id} name={topic.name} key={topic.id} selectTopic={selectTopics} />
+  });
+
+ 
+
+  
   return (
-    <Form  >
+    <Form style={{ height: 100 + "%" , width: 100+"%"}} >
       <Search/>
-      <Form.Control onChange={onChangeHandler} as="select"  size={props.SelectSize} multiple>
+      <ListGroup style={{overflow: "auto" }}>
         {topicsToDisplay}
-      </Form.Control>
-      < Button variant="primary" onClick={selectTopics} >
-        Submit
-      </ Button>
+      </ListGroup>
+     
     </Form>
   );
 });
 
-export default Topics;
+export default BrowsedTopics;
