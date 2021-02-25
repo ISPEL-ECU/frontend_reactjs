@@ -1,26 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import Domain from './Domain'
+import Domain from "./Domain";
 
-import Form from 'react-bootstrap/Form';
-import FormGroup from 'react-bootstrap/FormGroup';
+import Form from "react-bootstrap/Form";
+import FormGroup from "react-bootstrap/FormGroup";
 
-import axios from 'axios';
+import {Redirect} from 'react-router-dom';
 
-const Domains = React.memo(props => {
+import axios from "axios";
+
+import { useAuth } from "../../context/auth";
+
+const Domains = React.memo((props) => {
   const [domains, setDomains] = useState([]);
   const [showDomains, setShowDomains] = useState(true);
+  const { authToken } = useAuth();
 
   useEffect(() => {
-    axios.get('http://localhost:3000/react/get-domains')
-      .then(domains => {
-
+    axios
+      .get("http://192.168.1.5:3000/react/get-domains", {
+        headers: {
+          Authorization: "Bearer " + authToken,
+        },
+      })
+      .then((domains) => {
         setDomains(domains.data);
         onDomainChange(domains.data[0].id);
-
+      })
+      .catch((err)=>{
+       
+            return (
+            <Redirect to="/login" />
+        )
+        
       });
   }, []);
-  const onDomainChange = domainId => {
+  const onDomainChange = (domainId) => {
     props.onChangeDomain(domainId);
 
     //event.preventDefault();
@@ -30,17 +45,16 @@ const Domains = React.memo(props => {
   const handleSearchCheck = (event) => {
     if (event.target.checked) {
       props.showSearch(true);
-      console.log('showing search');
+      console.log("showing search");
       setShowDomains(false);
     } else {
       props.showSearch(false);
       setShowDomains(true);
     }
-  }
+  };
 
-  const domainsToDisplay = domains.map(domain => {
-
-    return <Domain id={domain.id} name={domain.name} key={domain.id} />
+  const domainsToDisplay = domains.map((domain) => {
+    return <Domain id={domain.id} name={domain.name} key={domain.id} />;
   });
 
   return (
@@ -51,13 +65,19 @@ const Domains = React.memo(props => {
         id="advancedSearch"
         onChange={handleSearchCheck}
       />
-      <label htmlFor="domainSelect" hidden={!showDomains}>Select Domain</label>
-      <Form.Control as="select" hidden={!showDomains} id="domainSelect" style={{ display: "inline" }} onChange={(event) => onDomainChange(event.target.value)}>
+      <label htmlFor="domainSelect" hidden={!showDomains}>
+        Select Domain
+      </label>
+      <Form.Control
+        as="select"
+        hidden={!showDomains}
+        id="domainSelect"
+        style={{ display: "inline" }}
+        onChange={(event) => onDomainChange(event.target.value)}
+      >
         {domainsToDisplay}
       </Form.Control>
     </FormGroup>
-
-
   );
 });
 

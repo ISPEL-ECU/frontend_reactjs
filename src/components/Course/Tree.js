@@ -25,7 +25,7 @@ const Tree = React.memo(props => {
     focusAnimationDuration: 0.75,
     focusZoom: 10,
     freezeAllDragEvents: false,
-    height: 200,
+    height: 700,
     highlightDegree: 1,
     highlightOpacity: 1,
     linkHighlightBehavior: false,
@@ -35,10 +35,10 @@ const Tree = React.memo(props => {
     panAndZoom: false,
     staticGraph: false,
     staticGraphWithDragAndDrop: false,
-    width: 500,
+    width: 700,
     d3: {
       alphaTarget: 0.05,
-      gravity: -150,
+      gravity: -350,
       linkLength: 50,
       linkStrength: 1,
       disableLinkForce: false

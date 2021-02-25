@@ -10,6 +10,8 @@ import FormGroup from 'react-bootstrap/esm/FormGroup';
 
 import Topic from './Topic'
 
+import { useAuth } from "../../context/auth";
+
 
 
 
@@ -18,12 +20,17 @@ const Topics = React.memo(props => {
   const [selectedTopics, setSelectedTopics] = useState([]);
   const searchValueRef = useRef('');
   const inputRef = useRef();
+  const { authToken } = useAuth();
   useEffect(() => {
     console.log("useEffect topics");
-    axios.get('http://localhost:3000/react/get-topics', 
+    axios.get('http://192.168.1.5:3000/react/get-topics', 
     { params:
        { areaId: (props.selectedArea && props.selectedArea !== '') ? props.selectedArea : "-1",
-       } })
+       },
+       headers: {
+        Authorization: 'Bearer ' + authToken,
+      }
+      })
       .then(topics => {
         console.log("topics");
         console.log(topics.data);
@@ -39,10 +46,15 @@ const Topics = React.memo(props => {
 
   const searchHandler = (event) =>{
     searchValueRef.current =  event.target.value;
-    axios.get('http://localhost:3000/react/get-topics-search', 
+    axios.get('http://192.168.1.5:3000/react/get-topics-search', 
     { params:
        { name:searchValueRef.current,
-       } })
+       }
+       ,
+       headers: {
+        Authorization: 'Bearer ' + authToken,
+      }
+      })
       .then(tops => {
         setTopics(tops.data);
       });
@@ -90,7 +102,7 @@ const Topics = React.memo(props => {
         {topicsToDisplay}
       </Form.Control>
       < Button variant="primary" onClick={selectTopics} >
-        Submit
+        Select
       </ Button>
     </Form>
   );

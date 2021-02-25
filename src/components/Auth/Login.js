@@ -24,17 +24,18 @@ function Login(props) {
     const [isError, setIsError] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { setAuthToken, setAuthLevel } = useAuth();
+    const { setAuthToken, setAuthLevel, setUserId } = useAuth();
 
 
     const onLoginHandler = () => {
 
-        axios.post('http://localhost:3000/react/login', null, { params: { email: email, password: password } })
+        axios.post('http://192.168.1.5:3000/react/login', null, { params: { email: email, password: password } })
             .then(resData => {
                 if (resData.status === 200) {
-         
+                    console.log(resData.data.token);
                     setAuthToken(resData.data.token);
                     setAuthLevel(resData.data.authLevel);
+                    setUserId(resData.data.userId);
                     console.log('authLevel='+resData.data.authLevel);
                     setLevel(resData.data.authLevel);
                     setLoggedIn(true);
@@ -50,8 +51,8 @@ function Login(props) {
             });}
             
         if (isLoggedIn) {
-            console.log('!!!!!!!!!!!!!!!!!!!!!!', authLevel);
-            return authLevel===3?(<Redirect to="/browse-topics"/>):(<Redirect to="/"/>);
+          
+            return <Redirect to="/browse-topics"/>;
         }
     
 

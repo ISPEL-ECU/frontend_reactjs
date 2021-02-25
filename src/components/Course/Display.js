@@ -1,53 +1,51 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import Card from 'react-bootstrap/Card';
+import Card from "react-bootstrap/Card";
 
+import axios from "axios";
+import { useAuth } from "../../context/auth";
 
+const Display = React.memo((props) => {
+  const [topic, setTopic] = useState("");
+  const { authToken } = useAuth();
 
+  useEffect(() => {
+    console.log("ST " + props.selectedTopic);
+    axios
+      .get("http://192.168.1.5:3000/react/get-content", {
+        params: {
+          id: props.selectedTopic.length !== "" ? props.selectedTopic : "-1",
+        },
+        headers: {
+          Authorization: 'Bearer ' + authToken,
+        }
+      })
+      .then((topic) => {
+        console.log("selected topic content");
+        console.log(topic);
+        setTopic(topic.data);
+      });
+  }, [props.selectedTopic]);
+  
 
-import axios from 'axios';
-
-const Display = React.memo(props => {
-    const [topic, setTopic] = useState('');
-
-    useEffect(() => {
-        console.log('ST '+props.selectedTopic);
-        axios.get('http://localhost:3000/react/get-content', { params: { id: ((props.selectedTopic.length!=='')?props.selectedTopic:'-1') } })
-            .then(topic => {
-                console.log('selected topic content');
-                console.log(topic);
-                setTopic(topic.data);
-
-            });
-    }, [props.selectedTopic]);
-    // const onTopicChange = domainId => {
-    //   props.onChangeDomain(domainId);
-    //   console.log('domainId='+domainId);
-    //   //event.preventDefault();
-    //   // ...
-    // };
-
-   
-   
-
-
-
-    return (
-        <section id="displaySection" >
-            <Card id="displayCard">
-               
-                
-            <div id="displayDiv">
-                            <iframe title="Preview"  src={((topic!=='')?('http://localhost:3000/author/topic/'+topic):'http://localhost:3000/author/topic/rmdhtml/preview.html')} id="frame"   frameBorder="0"></iframe>
-                        </div>
-                 
-               
-                
-                            
-                           
-            </Card>
-        </section>
-    );
+  return (
+    <div
+      id="displayDiv"
+      style={{ maxHeight: 90 + "%", width: 100 + "%", overflow: "auto" }}
+    >
+      <iframe
+        title="Preview"
+        style={{ maxHeight: 90 + "%", width: 100 + "%", overflow: "auto" }}
+        src={
+          topic !== ""
+            ? "http://192.168.1.5:3000/author/topic/" + topic
+            : "http://192.168.1.5:3000/author/topic/rmdhtml/preview.html"
+        }
+        id="frame"
+        frameBorder="0"
+      ></iframe>
+    </div>
+  );
 });
 
 export default Display;

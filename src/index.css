@@ -196,3 +196,8 @@ table#topicsOverview {
   margin-left: 0;
   margin-right: 0;
 }
+
+.form-group.required .control-label:after {
+  content:"*";
+  color:red;
+}

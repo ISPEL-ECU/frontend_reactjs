@@ -35,6 +35,8 @@ export default class Tree extends Component {
 
     this.setState({ treeData: this.props.treeData });
     this.props.setTreeData(this.props.treeData);
+    console.log('----------------------');
+    console.log(this.props.treeData);
     if (this.props.treeData.lenght < 1) {
       this.props.setButtonDisabled(true);
     } else {

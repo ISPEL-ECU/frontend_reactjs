@@ -1,9 +1,6 @@
 import React from 'react';
 import TopicForOverview from './TopicForOverview';
 
-import Card from 'react-bootstrap/Card';
-import Row from 'react-bootstrap/Row';
-
 const CourseOverview = React.memo(props => {
 
 
@@ -11,23 +8,22 @@ const CourseOverview = React.memo(props => {
     console.log(props.topics);
 
     const topicsToDisplay = props.topics.map(topic => {
-
-        console.log("topic");
-        console.log(topic);
+        if (topic.id===0) return null;
+        
         return <TopicForOverview key={topic.id} topic={topic} nodeClick={props.nodeClick} />;//<Topic topic={topic} />
     });
 
     return (
 
-        <Row style={{ height: 70 + "%", overflow: "auto", width: 100 + "%" }}>
-            <h2>{props.courseName}</h2>
-            <hr></hr>
+            <div>
+            <h2 style={{textDecoration:'underline'}}>{props.courseName}</h2>
+            <hr/>
             <table id="topicsOverview">
                 <tbody>
                     {topicsToDisplay}
                 </tbody>
             </table>
-        </Row>
+            </div>
 
     );
 });

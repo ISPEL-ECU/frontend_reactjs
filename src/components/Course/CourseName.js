@@ -7,9 +7,10 @@ import FormGroup from 'react-bootstrap/esm/FormGroup';
 const Name = React.memo((props) => {
 
 
-    const NameHandler = useCallback ((event)=>{
+    const NameHandler =(event)=>{
     props.onNameHandler(event.target.value);
-  })
+    event.preventDefault();
+  }
     
  
 
@@ -20,7 +21,7 @@ const Name = React.memo((props) => {
       <InputGroup.Prepend>
         <InputGroup.Text id="inputGroup-sizing-sm">Course Name:</InputGroup.Text>
       </InputGroup.Prepend>
-      <FormControl aria-label="Small" onBlur={NameHandler}  aria-describedby="inputGroup-sizing-sm" />
+    <FormControl aria-label="Small" onBlur={NameHandler} key={'courseName'}  aria-describedby="inputGroup-sizing-sm" />
     </InputGroup>
   </FormGroup>
 
