@@ -51,7 +51,7 @@ function CourseBuilder(props) {
 
   const extractTopicsHandler = (selectedTopics) => {
     axios
-      .get("http://192.168.1.5:3000/react/get-selected-topics", {
+      .get("http://localhost:3000/react/get-selected-topics", {
         params: {
           id:
             selectedTopics && selectedTopics.length > 0
@@ -119,7 +119,7 @@ function CourseBuilder(props) {
           const childPosition = nodes.push({
             name: parentI + (i + 1) + ". " + currentNode.children[i].title,
             url:
-              "http://192.168.1.5:3000/author/topic/" +
+              "http://localhost:3000/author/topic/" +
               currentNode.children[i].id,
             teaser: currentNode.subtitle,
             id: currentNode.children[i].id,
@@ -144,7 +144,7 @@ function CourseBuilder(props) {
       edges.push({ source: 0, target: currentNode.id });
       const currentPosition = nodes.push({
         name: i + 1 + "." + currentNode.title,
-        url: "http://192.168.1.5:3000/author/topic/" + currentNode.id,
+        url: "http://localhost:3000/author/topic/" + currentNode.id,
         id: currentNode.id,
         teaser: currentNode.subtitle,
         color: color_original,
@@ -161,7 +161,7 @@ function CourseBuilder(props) {
   };
 
   const saveCourseHandler = (event) => {
-    axios.post("http://192.168.1.5:3000/react/save-course", null, {
+    axios.post("http://localhost:3000/react/save-course", null, {
       params: {
         courseName: courseName,
         topics: JSON.stringify(topics),

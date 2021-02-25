@@ -29,7 +29,7 @@ function CourseBuilder(props) {
   useEffect(() => {
    
     axios
-      .get("http://192.168.1.5:3000/react/get-courses",  {headers: {
+      .get("http://localhost:3000/react/get-courses",  {headers: {
         Authorization: "Bearer " + authToken,
       },})
       .then((crses) => {

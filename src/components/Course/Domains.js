@@ -18,7 +18,7 @@ const Domains = React.memo((props) => {
 
   useEffect(() => {
     axios
-      .get("http://192.168.1.5:3000/react/get-domains", {
+      .get("http://localhost:3000/react/get-domains", {
         headers: {
           Authorization: "Bearer " + authToken,
         },

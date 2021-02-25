@@ -35,7 +35,7 @@ const AddTopic = (props) => {
   const setAreasForDomain = (domainId) => {
     if (!domainId) return [];
     axios
-      .get("http://192.168.1.5:3000/react/get-areas", {
+      .get("http://localhost:3000/react/get-areas", {
         params: { domainId: domainId },
         headers: {
           Authorization: 'Bearer ' + authToken,
@@ -56,7 +56,7 @@ const AddTopic = (props) => {
     console.log("effect");
     let initialTopicId = "";
     axios
-      .get("http://192.168.1.5:3000/react/get-domains", {
+      .get("http://localhost:3000/react/get-domains", {
         headers: {
           Authorization: "Bearer " + authToken,
         },
@@ -70,7 +70,7 @@ const AddTopic = (props) => {
       })
       .then((id) => {
         axios
-          .get("http://192.168.1.5:3000/react/get-areas", {
+          .get("http://localhost:3000/react/get-areas", {
             params: { domainId: id },
             headers: {
               Authorization: "Bearer " + authToken,
@@ -85,7 +85,7 @@ const AddTopic = (props) => {
           });
       });
     axios
-      .get("http://192.168.1.5:3000/react/get-keywords", {
+      .get("http://localhost:3000/react/get-keywords", {
         headers: {
           Authorization: "Bearer " + authToken,
         },
@@ -95,7 +95,7 @@ const AddTopic = (props) => {
         setSelectedkeyword(keywords.data[0].id);
       });
     axios
-      .get("http://192.168.1.5:3000/react/get-aliases", {
+      .get("http://localhost:3000/react/get-aliases", {
         headers: {
           Authorization: "Bearer " + authToken,
         },
@@ -123,7 +123,7 @@ const AddTopic = (props) => {
 
     console.log(data);
     axios
-      .post("http://192.168.1.5:3000/react/save-topic", data, {
+      .post("http://localhost:3000/react/save-topic", data, {
         headers: {
           Authorization: "Bearer " + authToken,
         },
@@ -155,7 +155,7 @@ const AddTopic = (props) => {
       if (rmd) data.append("rdmUpload", rmd);
       data.append("userId", localStorage.getItem("userId"));
       axios
-        .post("http://192.168.1.5:3000/react/save-topic", data, {
+        .post("http://localhost:3000/react/save-topic", data, {
           headers: {
             Authorization: "Bearer " + authToken,
           },

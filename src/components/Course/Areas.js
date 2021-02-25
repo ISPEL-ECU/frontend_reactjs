@@ -15,7 +15,7 @@ const Areas = (props) => {
   useEffect(() => {
     if (!props.showSearch) {
       axios
-        .get("http://192.168.1.5:3000/react/get-areas", {
+        .get("http://localhost:3000/react/get-areas", {
           params: {
             domainId:
               props.selectedDomain && props.selectedDomain !== ""

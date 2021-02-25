@@ -21,7 +21,7 @@ const BrowsedTopics = React.memo((props) => {
   useEffect(() => {
     console.log("useEffect topics");
     axios
-      .get("http://192.168.1.5:3000/react/get-topics", {
+      .get("http://localhost:3000/react/get-topics", {
         params: {
           areaId:
             props.selectedArea && props.selectedArea !== ""
@@ -48,7 +48,7 @@ const BrowsedTopics = React.memo((props) => {
   const searchHandler = (event) => {
     searchValueRef.current = event.target.value;
     axios
-      .get("http://192.168.1.5:3000/react/get-topics-search", {
+      .get("http://localhost:3000/react/get-topics-search", {
         params: { name: searchValueRef.current },
       })
       .then((tops) => {
