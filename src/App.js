@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import { Router, Route, Switch } from "react-router-dom";
@@ -21,6 +21,10 @@ const App = (props) => {
   const [authLevel, setAuthLevel] = useState(existingAuthLevel);
   const existingUserId = localStorage.getItem("userId");
   const [userId, setUserId] = useState(existingUserId);
+
+  useEffect(() => {
+    document.title = "ISPEL";
+  }, []);
 
   const setUser = (data) => {
     localStorage.setItem("userId", data);
