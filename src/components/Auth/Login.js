@@ -29,7 +29,7 @@ function Login(props) {
 
     const onLoginHandler = () => {
 
-        axios.post('http://localhost:3000/react/login', null, { params: { email: email, password: password } })
+        axios.post('http://38.123.149.95:3000/react/login', null, { params: { email: email, password: password } })
             .then(resData => {
                 if (resData.status === 200) {
                     console.log(resData.data.token);

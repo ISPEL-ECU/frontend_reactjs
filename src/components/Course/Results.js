@@ -14,7 +14,7 @@ const Results = React.memo(props => {
     useEffect(() => {
         console.log('output');
         console.log(props.selectedTopics.length);
-        axios.get('http://localhost:3000/react/get-selected-topics', { params: { id: ((props.selectedTopics && props.selectedTopics.length > 0) ? props.selectedTopics : ['-1']) } })
+        axios.get('http://38.123.149.95:3000/react/get-selected-topics', { params: { id: ((props.selectedTopics && props.selectedTopics.length > 0) ? props.selectedTopics : ['-1']) } })
             .then(topics => {
                 setTopics(topics.data);
                 if (topics.data.length > 0) {

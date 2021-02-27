@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap");
 * {
   box-sizing: border-box;
 }
@@ -56,7 +56,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
   font-size: 1em;
 }
 
-.bm-menu a  {
+.bm-menu a {
   color: #ffffff;
   font-weight: bold;
   outline: 0;
@@ -92,8 +92,9 @@ Note: Beware of modifying this element as it can break the animations - you shou
   background: rgba(0, 0, 0, 0.3);
 }
 
-html, body {
-  font-family: 'Open Sans', sans-serif;
+html,
+body {
+  font-family: "Open Sans", sans-serif;
   margin: 0;
   height: 100%;
 }
@@ -142,7 +143,8 @@ iframe {
   width: 100%;
 }
 
-button:hover, button:active {
+button:hover,
+button:active {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.26);
 }
 
@@ -154,7 +156,9 @@ button:focus {
   background-color: #582c83;
 }
 
-.bg-ecu .navbar-brand, .navbar-light .navbar-brand, .navbar-custom .nav-item .nav-link {
+.bg-ecu .navbar-brand,
+.navbar-light .navbar-brand,
+.navbar-custom .nav-item .nav-link {
   color: #ffffff;
 }
 
@@ -198,6 +202,33 @@ table#topicsOverview {
 }
 
 .form-group.required .control-label:after {
+  content: "*";
+  color: red;
+}
+
+.circle-tooltip {
+  width: 30px;
+  height: 30px;
+  margin-left: 6px;
+  border-radius: 15px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  padding: 0 10px;
+  
+}
+
+.required.form-group .form-label:before {
   content:"*";
   color:red;
+}
+
+.required.form-file .form-file-label:before {
+  content:"*";
+  color:red;
+}
+
+.form-label, .form-file-label {
+  font-family: 'Arvo', serif;
+  font-weight: bold;
 }

@@ -12,7 +12,7 @@ const Display = React.memo((props) => {
   useEffect(() => {
     console.log("ST " + props.selectedTopic);
     axios
-      .get("http://localhost:3000/react/get-content", {
+      .get("http://38.123.149.95:3000/react/get-content", {
         params: {
           id: props.selectedTopic.length !== "" ? props.selectedTopic : "-1",
         },
@@ -38,8 +38,8 @@ const Display = React.memo((props) => {
         style={{ maxHeight: 90 + "%", width: 100 + "%", overflow: "auto" }}
         src={
           topic !== ""
-            ? "http://localhost:3000/author/topic/" + topic
-            : "http://localhost:3000/author/topic/rmdhtml/preview.html"
+            ? "http://38.123.149.95:3000/author/topic/" + topic
+            : "http://38.123.149.95:3000/author/topic/rmdhtml/preview.html"
         }
         id="frame"
         frameBorder="0"

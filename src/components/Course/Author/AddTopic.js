@@ -11,7 +11,11 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Tooltip from "react-bootstrap/Tooltip";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+
 import { useAuth } from "../../../context/auth";
+import { Redirect } from "react-router";
 
 const AddTopic = (props) => {
   const [topicId, setTopicId] = useState("");
@@ -31,18 +35,20 @@ const AddTopic = (props) => {
   const [rmd, setRmd] = useState();
   const [privateTopic, setPrivateTopic] = useState(false);
   const { authToken } = useAuth();
+  const [submitForm, setSubmitForm] = useState(false);
 
   const setAreasForDomain = (domainId) => {
     if (!domainId) return [];
     axios
-      .get("http://localhost:3000/react/get-areas", {
+      .get("http://38.123.149.95:3000/react/get-areas", {
         params: { domainId: domainId },
         headers: {
-          Authorization: 'Bearer ' + authToken,
+          Authorization: "Bearer " + authToken,
         },
       })
       .then((areas) => {
         setAreas(areas.data);
+        setSelectedArea(areas.data[0]);
         const currentDomain = domains.find((d) => d.id.toString() === domainId);
         const name = topicName.toLowerCase().replace(/ /g, "-");
         setTopicId(
@@ -56,7 +62,7 @@ const AddTopic = (props) => {
     console.log("effect");
     let initialTopicId = "";
     axios
-      .get("http://localhost:3000/react/get-domains", {
+      .get("http://38.123.149.95:3000/react/get-domains", {
         headers: {
           Authorization: "Bearer " + authToken,
         },
@@ -70,7 +76,7 @@ const AddTopic = (props) => {
       })
       .then((id) => {
         axios
-          .get("http://localhost:3000/react/get-areas", {
+          .get("http://38.123.149.95:3000/react/get-areas", {
             params: { domainId: id },
             headers: {
               Authorization: "Bearer " + authToken,
@@ -85,7 +91,7 @@ const AddTopic = (props) => {
           });
       });
     axios
-      .get("http://localhost:3000/react/get-keywords", {
+      .get("http://38.123.149.95:3000/react/get-keywords", {
         headers: {
           Authorization: "Bearer " + authToken,
         },
@@ -95,7 +101,7 @@ const AddTopic = (props) => {
         setSelectedkeyword(keywords.data[0].id);
       });
     axios
-      .get("http://localhost:3000/react/get-aliases", {
+      .get("http://38.123.149.95:3000/react/get-aliases", {
         headers: {
           Authorization: "Bearer " + authToken,
         },
@@ -106,35 +112,9 @@ const AddTopic = (props) => {
       });
   }, []);
 
-  const saveTopic = () => {
-    const data = new FormData();
-    data.append("domain", selectedDomain);
-    data.append("area", selectedArea);
-    data.append("name", topicName);
-    data.append("topicId", topicId);
-    data.append("keyword", selectedKeyword);
-    data.append("alias", selectedAlias);
-    data.append("private", privateTopic);
-    data.append("teaser", teaser);
-    data.append("contentUpload", htmlContent);
-    if (assets) data.append("assetsUpload", assets);
-    if (rmd) data.append("rdmUpload", rmd);
-    data.append("userId", localStorage.getItem("userId"));
-
-    console.log(data);
-    axios
-      .post("http://localhost:3000/react/save-topic", data, {
-        headers: {
-          Authorization: "Bearer " + authToken,
-        },
-      })
-      .then((response) => {
-        return response;
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
     const form = event.currentTarget;
     console.log(form);
     if (form.checkValidity() === false) {
@@ -142,8 +122,10 @@ const AddTopic = (props) => {
       event.stopPropagation();
     } else {
       const data = new FormData();
+      console.log("area");
+      console.log(selectedArea.id);
       data.append("domain", selectedDomain);
-      data.append("area", selectedArea);
+      data.append("area", selectedArea.id);
       data.append("name", topicName);
       data.append("topicId", topicId);
       data.append("keyword", selectedKeyword);
@@ -154,8 +136,9 @@ const AddTopic = (props) => {
       if (assets) data.append("assetsUpload", assets);
       if (rmd) data.append("rdmUpload", rmd);
       data.append("userId", localStorage.getItem("userId"));
-      axios
-        .post("http://localhost:3000/react/save-topic", data, {
+
+      await axios
+        .post("http://38.123.149.95:3000/react/save-topic", data, {
           headers: {
             Authorization: "Bearer " + authToken,
           },
@@ -165,8 +148,12 @@ const AddTopic = (props) => {
             event.preventDefault();
             event.stopPropagation();
           }
+          setSubmitForm(true);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          alert(err);
+          console.log(err);
+        });
     }
   };
 
@@ -249,17 +236,13 @@ const AddTopic = (props) => {
 
   return (
     <div className="App" style={{ height: 100 + "%" }}>
+      {submitForm ? <Redirect to="/browse-topics" /> : null}
       <Container fluid style={{ height: 100 + "%" }}>
         <Menu isAuth={props.isAuth} setIsAuth={props.setIsAuth} />
         <Navbar />
         <Row>
           <Col lg={12}>
-            <Form
-              noValidate
-              validated={validated}
-              onSubmit={handleSubmit}
-              action="/browse-topics"
-            >
+            <Form noValidate validated={validated} onSubmit={handleSubmit}>
               <Row>
                 <Col sm={4}>
                   <Form.Group>
@@ -276,7 +259,7 @@ const AddTopic = (props) => {
                 </Col>
 
                 <Col sm={4}>
-                  <Form.Group key="topicNameInputGroup">
+                  <Form.Group key="topicNameInputGroup" className="required">
                     <Form.Label>Topic Name</Form.Label>
                     <Form.Control
                       key="topicNameInput"
@@ -347,8 +330,21 @@ const AddTopic = (props) => {
 
               <Row>
                 <Col sm={12}>
-                  <Form.Group>
-                    <Form.Label>Teaser paragraph</Form.Label>
+                  <Form.Group className="required">
+                    <Form.Label>
+                      Teaser paragraph
+                      <OverlayTrigger
+                        key="right"
+                        placement="right"
+                        overlay={
+                          <Tooltip id="paragraphTooltip">
+                            Please enter 1-2 sentences about your topic
+                          </Tooltip>
+                        }
+                      >
+                        <Button variant="secondary" className="circle-tooltip" >?</Button>
+                      </OverlayTrigger>
+                    </Form.Label>
                     <Form.Control
                       as="textarea"
                       rows={10}
@@ -366,6 +362,8 @@ const AddTopic = (props) => {
                       id="htmlContent"
                       label="HTML File"
                       onChange={htmlHandler}
+                      accept=".html"
+                      className="required"
                     />
                   </Form.Group>
                 </Col>
@@ -387,14 +385,18 @@ const AddTopic = (props) => {
                       id="rmdContent"
                       label="RMD File"
                       onChange={rmdHandler}
+                      accept=".rmd"
                     />
                   </Form.Group>
                 </Col>
               </Row>
               <Row>
-                <Col sm={6}>* indicates required fields</Col>
-                <Col sm={6}>
-                  <Button type="submit" variant="primary">
+                <Col sm={12}>* indicates required fields</Col>
+                </Row>
+                <Row>&nbsp;</Row>
+                <Row className="justify-content-md-right">
+                <Col sm={10}  className="float-right">
+                  <Button type="submit" variant="primary" size="lg" className="float-right" >
                     Submit
                   </Button>
                 </Col>
