@@ -12,6 +12,9 @@ import Login from "./components/Auth/Login";
 import TopicBrowser from "./components/Course/TopicBrowser";
 import CourseBrowser from "./components/Course/CourseBrowser";
 import AddTopic from "./components/Course/Author/AddTopic";
+import Users from "./components/Course/UserBrowser";
+import AddUser from "./components/Course/AddUserWraper";
+import ManageAccount from "./components/Course/ManageAccountWraper";
 import NoMatch from "./components/Course/404";
 
 const App = (props) => {
@@ -61,6 +64,9 @@ const App = (props) => {
             path="/browse-courses"
             component={CourseBrowser}
           />
+           <PrivateRoute exact path="/users" component={Users} />
+           <PrivateRoute exact path="/manage-account" component={ManageAccount} />
+           <PrivateRoute exact path="/add-user" component={AddUser} />
           <PrivateRoute exact path="/add-topic" component={AddTopic} />
           <Route path="/login">
             <Login />

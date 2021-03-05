@@ -1,0 +1,1 @@
+export const SERVER_ADDRESS = "http://38.123.149.95:3000/react/";

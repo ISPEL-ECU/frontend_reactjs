@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-import Card from "react-bootstrap/Card";
 
 import axios from "axios";
 import { useAuth } from "../../context/auth";
+
+import {SERVER_ADDRESS} from "../../constants/constants";
 
 const Display = React.memo((props) => {
   const [topic, setTopic] = useState("");
@@ -12,7 +13,7 @@ const Display = React.memo((props) => {
   useEffect(() => {
     console.log("ST " + props.selectedTopic);
     axios
-      .get("http://38.123.149.95:3000/react/get-content", {
+      .get(SERVER_ADDRESS+"get-content", {
         params: {
           id: props.selectedTopic.length !== "" ? props.selectedTopic : "-1",
         },

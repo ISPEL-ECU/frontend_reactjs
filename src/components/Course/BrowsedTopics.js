@@ -3,11 +3,12 @@ import axios from "axios";
 
 //bootstrap components
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import FormGroup from "react-bootstrap/esm/FormGroup";
 import ListGroup from "react-bootstrap/ListGroup";
+
+import {SERVER_ADDRESS} from "../../constants/constants";
 
 import Topic from "./BrowsedTopic";
 import { useAuth } from "../../context/auth";
@@ -21,7 +22,7 @@ const BrowsedTopics = React.memo((props) => {
   useEffect(() => {
     console.log("useEffect topics");
     axios
-      .get("http://38.123.149.95:3000/react/get-topics", {
+      .get(SERVER_ADDRESS+"get-topics", {
         params: {
           areaId:
             props.selectedArea && props.selectedArea !== ""
@@ -37,7 +38,7 @@ const BrowsedTopics = React.memo((props) => {
         console.log(topics.data);
         setTopics(topics.data);
       });
-  }, [props.selectedArea, props.showSearch]);
+  }, [props.selectedArea, props.showSearch, authToken]);
 
   useEffect(() => {
     if (props.showSearch) {
@@ -48,7 +49,7 @@ const BrowsedTopics = React.memo((props) => {
   const searchHandler = (event) => {
     searchValueRef.current = event.target.value;
     axios
-      .get("http://38.123.149.95:3000/react/get-topics-search", {
+      .get(SERVER_ADDRESS+"get-topics-search", {
         params: { name: searchValueRef.current },
       })
       .then((tops) => {

@@ -7,6 +7,8 @@ import './IngredientForm.css';
 
 import axios from 'axios';
 
+import {SERVER_ADDRESS} from "../../constants/constants";
+
 const Results = React.memo(props => {
     const [topics, setTopics] = useState([]);
     const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -14,7 +16,7 @@ const Results = React.memo(props => {
     useEffect(() => {
         console.log('output');
         console.log(props.selectedTopics.length);
-        axios.get('http://38.123.149.95:3000/react/get-selected-topics', { params: { id: ((props.selectedTopics && props.selectedTopics.length > 0) ? props.selectedTopics : ['-1']) } })
+        axios.get(SERVER_ADDRESS+"get-selected-topics", { params: { id: ((props.selectedTopics && props.selectedTopics.length > 0) ? props.selectedTopics : ['-1']) } })
             .then(topics => {
                 setTopics(topics.data);
                 if (topics.data.length > 0) {

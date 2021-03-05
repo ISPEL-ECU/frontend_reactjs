@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+
 
 import Menu from "../UI/Menu";
 import Navbar from "../UI/Navbar";
@@ -21,7 +21,6 @@ function TopicBrowser(props) {
   const [selectedDomain, setSelectedDomain] = useState("");
   const [selectedArea, setSelectedArea] = useState("");
   const [selectedTopic, setSelectedTopic] = useState([]);
-  const [topics, setTopics] = useState([]);
   const [showSearch, setShowSearch] = useState(false);
 
   const changeDomainHandler = (domainId) => {

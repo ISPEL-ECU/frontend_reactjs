@@ -12,7 +12,7 @@ import Topic from './Topic'
 
 import { useAuth } from "../../context/auth";
 
-
+import {SERVER_ADDRESS} from "../../constants/constants";
 
 
 const Topics = React.memo(props => {
@@ -23,7 +23,7 @@ const Topics = React.memo(props => {
   const { authToken } = useAuth();
   useEffect(() => {
     console.log("useEffect topics");
-    axios.get('http://38.123.149.95:3000/react/get-topics', 
+    axios.get(SERVER_ADDRESS+"get-topics", 
     { params:
        { areaId: (props.selectedArea && props.selectedArea !== '') ? props.selectedArea : "-1",
        },
@@ -46,7 +46,7 @@ const Topics = React.memo(props => {
 
   const searchHandler = (event) =>{
     searchValueRef.current =  event.target.value;
-    axios.get('http://38.123.149.95:3000/react/get-topics-search', 
+    axios.get(SERVER_ADDRESS+"get-topics-search", 
     { params:
        { name:searchValueRef.current,
        }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
+
 
 import Menu from "../UI/Menu";
 import Navbar from "../UI/Navbar";
@@ -22,8 +22,10 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
+import {SERVER_ADDRESS} from "../../constants/constants";
+
 function CourseBuilder(props) {
-  const history = useHistory();
+  
   const color_original = "#4c72ff";
   const color_root_node = "#ff0000";
 
@@ -51,7 +53,7 @@ function CourseBuilder(props) {
 
   const extractTopicsHandler = (selectedTopics) => {
     axios
-      .get("http://38.123.149.95:3000/react/get-selected-topics", {
+      .get(SERVER_ADDRESS+"get-selected-topics", {
         params: {
           id:
             selectedTopics && selectedTopics.length > 0
@@ -161,7 +163,7 @@ function CourseBuilder(props) {
   };
 
   const saveCourseHandler = (event) => {
-    axios.post("http://38.123.149.95:3000/react/save-course", null, {
+    axios.post(SERVER_ADDRESS+"save-course", null, {
       params: {
         courseName: courseName,
         topics: JSON.stringify(topics),

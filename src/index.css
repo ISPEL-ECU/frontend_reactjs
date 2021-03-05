@@ -218,12 +218,7 @@ table#topicsOverview {
   
 }
 
-.required.form-group .form-label:before {
-  content:"*";
-  color:red;
-}
-
-.required.form-file .form-file-label:before {
+.required.form-group .form-label:after, .required.form-file .form-file-label:after {
   content:"*";
   color:red;
 }
@@ -231,4 +226,9 @@ table#topicsOverview {
 .form-label, .form-file-label {
   font-family: 'Arvo', serif;
   font-weight: bold;
+}
+
+.asterix-caption:before {
+  content:"*";
+  color:red;
 }

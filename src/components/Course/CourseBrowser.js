@@ -14,7 +14,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { useAuth } from "../../context/auth";
 
-
+import {SERVER_ADDRESS} from "../../constants/constants";
 
 
 function CourseBuilder(props) {
@@ -29,7 +29,7 @@ function CourseBuilder(props) {
   useEffect(() => {
    
     axios
-      .get("http://38.123.149.95:3000/react/get-courses",  {headers: {
+      .get(SERVER_ADDRESS+"get-courses",  {headers: {
         Authorization: "Bearer " + authToken,
       },})
       .then((crses) => {

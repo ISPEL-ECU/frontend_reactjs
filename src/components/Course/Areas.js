@@ -8,14 +8,17 @@ import FormGroup from "react-bootstrap/FormGroup";
 
 import { useAuth } from "../../context/auth";
 
+import {SERVER_ADDRESS} from "../../constants/constants";
+
 const Areas = (props) => {
   const [areas, setAreas] = useState([]);
   const { authToken } = useAuth();
 
   useEffect(() => {
+    console.log('areas effect');
     if (!props.showSearch) {
       axios
-        .get("http://38.123.149.95:3000/react/get-areas", {
+        .get(SERVER_ADDRESS+"get-areas", {
           params: {
             domainId:
               props.selectedDomain && props.selectedDomain !== ""
@@ -23,8 +26,8 @@ const Areas = (props) => {
                 : "-1",
           },
           headers: {
-            Authorization: 'Bearer ' + authToken,
-          }
+            Authorization: "Bearer " + authToken,
+          },
         })
         .then((areas) => {
           console.log("i am here " + props.showSearch);
@@ -33,7 +36,7 @@ const Areas = (props) => {
           // console.log(domains);
         });
     }
-  }, [props.selectedDomain]);
+  }, [props.selectedDomain, authToken, props.showSearch]);
 
   const onAreaChange = (areaId) => {
     props.onChangeArea(areaId);
@@ -46,19 +49,17 @@ const Areas = (props) => {
   });
 
   return (
-    <section className="ingredient-list">
-      <FormGroup>
-        <label htmlFor="areaSelect">Select Area</label>
-        <Form.Control
-          as="select"
-          id="areaSelect"
-          style={{ display: "inline" }}
-          onChange={(event) => onAreaChange(event.target.value)}
-        >
-          {areasToDisplay}
-        </Form.Control>
-      </FormGroup>
-    </section>
+    <FormGroup>
+      <Form.Label>Select Area</Form.Label>
+      <Form.Control
+        as="select"
+        id="areaSelect"
+        style={{ display: "inline" }}
+        onChange={(event) => onAreaChange(event.target.value)}
+      >
+        {areasToDisplay}
+      </Form.Control>
+    </FormGroup>
   );
 };
 

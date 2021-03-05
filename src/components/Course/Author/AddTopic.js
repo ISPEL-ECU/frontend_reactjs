@@ -17,6 +17,8 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import { useAuth } from "../../../context/auth";
 import { Redirect } from "react-router";
 
+import {SERVER_ADDRESS} from "../../../constants/constants";
+
 const AddTopic = (props) => {
   const [topicId, setTopicId] = useState("");
   const [topicName, setTopicName] = useState("");
@@ -40,7 +42,7 @@ const AddTopic = (props) => {
   const setAreasForDomain = (domainId) => {
     if (!domainId) return [];
     axios
-      .get("http://38.123.149.95:3000/react/get-areas", {
+      .get(SERVER_ADDRESS+"get-areas", {
         params: { domainId: domainId },
         headers: {
           Authorization: "Bearer " + authToken,
@@ -62,7 +64,7 @@ const AddTopic = (props) => {
     console.log("effect");
     let initialTopicId = "";
     axios
-      .get("http://38.123.149.95:3000/react/get-domains", {
+      .get(SERVER_ADDRESS+"get-domains", {
         headers: {
           Authorization: "Bearer " + authToken,
         },
@@ -76,7 +78,7 @@ const AddTopic = (props) => {
       })
       .then((id) => {
         axios
-          .get("http://38.123.149.95:3000/react/get-areas", {
+          .get(SERVER_ADDRESS+"get-areas", {
             params: { domainId: id },
             headers: {
               Authorization: "Bearer " + authToken,
@@ -91,7 +93,7 @@ const AddTopic = (props) => {
           });
       });
     axios
-      .get("http://38.123.149.95:3000/react/get-keywords", {
+      .get(SERVER_ADDRESS+"get-keywords", {
         headers: {
           Authorization: "Bearer " + authToken,
         },
@@ -101,7 +103,7 @@ const AddTopic = (props) => {
         setSelectedkeyword(keywords.data[0].id);
       });
     axios
-      .get("http://38.123.149.95:3000/react/get-aliases", {
+      .get(SERVER_ADDRESS+"get-aliases", {
         headers: {
           Authorization: "Bearer " + authToken,
         },
@@ -113,14 +115,15 @@ const AddTopic = (props) => {
   }, []);
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    event.stopPropagation();
     const form = event.currentTarget;
-    console.log(form);
+
     if (form.checkValidity() === false) {
+      console.log('not valid');
       event.preventDefault();
       event.stopPropagation();
     } else {
+      console.log('valid');
+      setValidated(true);
       const data = new FormData();
       console.log("area");
       console.log(selectedArea.id);
@@ -138,7 +141,7 @@ const AddTopic = (props) => {
       data.append("userId", localStorage.getItem("userId"));
 
       await axios
-        .post("http://38.123.149.95:3000/react/save-topic", data, {
+        .post(SERVER_ADDRESS+"save-topic", data, {
           headers: {
             Authorization: "Bearer " + authToken,
           },
@@ -166,7 +169,7 @@ const AddTopic = (props) => {
   });
 
   const keywordsToDisplay = keywords.map((keyword) => {
-    return <option value={keyword.id}>{keyword.value}</option>;
+    return <option value={keyword.id} key={keyword.id+keyword.value}>{keyword.value}</option>;
   });
 
   const onKeywordChange = (event) => {
@@ -174,7 +177,7 @@ const AddTopic = (props) => {
   };
 
   const aliasesToDisplay = aliases.map((alias) => {
-    return <option value={alias.id}>{alias.value}</option>;
+    return <option value={alias.id} key={alias.id+alias.value}>{alias.value}</option>;
   });
 
   const onDomainChange = (event) => {
@@ -235,48 +238,37 @@ const AddTopic = (props) => {
   };
 
   return (
-    <div className="App" style={{ height: 100 + "%" }}>
+    <div style={{ height: 100 + "%" }}>
       {submitForm ? <Redirect to="/browse-topics" /> : null}
       <Container fluid style={{ height: 100 + "%" }}>
         <Menu isAuth={props.isAuth} setIsAuth={props.setIsAuth} />
         <Navbar />
-        <Row>
-          <Col lg={12}>
-            <Form noValidate validated={validated} onSubmit={handleSubmit}>
-              <Row>
-                <Col sm={4}>
-                  <Form.Group>
-                    <Form.Label>Domain Name</Form.Label>
-                    <Form.Control
-                      as="select"
-                      id="domainSelect"
-                      style={{ display: "inline" }}
-                      onChange={onDomainChange}
-                    >
-                      {domainsToDisplay}
-                    </Form.Control>
-                  </Form.Group>
-                </Col>
+       
+            <Form validated={validated} onSubmit={handleSubmit}>
+              <Form.Row>
+                <Form.Group as={Col} sm={4}>
+                  <Form.Label>Domain Name</Form.Label>
+                  <Form.Control
+                    as="select"
+                    id="domainSelect"
+                    style={{ display: "inline" }}
+                    onChange={onDomainChange}
+                  >
+                    {domainsToDisplay}
+                  </Form.Control>
+                </Form.Group>
 
-                <Col sm={4}>
-                  <Form.Group key="topicNameInputGroup" className="required">
-                    <Form.Label>Topic Name</Form.Label>
-                    <Form.Control
-                      key="topicNameInput"
-                      type="text"
-                      required
-                      onBlur={onTopicName}
-                    />
-                  </Form.Group>
-                </Col>
+                <Form.Group as={Col} sm={4} controlId="validationCustom01" className="required">
+                  <Form.Label>Topic Name</Form.Label>
+                  <Form.Control required type="text" onBlur={onTopicName} />
+                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                </Form.Group>
 
-                <Col sm={4}>
-                  <Form.Group>
-                    <Form.Label>Topic ID | to be auto-generated</Form.Label>
-                    <Form.Control value={topicId} readOnly />
-                  </Form.Group>
-                </Col>
-              </Row>
+                <Form.Group as={Col} sm={4}>
+                  <Form.Label>Topic ID | to be auto-generated</Form.Label>
+                  <Form.Control value={topicId} readOnly />
+                </Form.Group>
+              </Form.Row>
               <Row>
                 <Col sm={4}>
                   <Form.Group>
@@ -342,7 +334,9 @@ const AddTopic = (props) => {
                           </Tooltip>
                         }
                       >
-                        <Button variant="secondary" className="circle-tooltip" >?</Button>
+                        <Button variant="secondary" className="circle-tooltip">
+                          ?
+                        </Button>
                       </OverlayTrigger>
                     </Form.Label>
                     <Form.Control
@@ -391,19 +385,25 @@ const AddTopic = (props) => {
                 </Col>
               </Row>
               <Row>
-                <Col sm={12}>* indicates required fields</Col>
-                </Row>
-                <Row>&nbsp;</Row>
-                <Row className="justify-content-md-right">
-                <Col sm={10}  className="float-right">
-                  <Button type="submit" variant="primary" size="lg" className="float-right" >
-                    Submit
-                  </Button>
+                <Col sm={12} className="asterix-caption">
+                  indicates required fields
                 </Col>
               </Row>
+              <Row>&nbsp;</Row>
+              <Form.Row className="justify-content-md-right">
+                <Form.Group as={Col} sm={10} className="float-right">
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    size="lg"
+                    className="float-right"
+                  >
+                    Submit
+                  </Button>
+                </Form.Group>
+              </Form.Row>
             </Form>
-          </Col>
-        </Row>
+         
       </Container>
     </div>
   );

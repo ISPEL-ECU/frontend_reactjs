@@ -11,6 +11,8 @@ import axios from "axios";
 
 import { useAuth } from "../../context/auth";
 
+import {SERVER_ADDRESS} from "../../constants/constants";
+
 const Domains = React.memo((props) => {
   const [domains, setDomains] = useState([]);
   const [showDomains, setShowDomains] = useState(true);
@@ -18,7 +20,7 @@ const Domains = React.memo((props) => {
 
   useEffect(() => {
     axios
-      .get("http://38.123.149.95:3000/react/get-domains", {
+      .get(SERVER_ADDRESS+"get-domains", {
         headers: {
           Authorization: "Bearer " + authToken,
         },
@@ -65,9 +67,9 @@ const Domains = React.memo((props) => {
         id="advancedSearch"
         onChange={handleSearchCheck}
       />
-      <label htmlFor="domainSelect" hidden={!showDomains}>
+      <Form.Label hidden={!showDomains}>
         Select Domain
-      </label>
+      </Form.Label>
       <Form.Control
         as="select"
         hidden={!showDomains}
