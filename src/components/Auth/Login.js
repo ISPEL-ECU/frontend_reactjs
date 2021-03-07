@@ -24,7 +24,7 @@ function Login(props) {
   const [isError, setIsError] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setAuthToken, setAuthLevel, setUserId } = useAuth();
+  const { setAuthToken, setAuthLevel, setUserId, setUserName } = useAuth();
 
   const onLoginHandler = () => {
     axios
@@ -33,11 +33,11 @@ function Login(props) {
       })
       .then((resData) => {
         if (resData.status === 200) {
-          console.log(resData.data.token);
+          
           setAuthToken(resData.data.token);
           setAuthLevel(resData.data.authLevel);
           setUserId(resData.data.userId);
-          console.log("authLevel=" + resData.data.authLevel);
+          setUserName(resData.data.userName);
           setLevel(resData.data.authLevel);
           setLoggedIn(true);
         } else {

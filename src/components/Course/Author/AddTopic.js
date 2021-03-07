@@ -115,6 +115,9 @@ const AddTopic = (props) => {
   }, []);
 
   const handleSubmit = async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
     const form = event.currentTarget;
 
     if (form.checkValidity() === false) {
@@ -123,7 +126,7 @@ const AddTopic = (props) => {
       event.stopPropagation();
     } else {
       console.log('valid');
-      setValidated(true);
+      
       const data = new FormData();
       console.log("area");
       console.log(selectedArea.id);
@@ -244,7 +247,7 @@ const AddTopic = (props) => {
         <Menu isAuth={props.isAuth} setIsAuth={props.setIsAuth} />
         <Navbar />
        
-            <Form validated={validated} onSubmit={handleSubmit}>
+            <Form noValidate validated={validated} onSubmit={handleSubmit}>
               <Form.Row>
                 <Form.Group as={Col} sm={4}>
                   <Form.Label>Domain Name</Form.Label>
@@ -394,6 +397,7 @@ const AddTopic = (props) => {
                 <Form.Group as={Col} sm={10} className="float-right">
                   <Button
                     type="submit"
+                    
                     variant="primary"
                     size="lg"
                     className="float-right"

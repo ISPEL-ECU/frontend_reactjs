@@ -12,7 +12,8 @@ import Button from "react-bootstrap/Button";
 
 import { useAuth } from "../../context/auth";
 
-import {SERVER_ADDRESS} from "../../constants/constants";
+import { SERVER_ADDRESS } from "../../constants/constants";
+import { Redirect } from "react-router";
 
 const ManageUser = (props) => {
   const [currentUser, setCurrentUser] = useState();
@@ -22,11 +23,12 @@ const ManageUser = (props) => {
   const [userPassword, setUserPassword] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userRole, setUserRole] = useState();
+  const [submitForm, setSubmitForm] = useState(false);
   const { authToken } = useAuth();
 
   useEffect(() => {
     axios
-      .get(SERVER_ADDRESS+"get-roles", {
+      .get(SERVER_ADDRESS + "get-roles", {
         headers: {
           Authorization: "Bearer " + authToken,
         },
@@ -38,40 +40,45 @@ const ManageUser = (props) => {
   }, [props.selectedUser, authToken]);
 
   const rolesToDisplay = roles.map((role) => {
-    return <option value={role.id} key={role.id+role.roleName}>{role.roleName}</option>;
+    return (
+      <option value={role.id} key={role.id + role.roleName}>
+        {role.roleName}
+      </option>
+    );
   });
 
-  const onSubmitHandler = (event) => {
+  const onSubmitHandler = async (event) => {
     const form = event.currentTarget;
 
     if (form.checkValidity() === false) {
-      console.log('not valid');
+      console.log("not valid");
       event.preventDefault();
       event.stopPropagation();
     } else {
-    const data = new FormData();
-    data.append("firstName", userFirstName);
-    data.append("lastName", userLastName);
-    data.append("email", userEmail);
-    data.append("password", userPassword);
-    data.append("role", userRole);
-    axios
-      .post(SERVER_ADDRESS+"create-user", data, {
-        headers: {
-          Authorization: "Bearer " + authToken,
-        },
-      })
-      .then((response) => {
-        if (response.status !== 200) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-        return response.data;
-      })
-      .then((user) => {
-        setCurrentUser(user);
-      })
-      .catch((err) => console.log(err));
+      const data = new FormData();
+      data.append("firstName", userFirstName);
+      data.append("lastName", userLastName);
+      data.append("email", userEmail);
+      data.append("password", userPassword);
+      data.append("role", userRole);
+      await axios
+        .post(SERVER_ADDRESS + "create-user", data, {
+          headers: {
+            Authorization: "Bearer " + authToken,
+          },
+        })
+        .then((response) => {
+          if (response.status !== 200) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          return response.data;
+        })
+        .then((user) => {
+          setCurrentUser(user);
+          setSubmitForm(true);
+        })
+        .catch((err) => console.log(err));
     }
   };
 
@@ -96,9 +103,10 @@ const ManageUser = (props) => {
 
   return (
     <Container fluid style={{ height: 100 + "%" }}>
+      {submitForm ? <Redirect to="/browse-topics" /> : null}
       <Row>
         <Col lg={12}>
-          <Form action="/users" onSubmit={onSubmitHandler}>
+          <Form>
             <Row>
               <Col sm={4}>
                 <Form.Group className="required">
@@ -176,8 +184,8 @@ const ManageUser = (props) => {
             <Row className="justify-content-md-right">
               <Col sm={10} className="float-right">
                 <Button
-                  type="submit"
-                  
+                  type="button"
+                  onClick={onSubmitHandler}
                   variant="primary"
                   size="lg"
                   className="float-right"

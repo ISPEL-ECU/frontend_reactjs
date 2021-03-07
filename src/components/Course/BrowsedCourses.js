@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+import {LIST_FONT_COLOR, LIST_BACKGROUND_COLOR} from "../../constants/constants";
 
 //bootstrap components
 import Form from "react-bootstrap/Form";
@@ -25,8 +26,8 @@ const BrowsedCourses = React.memo((props) => {
       prevCourse.style.backgroundColor = "initial";
       prevCourse.style.color = "initial";
     }
-    event.target.style.backgroundColor = "#582c83";
-    event.target.style.color = "#ffffff";
+    event.target.style.backgroundColor =LIST_BACKGROUND_COLOR;
+    event.target.style.color = LIST_FONT_COLOR;
     setPrevCourse(event.target);
     
   };

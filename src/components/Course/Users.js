@@ -11,6 +11,8 @@ import { useAuth } from "../../context/auth";
 
 import {SERVER_ADDRESS} from "../../constants/constants";
 
+import {LIST_FONT_COLOR, LIST_BACKGROUND_COLOR} from "../../constants/constants";
+
 const Topics = React.memo((props) => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState();
@@ -22,6 +24,7 @@ const Topics = React.memo((props) => {
   
   //
   useEffect(() => {
+    props.setUpdateUsers(false);
     axios
       .get(SERVER_ADDRESS+"users", {
         headers: {
@@ -32,7 +35,7 @@ const Topics = React.memo((props) => {
         console.log(users);
         setUsers(users.data);
       });
-  }, []);
+  }, [authToken, props.updateUsers]);
 
   const selectedUserHandler = (event) => {
     const clickedUser = users.find((element) => element.id.toString() === event.target.id);
@@ -43,8 +46,8 @@ const Topics = React.memo((props) => {
       prevUser.style.backgroundColor = "initial";
       prevUser.style.color = "initial";
     }
-    event.target.style.backgroundColor = "#582c83";
-    event.target.style.color = "#ffffff";
+    event.target.style.backgroundColor = LIST_BACKGROUND_COLOR;
+    event.target.style.color = LIST_FONT_COLOR;
     setPrevUser(event.target);
   };
 

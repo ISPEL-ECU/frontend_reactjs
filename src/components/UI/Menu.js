@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { slide as Menu } from "react-burger-menu";
 
@@ -8,6 +8,8 @@ const SideNav = (props) => {
   const { authToken, setAuthToken } = useAuth();
   const { authLevel, setAuthLevel } = useAuth();
   const { setUserId } = useAuth();
+  const { userName } = useAuth();
+  const [currentUser, setCurrentUser] = useState(userName);
 
   function logOut() {
     setAuthToken();
@@ -17,6 +19,11 @@ const SideNav = (props) => {
     localStorage.removeItem("token");
     localStorage.removeItem("authLevel");
   }
+
+  useEffect(()=>{
+    console.log('name is '+userName);
+    setCurrentUser(userName);
+  }, [userName])
 
   const AuthorizedMenu = () => {
     if (authToken) {
@@ -44,7 +51,7 @@ const SideNav = (props) => {
             </a>
             <hr />
             <a id="account" className="menu-item" href="/manage-account">
-              Manage Account
+              {currentUser}
             </a>
             <a id="logout" className="menu-item" href="#" onClick={logOut}>
               Logout
@@ -70,7 +77,7 @@ const SideNav = (props) => {
             </a>
             <hr />
             <a id="account" className="menu-item" href="/manage-account">
-              Manage Account
+              {currentUser}
             </a>
             <a id="logout" className="menu-item" href="#" onClick={logOut}>
               Logout
@@ -88,7 +95,7 @@ const SideNav = (props) => {
           </a>
           <hr />
           <a id="account" className="menu-item" href="/manage-account">
-            Manage Account
+            {currentUser}
           </a>
           <a id="logout" className="menu-item" href="#" onClick={logOut}>
             Logout

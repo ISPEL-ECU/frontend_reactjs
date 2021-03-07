@@ -13,6 +13,8 @@ import {SERVER_ADDRESS} from "../../constants/constants";
 import Topic from "./BrowsedTopic";
 import { useAuth } from "../../context/auth";
 
+import {LIST_FONT_COLOR, LIST_BACKGROUND_COLOR} from "../../constants/constants";
+
 const BrowsedTopics = React.memo((props) => {
   const [topics, setTopics] = useState([]);
   const [prevTopic, setPrevTopic] = useState();
@@ -89,8 +91,8 @@ const BrowsedTopics = React.memo((props) => {
       prevTopic.style.backgroundColor = "initial";
       prevTopic.style.color = "initial";
     }
-    event.target.style.backgroundColor = "#582c83";
-    event.target.style.color = "#ffffff";
+    event.target.style.backgroundColor = LIST_BACKGROUND_COLOR;
+    event.target.style.color = LIST_FONT_COLOR;
     setPrevTopic(event.target);
     event.preventDefault();
   };

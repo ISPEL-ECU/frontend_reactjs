@@ -24,6 +24,8 @@ const App = (props) => {
   const [authLevel, setAuthLevel] = useState(existingAuthLevel);
   const existingUserId = localStorage.getItem("userId");
   const [userId, setUserId] = useState(existingUserId);
+  const existingUserName = localStorage.getItem("userName");
+  const [userName, setUserName] = useState(existingUserName);
 
   useEffect(() => {
     document.title = "ISPEL";
@@ -44,6 +46,11 @@ const App = (props) => {
     setAuthLevel(data);
   };
 
+  const setName = (data) =>{
+    localStorage.setItem("userName", data);
+    setUserName(data);
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -53,6 +60,8 @@ const App = (props) => {
         setAuthLevel: setLevel,
         userId,
         setUserId: setUser,
+        userName,
+        setUserName: setName
       }}
     >
       <Router history={history}>

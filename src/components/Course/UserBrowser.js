@@ -17,6 +17,7 @@ import Form from "react-bootstrap/Form";
 
 function UserBrowser(props) {
   const [selectedUser, setSelectedUser] = useState();
+  const [updateUsers, setUpdateUsers] = useState(false);
  
  
   return (
@@ -32,14 +33,14 @@ function UserBrowser(props) {
                 <Row>
                 </Row>
                 <Row style={{ height: 80 + "%" }}>
-                  <Users selectedUserHandler = {setSelectedUser}/>
+                  <Users selectedUserHandler = {setSelectedUser} updateUsers = {updateUsers} setUpdateUsers = {setUpdateUsers}/>
                 </Row>
               </Card>
             </Form>
           </Col>
 
           <Col sm={10} style={{ overflow: "auto" }}>
-            {selectedUser? <ManageUser selectedUser={selectedUser}/>:null}
+            {selectedUser? <ManageUser selectedUser={selectedUser} updateUsers={setUpdateUsers}/>:null}
           </Col>
         </Row>
       </Container>
