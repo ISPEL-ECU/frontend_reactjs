@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 
+import axios from "axios";
+
+import {SERVER_ADDRESS} from "../../constants/constants";
 
 import Menu from "../UI/Menu";
 import Navbar from "../UI/Navbar";
@@ -20,7 +23,7 @@ import Form from "react-bootstrap/Form";
 function TopicBrowser(props) {
   const [selectedDomain, setSelectedDomain] = useState("");
   const [selectedArea, setSelectedArea] = useState("");
-  const [selectedTopic, setSelectedTopic] = useState([]);
+  const [selectedTopic, setSelectedTopic] = useState('');
   const [showSearch, setShowSearch] = useState(false);
 
   const changeDomainHandler = (domainId) => {
@@ -34,7 +37,16 @@ function TopicBrowser(props) {
   
   const changeTopicHandler = (topic) => {
     console.log("selected " + topic);
-    setSelectedTopic(topic);
+    axios
+      .get(SERVER_ADDRESS+"get-content", {
+        params: {
+          id: topic,
+        }
+      })
+      .then((topicContent) => {
+        console.log("selected topic content");
+        console.log(topicContent.data);
+    setSelectedTopic(topicContent.data);})
   };
 
   const HandleAreaSearch = () => {

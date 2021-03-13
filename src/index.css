@@ -19,6 +19,20 @@
   background: #ffffff;
 }
 
+.no-border{
+  border:0;
+}
+
+a.courses{
+  color: black;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+body {
+  font-family: et-book, Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
+}
+
 /* Color/shape of burger icon bars on hover*/
 
 .bm-burger-bars-hover {
@@ -231,4 +245,15 @@ table#topicsOverview {
 .asterix-caption:before {
   content:"*";
   color:red;
+}
+
+.courses-browser{
+  font-size: 2rem;
+}
+
+.content-table{
+  font-size: 1rem;
+}
+div.table-of-content{
+  cursor: pointer;
 }

@@ -17,7 +17,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import { useAuth } from "../../../context/auth";
 import { Redirect } from "react-router";
 
-import {SERVER_ADDRESS} from "../../../constants/constants";
+import { SERVER_ADDRESS } from "../../../constants/constants";
 
 const AddTopic = (props) => {
   const [topicId, setTopicId] = useState("");
@@ -38,11 +38,14 @@ const AddTopic = (props) => {
   const [privateTopic, setPrivateTopic] = useState(false);
   const { authToken } = useAuth();
   const [submitForm, setSubmitForm] = useState(false);
+  const [nameValid, setNameValid] = useState(false);
+  const [teaserValid, setTeaserValid] = useState(false);
+  const [htmlValid, setHtmlValid] = useState(false);
 
   const setAreasForDomain = (domainId) => {
     if (!domainId) return [];
     axios
-      .get(SERVER_ADDRESS+"get-areas", {
+      .get(SERVER_ADDRESS + "get-areas", {
         params: { domainId: domainId },
         headers: {
           Authorization: "Bearer " + authToken,
@@ -64,7 +67,7 @@ const AddTopic = (props) => {
     console.log("effect");
     let initialTopicId = "";
     axios
-      .get(SERVER_ADDRESS+"get-domains", {
+      .get(SERVER_ADDRESS + "get-domains", {
         headers: {
           Authorization: "Bearer " + authToken,
         },
@@ -78,7 +81,7 @@ const AddTopic = (props) => {
       })
       .then((id) => {
         axios
-          .get(SERVER_ADDRESS+"get-areas", {
+          .get(SERVER_ADDRESS + "get-areas", {
             params: { domainId: id },
             headers: {
               Authorization: "Bearer " + authToken,
@@ -93,7 +96,7 @@ const AddTopic = (props) => {
           });
       });
     axios
-      .get(SERVER_ADDRESS+"get-keywords", {
+      .get(SERVER_ADDRESS + "get-keywords", {
         headers: {
           Authorization: "Bearer " + authToken,
         },
@@ -103,7 +106,7 @@ const AddTopic = (props) => {
         setSelectedkeyword(keywords.data[0].id);
       });
     axios
-      .get(SERVER_ADDRESS+"get-aliases", {
+      .get(SERVER_ADDRESS + "get-aliases", {
         headers: {
           Authorization: "Bearer " + authToken,
         },
@@ -121,12 +124,12 @@ const AddTopic = (props) => {
     const form = event.currentTarget;
 
     if (form.checkValidity() === false) {
-      console.log('not valid');
+      console.log("not valid");
       event.preventDefault();
       event.stopPropagation();
     } else {
-      console.log('valid');
-      
+      console.log("valid");
+
       const data = new FormData();
       console.log("area");
       console.log(selectedArea.id);
@@ -144,7 +147,7 @@ const AddTopic = (props) => {
       data.append("userId", localStorage.getItem("userId"));
 
       await axios
-        .post(SERVER_ADDRESS+"save-topic", data, {
+        .post(SERVER_ADDRESS + "save-topic", data, {
           headers: {
             Authorization: "Bearer " + authToken,
           },
@@ -172,7 +175,11 @@ const AddTopic = (props) => {
   });
 
   const keywordsToDisplay = keywords.map((keyword) => {
-    return <option value={keyword.id} key={keyword.id+keyword.value}>{keyword.value}</option>;
+    return (
+      <option value={keyword.id} key={keyword.id + keyword.value}>
+        {keyword.value}
+      </option>
+    );
   });
 
   const onKeywordChange = (event) => {
@@ -180,7 +187,11 @@ const AddTopic = (props) => {
   };
 
   const aliasesToDisplay = aliases.map((alias) => {
-    return <option value={alias.id} key={alias.id+alias.value}>{alias.value}</option>;
+    return (
+      <option value={alias.id} key={alias.id + alias.value}>
+        {alias.value}
+      </option>
+    );
   });
 
   const onDomainChange = (event) => {
@@ -197,6 +208,11 @@ const AddTopic = (props) => {
   };
 
   const onTopicName = (event) => {
+    if (event.target.value.length > 0) {
+      setNameValid(true);
+    } else {
+      setNameValid(false);
+    }
     setTopicName(event.target.value);
     let name = event.target.value.toLowerCase().replace(/ /g, "-");
     let currentTopicId =
@@ -225,10 +241,20 @@ const AddTopic = (props) => {
   };
 
   const teaserHandler = (event) => {
+    if (event.target.value.length > 0) {
+      setTeaserValid(true);
+    } else {
+      setTeaserValid(false);
+    }
     setTeaser(event.target.value);
   };
 
   const htmlHandler = (event) => {
+    if (event.target.files[0]) {
+      setHtmlValid(true);
+    } else {
+      setHtmlValid(false);
+    }
     setHtmlContent(event.target.files[0]);
   };
 
@@ -246,168 +272,179 @@ const AddTopic = (props) => {
       <Container fluid style={{ height: 100 + "%" }}>
         <Menu isAuth={props.isAuth} setIsAuth={props.setIsAuth} />
         <Navbar />
-       
-            <Form noValidate validated={validated} onSubmit={handleSubmit}>
-              <Form.Row>
-                <Form.Group as={Col} sm={4}>
-                  <Form.Label>Domain Name</Form.Label>
-                  <Form.Control
-                    as="select"
-                    id="domainSelect"
-                    style={{ display: "inline" }}
-                    onChange={onDomainChange}
+
+        <Form  validated={validated} onSubmit={handleSubmit}>
+          <Form.Row>
+            <Form.Group as={Col} sm={4}>
+              <Form.Label>Domain Name</Form.Label>
+              <Form.Control
+                as="select"
+                id="domainSelect"
+                style={{ display: "inline" }}
+                onChange={onDomainChange}
+              >
+                {domainsToDisplay}
+              </Form.Control>
+            </Form.Group>
+
+            <Form.Group
+              as={Col}
+              sm={4}
+              controlId="validationCustom01"
+              className="required"
+            >
+              <Form.Label>Topic Name</Form.Label>
+              <Form.Control
+                className={nameValid ? "is-valid" : "is-invalid"}
+                required
+                type="text"
+                key="topicNameInputKey"
+                onBlur={onTopicName}
+              />
+              
+            </Form.Group>
+
+            <Form.Group as={Col} sm={4}>
+              <Form.Label>Topic ID | to be auto-generated</Form.Label>
+              <Form.Control value={topicId} readOnly />
+            </Form.Group>
+          </Form.Row>
+          <Row>
+            <Col sm={4}>
+              <Form.Group>
+                <Form.Label>Area Name</Form.Label>
+                <Form.Control
+                  as="select"
+                  id="AreaSelect"
+                  style={{ display: "inline" }}
+                  onChange={onAreaChange}
+                >
+                  {areasToDisplay}
+                </Form.Control>
+              </Form.Group>
+              <Form.Group id="formGroupCheckbox">
+                <Form.Check
+                  type="checkbox"
+                  onChange={privateHandler}
+                  label="Private topic"
+                />
+              </Form.Group>
+            </Col>
+
+            <Col sm={4}>
+              <Form.Group>
+                <Form.Label>Keywords</Form.Label>
+                <Form.Control
+                  as="select"
+                  id="keywords"
+                  style={{ display: "inline" }}
+                  onChange={onKeywordChange}
+                >
+                  {keywordsToDisplay}
+                </Form.Control>
+              </Form.Group>
+            </Col>
+
+            <Col sm={4}>
+              <Form.Group>
+                <Form.Label>Aliases</Form.Label>
+                <Form.Control
+                  as="select"
+                  id="aliases"
+                  style={{ display: "inline" }}
+                  onChange={(event) => onAliasChange(event.target.value)}
+                >
+                  {aliasesToDisplay}
+                </Form.Control>
+              </Form.Group>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col sm={12}>
+              <Form.Group className="required">
+                <Form.Label>
+                  Teaser paragraph
+                  <OverlayTrigger
+                    key="right"
+                    placement="right"
+                    overlay={
+                      <Tooltip id="paragraphTooltip">
+                        Please enter 1-2 sentences about your topic
+                      </Tooltip>
+                    }
                   >
-                    {domainsToDisplay}
-                  </Form.Control>
-                </Form.Group>
+                    <Button variant="secondary" className="circle-tooltip">
+                      ?
+                    </Button>
+                  </OverlayTrigger>
+                </Form.Label>
+                <Form.Control
+                  className={teaserValid ? "is-valid" : "is-invalid"}
+                  as="textarea"
+                  rows={10}
+                  required
+                  onBlur={teaserHandler}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row>
+            <Col sm={4}>
+              <Form.Group>
+                <Form.File
+                  className={htmlValid ? "is-valid" : "is-invalid"}
+                  required
+                  id="htmlContent"
+                  label="HTML File"
+                  onChange={htmlHandler}
+                  accept=".html"
+                  className="required"
+                />
+              </Form.Group>
+            </Col>
 
-                <Form.Group as={Col} sm={4} controlId="validationCustom01" className="required">
-                  <Form.Label>Topic Name</Form.Label>
-                  <Form.Control required type="text" onBlur={onTopicName} />
-                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                </Form.Group>
+            <Col sm={4}>
+              <Form.Group>
+                <Form.File
+                  id="assetsContent"
+                  label="Assets File(s)"
+                  multiple
+                  onChange={assetsHandler}
+                />
+              </Form.Group>
+            </Col>
 
-                <Form.Group as={Col} sm={4}>
-                  <Form.Label>Topic ID | to be auto-generated</Form.Label>
-                  <Form.Control value={topicId} readOnly />
-                </Form.Group>
-              </Form.Row>
-              <Row>
-                <Col sm={4}>
-                  <Form.Group>
-                    <Form.Label>Area Name</Form.Label>
-                    <Form.Control
-                      as="select"
-                      id="AreaSelect"
-                      style={{ display: "inline" }}
-                      onChange={onAreaChange}
-                    >
-                      {areasToDisplay}
-                    </Form.Control>
-                  </Form.Group>
-                  <Form.Group id="formGroupCheckbox">
-                    <Form.Check
-                      type="checkbox"
-                      onChange={privateHandler}
-                      label="Private topic"
-                    />
-                  </Form.Group>
-                </Col>
-
-                <Col sm={4}>
-                  <Form.Group>
-                    <Form.Label>Keywords</Form.Label>
-                    <Form.Control
-                      as="select"
-                      id="keywords"
-                      style={{ display: "inline" }}
-                      onChange={onKeywordChange}
-                    >
-                      {keywordsToDisplay}
-                    </Form.Control>
-                  </Form.Group>
-                </Col>
-
-                <Col sm={4}>
-                  <Form.Group>
-                    <Form.Label>Aliases</Form.Label>
-                    <Form.Control
-                      as="select"
-                      id="aliases"
-                      style={{ display: "inline" }}
-                      onChange={(event) => onAliasChange(event.target.value)}
-                    >
-                      {aliasesToDisplay}
-                    </Form.Control>
-                  </Form.Group>
-                </Col>
-              </Row>
-
-              <Row>
-                <Col sm={12}>
-                  <Form.Group className="required">
-                    <Form.Label>
-                      Teaser paragraph
-                      <OverlayTrigger
-                        key="right"
-                        placement="right"
-                        overlay={
-                          <Tooltip id="paragraphTooltip">
-                            Please enter 1-2 sentences about your topic
-                          </Tooltip>
-                        }
-                      >
-                        <Button variant="secondary" className="circle-tooltip">
-                          ?
-                        </Button>
-                      </OverlayTrigger>
-                    </Form.Label>
-                    <Form.Control
-                      as="textarea"
-                      rows={10}
-                      required
-                      onBlur={teaserHandler}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-              <Row>
-                <Col sm={4}>
-                  <Form.Group>
-                    <Form.File
-                      required
-                      id="htmlContent"
-                      label="HTML File"
-                      onChange={htmlHandler}
-                      accept=".html"
-                      className="required"
-                    />
-                  </Form.Group>
-                </Col>
-
-                <Col sm={4}>
-                  <Form.Group>
-                    <Form.File
-                      id="assetsContent"
-                      label="Assets File(s)"
-                      multiple
-                      onChange={assetsHandler}
-                    />
-                  </Form.Group>
-                </Col>
-
-                <Col sm={4}>
-                  <Form.Group>
-                    <Form.File
-                      id="rmdContent"
-                      label="RMD File"
-                      onChange={rmdHandler}
-                      accept=".rmd"
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-              <Row>
-                <Col sm={12} className="asterix-caption">
-                  indicates required fields
-                </Col>
-              </Row>
-              <Row>&nbsp;</Row>
-              <Form.Row className="justify-content-md-right">
-                <Form.Group as={Col} sm={10} className="float-right">
-                  <Button
-                    type="submit"
-                    
-                    variant="primary"
-                    size="lg"
-                    className="float-right"
-                  >
-                    Submit
-                  </Button>
-                </Form.Group>
-              </Form.Row>
-            </Form>
-         
+            <Col sm={4}>
+              <Form.Group>
+                <Form.File
+                  id="rmdContent"
+                  label="RMD File"
+                  onChange={rmdHandler}
+                  accept=".rmd"
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row>
+            <Col sm={12} className="asterix-caption">
+              indicates required fields
+            </Col>
+          </Row>
+          <Row>&nbsp;</Row>
+          <Form.Row className="justify-content-md-right">
+            <Form.Group as={Col} sm={10} className="float-right">
+              <Button
+                type="submit"
+                variant="primary"
+                size="lg"
+                className="float-right"
+              >
+                Submit
+              </Button>
+            </Form.Group>
+          </Form.Row>
+        </Form>
       </Container>
     </div>
   );

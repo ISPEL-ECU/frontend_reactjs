@@ -8,7 +8,7 @@ const Search = React.memo((props) => {
 
 
   const [searchValue, setSearchValue] = useState('');
-  const SearchHandler = useCallback ((event)=>{
+  const SearchHandler =  ((event)=>{
     props.onSearchHandler(event.target.value);
   })
     

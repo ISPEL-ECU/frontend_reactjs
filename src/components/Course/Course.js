@@ -21,6 +21,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import { Redirect } from "react-router";
 
 import {SERVER_ADDRESS} from "../../constants/constants";
 
@@ -41,6 +42,7 @@ function CourseBuilder(props) {
   const [topicsForCourse, setTopicsForCourse] = useState([]);
   const [showSearch, setShowSearch] = useState(false);
   const [courseName, setCourseName] = useState("");
+  const [submitForm, setSubmitForm] = useState(false);
   const { authToken } = useAuth();
 
   const changeDomainHandler = (domainId) => {
@@ -163,10 +165,11 @@ function CourseBuilder(props) {
   };
 
   const saveCourseHandler = (event) => {
+    console.log("saving");
     axios.post(SERVER_ADDRESS+"save-course", null, {
       params: {
         courseName: courseName,
-        topics: JSON.stringify(topics),
+        topics: JSON.stringify(processedTopics),
         nodes: JSON.stringify(processedTopics),
         edges: JSON.stringify(processedEdges)
       },
@@ -174,8 +177,12 @@ function CourseBuilder(props) {
         Authorization: 'Bearer ' + authToken,
       }
     }).then((response)=>{
+      if (response.status !== 200) {
+        console.log('error!!!!');
+      }
+      setSubmitForm(true);
        console.log(response.status);
-    });
+    }).catch(err=>console.log(err));
   };
 
   const HandleAreaSearch = () => {
@@ -197,7 +204,7 @@ function CourseBuilder(props) {
       <Container fluid style={{ height: 100 + "%" }}>
         <Menu isAuth={props.isAuth} setIsAuth={props.setIsAuth} />
         <Navbar />
-
+        {submitForm ? <Redirect to="/browse-courses" /> : null}
         <Row style={{ height: 95 + "%" }}>
           <Col sm={2} style={{ height: 100 + "%" }}>
             <Form style={{ height: 100 + "%" }}>
@@ -257,7 +264,7 @@ function CourseBuilder(props) {
               <Display selectedTopic={selectedTopic} />
             </Row>
             <Row style={{ height: 10 + "%" }}>
-              <Button variant="primary" href='/browse-courses' size="sm" onClick={saveCourseHandler}>
+              <Button variant="primary" size="sm" onClick={saveCourseHandler}>
                 Save course
               </Button>
             </Row>

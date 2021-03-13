@@ -15,6 +15,8 @@ import AddTopic from "./components/Course/Author/AddTopic";
 import Users from "./components/Course/UserBrowser";
 import AddUser from "./components/Course/AddUserWraper";
 import ManageAccount from "./components/Course/ManageAccountWraper";
+import Questions from "./components/Course/Questions";
+import ViewCourse from "./components/Course/ViewCourse";
 import NoMatch from "./components/Course/404";
 
 const App = (props) => {
@@ -66,13 +68,16 @@ const App = (props) => {
     >
       <Router history={history}>
         <Switch>
-          <PrivateRoute exact path="/" component={Course} />
-          <PrivateRoute exact path="/browse-topics" component={TopicBrowser} />
-          <PrivateRoute
+          <Route exact path="/" component={TopicBrowser} />
+          <Route exact path="/browse-topics" component={TopicBrowser} />
+          <Route exact path="/get-questions" component={Questions} />
+          <Route path='/course/:courseId' component={ViewCourse}/>
+          <Route
             exact
             path="/browse-courses"
             component={CourseBrowser}
           />
+          <PrivateRoute exact path="/create-course" component={Course} />
            <PrivateRoute exact path="/users" component={Users} />
            <PrivateRoute exact path="/manage-account" component={ManageAccount} />
            <PrivateRoute exact path="/add-user" component={AddUser} />
