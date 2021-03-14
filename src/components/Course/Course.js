@@ -33,7 +33,7 @@ function CourseBuilder(props) {
   const [selectedDomain, setSelectedDomain] = useState("");
   const [selectedArea, setSelectedArea] = useState("");
   const [selectedTopics, setSelectedTopics] = useState([]);
-  const [selectedTopic, setSelectedTopic] = useState([]);
+  const [selectedTopic, setSelectedTopic] = useState('');
   const [topics, setTopics] = useState([]);
   const [treeData, setTreeData] = useState([]);
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -105,7 +105,16 @@ function CourseBuilder(props) {
   };
 
   const treeNodeClickHandler = (nodeId) => {
-    setSelectedTopic(nodeId);
+    console.log(nodeId);
+    console.log("content");
+    let topic;
+    if ((typeof nodeId)==="number"){
+      topic = topics.find(element=>element.id===nodeId);
+    } else {
+      topic = topics.find(element=>element.id.toString()===nodeId.target.id);
+    }
+    console.log(topics);
+    setSelectedTopic(topic.contentHtml);
   };
 
   const processTreeData = () => {
