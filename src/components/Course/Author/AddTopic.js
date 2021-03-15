@@ -269,7 +269,7 @@ const AddTopic = (props) => {
   return (
     <div style={{ height: 100 + "%" }}>
       {submitForm ? <Redirect to="/browse-topics" /> : null}
-      <Container fluid style={{ height: 100 + "%" }}>
+      <Container className="wrappedContainer" fluid style={{ height: 100 + "%" }}>
         <Menu isAuth={props.isAuth} setIsAuth={props.setIsAuth} />
         <Navbar />
 

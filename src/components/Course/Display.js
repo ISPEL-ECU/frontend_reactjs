@@ -32,11 +32,11 @@ const Display = React.memo((props) => {
   return (
     <div
       id="displayDiv"
-      style={{ maxHeight: 90 + "%", width: 100 + "%", overflow: "auto" }}
+      style={{ maxHeight: 100 + "%", width: 100 + "%", overflow: "auto" }}
     >
       <iframe
         title="Preview"
-        style={{ maxHeight: 90 + "%", width: 100 + "%", overflow: "auto" }}
+        style={{ maxHeight: 95 + "%", width: 100 + "%", overflow: "auto" }}
         src={
           props.selectedTopic&&props.selectedTtopic !== ""
             ? "http://38.123.149.95:3000/author/topic/" + props.selectedTopic

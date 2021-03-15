@@ -75,7 +75,7 @@ function CourseBuilder(props) {
 
   return (
     <div style={{ height: 100 + "%" }}>
-      <Container fluid style={{ height: 100 + "%" }} >
+      <Container className="wrappedContainer" fluid >
         <Menu isAuth={props.isAuth} setIsAuth={props.setIsAuth} />
         <Navbar />
 

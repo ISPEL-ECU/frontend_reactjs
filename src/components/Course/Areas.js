@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 import "./IngredientList.css";
 import Area from "./Area";
@@ -10,10 +10,18 @@ import { useAuth } from "../../context/auth";
 
 import {SERVER_ADDRESS} from "../../constants/constants";
 
-const Areas = (props) => {
+const Areas = React.memo((props) => {
   const [areas, setAreas] = useState([]);
   const { authToken } = useAuth();
 
+  const onAreaChange = useCallback((areaId) => {
+    console.log('AreaID = '+areaId);
+    props.onChangeArea(areaId);
+    //event.preventDefault();
+    // ...
+  }, [props]);
+
+ 
   useEffect(() => {
     console.log('areas effect');
     if (!props.showSearch) {
@@ -36,13 +44,8 @@ const Areas = (props) => {
           // console.log(domains);
         });
     }
-  }, [props.selectedDomain, authToken, props.showSearch]);
+  }, []);
 
-  const onAreaChange = (areaId) => {
-    props.onChangeArea(areaId);
-    //event.preventDefault();
-    // ...
-  };
 
   const areasToDisplay = areas.map((area) => {
     return <Area id={area.id} name={area.name} key={area.id + area.name} />;
@@ -61,6 +64,6 @@ const Areas = (props) => {
       </Form.Control>
     </FormGroup>
   );
-};
+});
 
 export default Areas;

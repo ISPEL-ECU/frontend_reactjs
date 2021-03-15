@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import axios from "axios";
 
@@ -31,6 +31,7 @@ function TopicBrowser(props) {
   };
 
   const changeAreaHandler = (areaId) => {
+    console.log('change handler');
     setSelectedArea(areaId);
   };
 
@@ -49,7 +50,8 @@ function TopicBrowser(props) {
     setSelectedTopic(topicContent.data);})
   };
 
-  const HandleAreaSearch = () => {
+  const HandleAreaSearch = useCallback( () => {
+    console.log('area search handler');
     if (!showSearch) {
       return (
         <Areas
@@ -58,14 +60,14 @@ function TopicBrowser(props) {
           showSearch={showSearch}
         />
       );
-    }
+    };
     setSelectedArea("%");
     return null;
-  };
+  }, [selectedDomain, showSearch]);
 
   return (
     <div className="App" style={{ height: 100 + "%", maxHeight: 100 + "%" }}>
-      <Container fluid style={{ height: 100 + "%", maxHeight: 100 + "%" }}>
+      <Container className="wrappedContainer" fluid >
         <Menu isAuth={props.isAuth} setIsAuth={props.setIsAuth} />
         <Navbar />
 

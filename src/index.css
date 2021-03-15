@@ -65,9 +65,11 @@ Note: Beware of modifying this element as it can break the animations - you shou
 /* General sidebar styles */
 
 .bm-menu {
-  background: #582c83;
+  background-image: url(backgroundM.jpg);
+  background-size: cover;
+   /* background: #000000;  */
   padding: 2.5em 1.5em 0;
-  font-size: 1em;
+  font-size: 1.5em;
 }
 
 .bm-menu a {
@@ -167,13 +169,20 @@ button:focus {
 }
 
 .bg-ecu {
+  background-image: url(background.jpg);
   background-color: #582c83;
+  padding-right: 0;
 }
 
 .bg-ecu .navbar-brand,
 .navbar-light .navbar-brand,
 .navbar-custom .nav-item .nav-link {
   color: #ffffff;
+  
+}
+
+body{
+  background-color: #fffff8;
 }
 
 .navbar-light .navbar-brand {
@@ -256,4 +265,9 @@ table#topicsOverview {
 }
 div.table-of-content{
   cursor: pointer;
+}
+
+.wrappedContainer{
+  padding-right: 0;
+  height: 100%;
 }

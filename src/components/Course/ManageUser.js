@@ -113,7 +113,7 @@ const ManageUser = (props) => {
   };
 
   return (
-    <Container fluid style={{ height: 100 + "%" }}>
+    <Container className="wrappedContainer" fluid >
       {submitForm ? <Redirect to="/users" /> : null}
       <Row>
         <Col lg={12}>
