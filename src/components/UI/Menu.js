@@ -42,6 +42,9 @@ const SideNav = (props) => {
             <a id="courses" className="menu-item" href="/browse-courses">
               View courses
             </a>
+            <a id="addTopic" className="menu-item" href="/manage-topics">
+              Manage topics
+            </a>
             <hr />
             <a id="admin" className="menu-item" href="/add-user">
               Add user
@@ -66,7 +69,7 @@ const SideNav = (props) => {
             <a id="addTopic" className="menu-item" href="/add-topic">
               Add topic
             </a>
-            <a id="createCourse" className="menu-item" href="/">
+            <a id="createCourse" className="menu-item" href="/create-course">
               Create course
             </a>
             <a id="topics" className="menu-item" href="/browse-topics">
@@ -75,7 +78,9 @@ const SideNav = (props) => {
             <a id="courses" className="menu-item" href="/browse-courses">
               View courses
             </a>
-           
+            <a id="addTopic" className="menu-item" href="/manage-topics">
+              Manage topics
+            </a>
             <hr />
             <a id="account" className="menu-item" href="/manage-account">
               {currentUser}

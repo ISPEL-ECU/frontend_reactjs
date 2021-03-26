@@ -110,7 +110,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
 
 html,
 body {
-  font-family: "Open Sans", sans-serif;
+  font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif; 
   margin: 0;
   height: 100%;
 }
@@ -182,6 +182,10 @@ button:focus {
 }
 
 body{
+  background-color: #fffff8;
+}
+
+.QuestionBody{
   background-color: #fffff8;
 }
 
@@ -257,11 +261,11 @@ table#topicsOverview {
 }
 
 .courses-browser{
-  font-size: 2rem;
+  font-size: 2vw;
 }
 
 .content-table{
-  font-size: 1rem;
+  font-size: 1vw;
 }
 div.table-of-content{
   cursor: pointer;
@@ -270,4 +274,22 @@ div.table-of-content{
 .wrappedContainer{
   padding-right: 0;
   height: 100%;
+}
+
+.App{
+  font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif; 
+}
+
+.topicNav{
+  font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif; 
+  font-size: 1.3vw;
+}
+
+.AnswersGroup{
+  text-align: left;
+  border: 0pt;
+}
+
+.QuestionMain{
+  font-size: 1.4rem;
 }

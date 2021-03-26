@@ -18,6 +18,7 @@ import ManageAccount from "./components/Course/ManageAccountWraper";
 import Questions from "./components/Course/Questions";
 import ViewCourse from "./components/Course/ViewCourse";
 import NoMatch from "./components/Course/404";
+import ManageTopic from "./components/Course/ManagTopicWraper";
 
 const App = (props) => {
   const existingToken = localStorage.getItem("token");
@@ -82,6 +83,7 @@ const App = (props) => {
            <PrivateRoute exact path="/manage-account" component={ManageAccount} />
            <PrivateRoute exact path="/add-user" component={AddUser} />
           <PrivateRoute exact path="/add-topic" component={AddTopic} />
+          <PrivateRoute exact path="/manage-topics" component={ManageTopic} />
           <Route path="/login">
             <Login />
           </Route>

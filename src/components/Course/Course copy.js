@@ -42,22 +42,74 @@ function CourseBuilder(props) {
   const [courseName, setCourseName] = useState("");
   const [submitForm, setSubmitForm] = useState(false);
   const { authToken } = useAuth();
-  const [tocWidth, setTocWidth] = useState("700");
-  const [tocHeight, setTocHeight] = useState("700");
+  const [tocWidth, setTocWidth] = useState('700');
+  const [tocHeight, setTocHeight] = useState('700');
   const tocRef = useRef(null);
 
-  useEffect(() => {
+  useEffect(()=>{
     setTocWidth(tocRef.current.offsetWidth);
     setTocHeight(tocRef.current.offsetHeight);
+    
   }, []);
 
- 
+  const changeDomainHandler = (domainId) => {
+    setSelectedDomain(domainId);
+  };
+
   const changeAreaHandler = (areaId) => {
     setSelectedArea(areaId);
   };
 
- 
+  const extractTopicsHandler = (selectedTopics) => {
+    axios
+      .get(SERVER_ADDRESS + "get-selected-topics", {
+        params: {
+          id:
+            selectedTopics && selectedTopics.length > 0
+              ? selectedTopics
+              : ["-1"],
+        },
+        headers: {
+          Authorization: "Bearer " + authToken,
+        },
+      })
+      .then((topics) => {
+        setTopics(topics.data);
+        if (topics.data.length > 0) {
+          setButtonDisabled(false);
+        } else {
+          setButtonDisabled(true);
+        }
+      });
+  };
 
+  const changeTopicHandler = (topics) => {
+    setSelectedTopics(selectedTopics.concat(topics));
+    extractTopicsHandler(selectedTopics.concat(topics));
+  };
+
+  const selectTopicHandler = (topicId) => {
+    setSelectedTopic(topicId);
+  };
+
+  const buildTree = () => {
+    if (topics.length < 1) return [{ title: "empty" }];
+    let treeData = [];
+    for (let i = 0; i < topics.length; i++) {
+      treeData.push({
+        title: topics[i].name,
+        id: topics[i].id,
+        subtitle: topics[i].teaser,
+        url: topics[i].contentHtml,
+      });
+    }
+
+    return treeData;
+  };
+
+  const onNameHandler = (value) => {
+    setCourseName(value);
+  };
 
   const treeNodeClickHandler = (nodeId) => {
     console.log(nodeId);
@@ -67,7 +119,9 @@ function CourseBuilder(props) {
       topic = topics.find((element) => element.id === nodeId);
     } else {
       console.log(nodeId);
-      topic = topics.find((element) => element.id.toString() === nodeId);
+      topic = topics.find(
+        (element) => element.id.toString() === nodeId
+      );
     }
     console.log(topics);
     setSelectedTopic(topic.contentHtml);
@@ -124,7 +178,14 @@ function CourseBuilder(props) {
     setProcessedEdges(edges);
   };
 
-  
+  const applyCourseHandler = (event) => {
+    // setTocWidth(tocRef.current.offsetWidth);
+    // setTocHeight(tocRef.current.offsetHeight);
+    // console.log('ref');
+    // console.log(tocRef);
+    setTopicsForCourse(topics);
+    processTreeData();
+  };
 
   const saveCourseHandler = (event) => {
     console.log("saving");
@@ -164,42 +225,6 @@ function CourseBuilder(props) {
     return null;
   };
 
-  const fileInputHandler = (event) =>{
-    if (event.target.files[0]) {
-      const reader = new FileReader();
-      let file;
-      reader.onload = async (e) =>{
-        file = e.target.result;
-        console.log(file);
-      const strings = file.split(/\n+/);
-      if (strings.length>0){
-        setCourseName(strings[0].trim());
-        const resultTopics = [];
-        let currentMeta;
-        let currentTopics = [];
-        for (let i=1; i<strings.length; i++){
-          if (strings[i].trim().startsWith("#")){
-            if (currentMeta) resultTopics.push({name:currentMeta, topics: currentTopics});
-            currentMeta=strings[i].trim().substring(1);
-            currentTopics = [];
-            } else {
-              currentTopics.push(strings[i].trim());
-          }
-        }
-        setTopics(resultTopics);
-        console.log("resultTopics");
-        console.log(resultTopics);
-
-      }
-      }
-      console.log(event.target.files[0]);
-      reader.readAsText(event.target.files[0])
-      
-      
-    
-    }
-  }
-
   return (
     <div className="App" style={{ height: 100 + "%" }}>
       <Container className="wrappedContainer" fluid>
@@ -210,27 +235,36 @@ function CourseBuilder(props) {
           <Col sm={2} style={{ height: 100 + "%" }}>
             <Form style={{ height: 100 + "%" }}>
               <Card style={{ height: 85 + "%" }}>
-                <Card.Title>Instructions:</Card.Title>
-                <Card.Body>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                  irure dolor in reprehenderit in voluptate velit esse cillum
-                  dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                  cupidatat non proident, sunt in culpa qui officia deserunt
-                  mollit anim id est laborum.
-                </Card.Body>
-                <Form.Group>
-                <Form.File
-                  required
-                  id="htmlContent"
-                  label="Structure file"
-                  onChange={fileInputHandler}
-                  accept=".txt"
-                  
+                <Name onNameHandler={onNameHandler} />
+                <h6>Course content:</h6>
+
+                <Domains
+                  onChangeDomain={changeDomainHandler}
+                  showSearch={setShowSearch}
                 />
-              </Form.Group>
+                <HandleAreaSearch />
+                <Topics
+                  selectedArea={selectedArea}
+                  showSearch={showSearch}
+                  onSelectedTopics={changeTopicHandler}
+                />
+                <Tree
+                  key={buildTree()}
+                  treeData={buildTree()}
+                  treeFunction={buildTree}
+                  setTreeData={setTreeData}
+                  setButtonDisabled={setButtonDisabled}
+                  selectedTopics={selectedTopics}
+                  onTopicExtracted={setTopics}
+                  onSelectedTopic={selectTopicHandler}
+                />
+                <Button
+                  variant="primary"
+                  onClick={applyCourseHandler}
+                  disabled={buttonDisabled}
+                >
+                  Apply
+                </Button>
               </Card>
             </Form>
           </Col>
@@ -239,17 +273,14 @@ function CourseBuilder(props) {
               <Row
                 style={{ height: 95 + "%", overflow: "auto", width: 100 + "%" }}
               >
-                <div style={{ height: 50 + "%", width: 100 + "%" }}>
+                <div style={{ height: 50 + "%", width: 100+"%"  }}>
                   <CourseOverview
                     topics={processedTopics}
                     courseName={courseName}
                     nodeClick={treeNodeClickHandler}
                   />
                 </div>
-                <div
-                  style={{ height: 50 + "%", width: 100 + "%" }}
-                  ref={tocRef}
-                >
+                <div style={{ height: 50 + "%", width: 100+"%" }} ref={tocRef}>
                   <TreeGraph
                     nodes={processedTopics}
                     edges={processedEdges}

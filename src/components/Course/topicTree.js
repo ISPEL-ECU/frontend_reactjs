@@ -35,8 +35,7 @@ export default class Tree extends Component {
 
     this.setState({ treeData: this.props.treeData });
     this.props.setTreeData(this.props.treeData);
-    console.log('----------------------');
-    console.log(this.props.treeData);
+  
     if (this.props.treeData.lenght < 1) {
       this.props.setButtonDisabled(true);
     } else {
@@ -65,7 +64,7 @@ export default class Tree extends Component {
   render() {
     return (
       
-        <FormGroup style={{ height: 100+"%" }}>
+        <FormGroup style={{ height: 100+"%", minHeight:50+"%" }}>
           <SortableTree
             treeData={this.state.treeData}
             onChange={this.handleTreeOnChange}

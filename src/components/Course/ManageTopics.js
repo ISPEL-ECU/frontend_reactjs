@@ -24,12 +24,10 @@ const BrowsedTopics = React.memo((props) => {
   useEffect(() => {
     console.log("useEffect topics");
     axios
-      .get(SERVER_ADDRESS+"get-topics", {
+      .get(SERVER_ADDRESS+"get-topics-manage", {
         params: {
-          areaId:
-            props.selectedArea && props.selectedArea !== ""
-              ? props.selectedArea
-              : "-1",
+          areaId:"%",
+          manage:"true"
         },
         headers: {
           Authorization: "Bearer " + authToken,
@@ -60,7 +58,7 @@ const BrowsedTopics = React.memo((props) => {
   };
 
   const Search = () => {
-    if (props.showSearch) {
+   
       return (
         <FormGroup>
           <InputGroup size="sm" className="mb-3">
@@ -79,10 +77,7 @@ const BrowsedTopics = React.memo((props) => {
           </InputGroup>
         </FormGroup>
       );
-    } else {
-      searchValueRef.current = "";
-      return null;
-    }
+    
   };
 
   const selectTopics = (event) => {
@@ -98,6 +93,7 @@ const BrowsedTopics = React.memo((props) => {
   };
 
   const topicsToDisplay = topics.map((topic) => {
+    console.log(topic.teaser);
     return (
       <Topic
         id={topic.id}

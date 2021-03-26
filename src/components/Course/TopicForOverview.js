@@ -35,6 +35,6 @@ const buildTable = (props) => {
   );
 };
 
-const TopicForOverview = (props) => <div>{buildTable(props)}</div>;
+const TopicForOverview = (props) => <div style={{ width: 100+"%" }}>{buildTable(props)}</div>;
 
 export default TopicForOverview;
