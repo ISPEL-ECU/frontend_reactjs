@@ -15,7 +15,7 @@ const CourseOverview = React.memo(props => {
 
     return (
 
-            <div>
+            <div >
             <h2 style={{textDecoration:'underline'}}>{props.courseName}</h2>
             <hr/>
             

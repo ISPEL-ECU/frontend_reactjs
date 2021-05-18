@@ -34,19 +34,13 @@ const SideNav = (props) => {
               Add topic
             </a>
             <a id="createCourse" className="menu-item" href="/create-course">
-              Create PeLDS course
-            </a>
-            <a id="createExCourse" className="menu-item" href="/create-excourse">
-              Create ExLDS course
+              Create course
             </a>
             <a id="topics" className="menu-item" href="/browse-topics">
               View topics
             </a>
             <a id="courses" className="menu-item" href="/browse-courses">
-              PeLDS courses
-            </a>
-            <a id="excourses" className="menu-item" href="/browse-excourses">
-              ExLDS courses
+              View courses
             </a>
             <a id="addTopic" className="menu-item" href="/manage-topics">
               Manage topics
@@ -76,19 +70,13 @@ const SideNav = (props) => {
               Add topic
             </a>
             <a id="createCourse" className="menu-item" href="/create-course">
-              Create PeLDS course
-            </a>
-            <a id="createExCourse" className="menu-item" href="/create-course">
-              Create ExLDS course
+              Create course
             </a>
             <a id="topics" className="menu-item" href="/browse-topics">
               View topics
             </a>
             <a id="courses" className="menu-item" href="/browse-courses">
-              PeLDS courses
-            </a>
-            <a id="excourses" className="menu-item" href="/browse-excourses">
-              ExLDS courses
+              View courses
             </a>
             <a id="addTopic" className="menu-item" href="/manage-topics">
               Manage topics
@@ -109,11 +97,8 @@ const SideNav = (props) => {
             View topics
           </a>
           <a id="courses" className="menu-item" href="/browse-courses">
-              View PeLDS courses
-            </a>
-            <a id="excourses" className="menu-item" href="/browse-excourses">
-              View ExLDS courses
-            </a>
+            View courses
+          </a>
           <hr />
           <a id="account" className="menu-item" href="/manage-account">
             {currentUser}
@@ -130,11 +115,8 @@ const SideNav = (props) => {
             View topics
           </a>
           <a id="courses" className="menu-item" href="/browse-courses">
-              PeLDS courses
-            </a>
-            <a id="excourses" className="menu-item" href="/browse-excourses">
-              ExLDS courses
-            </a>
+            View courses
+          </a>
           
           <hr />
         <a id="login" className="menu-item" href="/login">

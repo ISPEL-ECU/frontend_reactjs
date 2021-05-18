@@ -104,6 +104,7 @@ const BrowsedTopics = React.memo((props) => {
         name={topic.name}
         key={topic.id + topic.name}
         teaser ={topic.teaser}
+        topicId = {topic.topicId}
         selectTopic={selectTopics}
       />
     );

@@ -16,7 +16,7 @@ const buildTable = (props) => {
           id={props.topic.id}
           onClick={(e)=>props.nodeClick(props.topic.contentHtml, e)}
         >
-          <b>{props.topic.name}</b>
+          <b>{props.topicCount+'. '+props.topic.name}</b>
           <p>{props.topic.teaser}</p>
         </div>
       </Col>

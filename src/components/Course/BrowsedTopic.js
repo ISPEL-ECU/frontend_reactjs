@@ -1,9 +1,14 @@
 import React from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import ListGroup from 'react-bootstrap/ListGroup';
+import { useAuth } from "../../context/auth";
 
 
-const topic = (props) =>(
+
+function Topic(props) {
+  const { authLevel } = useAuth(); 
+return (
+  
     <OverlayTrigger
       key={'top'+props.id}
       placement='right'
@@ -15,9 +20,11 @@ const topic = (props) =>(
     >
     <ListGroup.Item action={true} id={props.id} onClick={props.selectTopic}>
         {props.name}
+        <br></br> 
+        {authLevel?(props.topicId):null}
     </ListGroup.Item>
     </OverlayTrigger>
 
 );
-
-export default topic;
+    }
+export default Topic;

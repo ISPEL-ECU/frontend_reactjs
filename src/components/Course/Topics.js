@@ -98,7 +98,7 @@ const Topics = React.memo(props => {
   return (
     <Form  >
       <Search/>
-      <Form.Control onChange={onChangeHandler} as="select"   multiple>
+      <Form.Control onChange={onChangeHandler} as="select" htmlSize={28}   multiple>
         {topicsToDisplay}
       </Form.Control>
       < Button variant="primary" onClick={selectTopics} >

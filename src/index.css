@@ -19,18 +19,19 @@
   background: #ffffff;
 }
 
-.no-border{
-  border:0;
+.no-border {
+  border: 0;
 }
 
-a.courses{
+a.courses {
   color: black;
   text-decoration: underline;
   cursor: pointer;
 }
 
 body {
-  font-family: et-book, Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
+  font-family: et-book, Palatino, "Palatino Linotype", "Palatino LT STD",
+    "Book Antiqua", Georgia, serif;
 }
 
 /* Color/shape of burger icon bars on hover*/
@@ -67,7 +68,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
 .bm-menu {
   background-image: url(backgroundM.jpg);
   background-size: cover;
-   /* background: #000000;  */
+  /* background: #000000;  */
   padding: 2.5em 1.5em 0;
   font-size: 1.5em;
 }
@@ -110,7 +111,8 @@ Note: Beware of modifying this element as it can break the animations - you shou
 
 html,
 body {
-  font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif; 
+  font-family: Palatino, Palatino Linotype, Palatino LT STD, Book Antiqua,
+    Georgia, serif;
   margin: 0;
   height: 100%;
 }
@@ -178,14 +180,13 @@ button:focus {
 .navbar-light .navbar-brand,
 .navbar-custom .nav-item .nav-link {
   color: #ffffff;
-  
 }
 
-body{
+body {
   background-color: #fffff8;
 }
 
-.QuestionBody{
+.QuestionBody {
   background-color: #fffff8;
 }
 
@@ -242,54 +243,138 @@ table#topicsOverview {
   font-weight: bold;
   text-align: center;
   padding: 0 10px;
-  
 }
 
-.required.form-group .form-label:after, .required.form-file .form-file-label:after {
-  content:"*";
-  color:red;
+.required.form-group .form-label:after,
+.required.form-file .form-file-label:after {
+  content: "*";
+  color: red;
 }
 
-.form-label, .form-file-label {
-  font-family: 'Arvo', serif;
+.form-label,
+.form-file-label {
+  font-family: "Arvo", serif;
   font-weight: bold;
 }
 
 .asterix-caption:before {
-  content:"*";
-  color:red;
+  content: "*";
+  color: red;
 }
 
-.courses-browser{
+.courses-browser {
   font-size: 2vw;
 }
 
-.content-table{
-  font-size: 1vw;
+.content-table {
+  font-size: 0.5vw;
 }
-div.table-of-content{
+div.table-of-content {
   cursor: pointer;
 }
 
-.wrappedContainer{
+.wrappedContainer {
   padding-right: 0;
   height: 100%;
 }
 
-.App{
-  font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif; 
+.App {
+  font-family: Palatino, Palatino Linotype, Palatino LT STD, Book Antiqua,
+    Georgia, serif;
 }
 
-.topicNav{
-  font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif; 
-  font-size: 1.3vw;
+.topicNav {
+  font-family: Palatino, Palatino Linotype, Palatino LT STD, Book Antiqua,
+    Georgia, serif;
+  font-size: 1vw;
 }
 
-.AnswersGroup{
+.instructions-upload {
+  font-family: Palatino, Palatino Linotype, Palatino LT STD, Book Antiqua,
+    Georgia, serif;
+  font-size: 1vw;
+  overflow-y: auto;
+}
+
+.AnswersGroup {
   text-align: left;
-  border: 0pt;
+}
+.AnswersGroup-odd {
+  text-align: left;
+  background-color: #fffff8;
+  border-style: none;
 }
 
-.QuestionMain{
+.AnswersGroup-even {
+  text-align: left;
+  background-color: rgb(231, 229, 226);
+  border-style: none;
+}
+
+.next-question-button {
+  text-align: right;
+}
+
+.QuestionMain {
   font-size: 1.4rem;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+.question-body {
+  font-size: 1.25rem;
+}
+
+.card-question {
+  border-radius: 0.5rem;
+  /* box-shadow: 10px 5px 5px gray; */
+  margin-top: 1rem;
+}
+
+.card-question-text {
+  border-radius: 0.5rem;
+  /* box-shadow: 10px 5px 10px gray; */
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  background-color: #fffff8;
+}
+
+.card-question-answers {
+  border-radius: 0.5rem;
+  /* box-shadow: 10px 5px 10px gray; */
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  background-color: #fffff8;
+  width: 100%;
+}
+
+.question-title {
+  text-align: center;
+}
+
+.submit-button-placeholder {
+  align-content: flex-start;
+}
+
+.quiz-button {
+  font-weight: 700;
+  white-space: nowrap;
+  text-align: center;
+}
+
+input[name="answers"] {
+  position: relative;
+}
+
+.btn-group-toggle>.btn input[type=checkbox], .btn-group-toggle>.btn input[type=radio], .btn-group-toggle>.btn-group>.btn input[type=checkbox], .btn-group-toggle>.btn-group>.btn input[type=radio]{
+  position: relative;
+  margin: 0 1rem;
 }

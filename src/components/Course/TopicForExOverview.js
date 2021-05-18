@@ -14,7 +14,7 @@ const buildTable = (props) => {
         <div className="table-of-content"
           key={props.topic.id}
           id={props.topic.id}
-          onClick={(e)=>props.nodeClick(props.topic.contentHtml, e)}
+          onClick={props.nodeClick}
         >
           <b>{props.topic.name}</b>
           <p>{props.topic.teaser}</p>

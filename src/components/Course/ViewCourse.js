@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import ListGroup from "react-bootstrap/ListGroup";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+
+import { useAuth } from "../../context/auth";
 
 import axios from "axios";
 
@@ -12,7 +13,7 @@ import Display from "./Display";
 import TopicForOverview from "./TopicForOverview";
 import Menu from "../UI/Menu";
 import Navbar from "../UI/Navbar";
-import TreeGraph from "./Tree";
+
 
 import { SERVER_ADDRESS } from "../../constants/constants";
 
@@ -24,7 +25,7 @@ import {
 } from "../../constants/constants";
 
 const Course = (props) => {
-  const [course, setCourse] = useState();
+ 
   const [selectedTopic, setSelectedTopic] = useState([]);
   const [topics, setTopics] = useState([]);
   const [quizDisabled, setQuizDisabled] = useState("true");
@@ -32,51 +33,63 @@ const Course = (props) => {
   const [showQuiz, setShowQuiz] = useState(false);
   const [topicContent, setTopicContent] = useState("");
   const [prevTopic, setPrevTopic] = useState();
-  const [processedTopics, setProcessedTopics] = useState([]);
-  const [processedEdges, setProcessedEdges] = useState([]);
-  const [tocWidth, setTocWidth] = useState();
-  const [tocHeight, setTocHeight] = useState();
-  const tocRef = useRef(null);
+  const [courseName, setCourseName] = useState();
+
+  const { authToken } = useAuth();
 
   useEffect(() => {
     const id = props.match.params.courseId;
     console.log('corseId='+id);
-    setTocWidth(tocRef.current.offsetWidth);
-    setTocHeight(tocRef.current.offsetHeight);
+   
     axios
       .get(SERVER_ADDRESS + "get-course", {
         params: { courseId: id },
       })
       .then((crs) => {
-        console.log(crs);
-        const topcs = JSON.parse(crs.data.topics);
-        setCourse(crs.data);
-        setTopics(topcs);
-        setProcessedTopics(JSON.parse(crs.data.nodes));
-        setProcessedEdges(JSON.parse(crs.data.edges));
-        console.log('topics');
-        console.log(topcs);
-      })
-      .catch((err) => console.log(err));
-  }, [props.match.params.courseId]);
+        setCourseName(crs.data.name);
+        axios
+        .get(SERVER_ADDRESS + "get-topic-complex", {
+          params: {
+            ids: JSON.parse(crs.data.topics),
+          },
+          headers: {
+            Authorization: "Bearer " + authToken,
+          },
+        })
+        .then((completeTopics) => {
+          console.log("completeTopics");
+          console.log(completeTopics.data);
+          setTopics(completeTopics.data);
+        })
+        .catch((err) => console.log(err));
 
-  useEffect(() => {
-    if (selectedTopic){
-    axios
-      .get(SERVER_ADDRESS + "quiz-exist", {
-        params: { topicId: selectedTopic },
-      })
-      .then((response) => {
-        console.log(response.data);
-        if (!response.data) {
-          setQuizDisabled(true);
-        } else {
-          setQuizDisabled(false);
-          setQuizId(response.data.quizId);
-        }
       })
       .catch((err) => console.log(err));
-  }}, [selectedTopic]);
+  }, [authToken, props.match.params.courseId]);
+
+const checkExistingQuiz = (id) =>{
+  console.log("quiz check");
+  console.log(selectedTopic);
+  if (id){
+    console.log("quiz check");
+  axios
+    .get(SERVER_ADDRESS + "quiz-exist", {
+      params: { topicId: id },
+    })
+    .then((response) => {
+      console.log(response.data);
+      if (!response.data) {
+        setQuizDisabled(true);
+      } else {
+        setQuizDisabled(false);
+        setQuizId(response.data.quizId);
+      }
+    })
+    .catch((err) => console.log(err));
+}
+}
+
+  
 
   const onQuizClick = (event) => {
     setQuizDisabled(true);
@@ -93,77 +106,79 @@ const Course = (props) => {
     }
   };
 
-  const onClickedTopic = (event) => {
+  const onClickedTopic = (content,event) => {
+    checkExistingQuiz(event.target.parentNode.id);
     if (prevTopic) {
       prevTopic.style.backgroundColor = "initial";
       prevTopic.style.color = "initial";
     }
-    event.target.style.backgroundColor = LIST_BACKGROUND_COLOR;
-    event.target.style.color = LIST_FONT_COLOR;
-    setPrevTopic(event.target);
-    axios
-      .get(SERVER_ADDRESS + "get-content", {
-        params: {
-          id: event.target.id,
-        },
-      })
-      .then((topicContent) => {
-        console.log("selected topic content");
-        console.log(topicContent.data);
-        setTopicContent(topicContent.data);
-      });
-    setSelectedTopic(event.target.id);
+    event.target.parentNode.style.backgroundColor = LIST_BACKGROUND_COLOR;
+    event.target.parentNode.style.color = LIST_FONT_COLOR;
+    setPrevTopic(event.target.parentNode);
+    setTopicContent(content);
+    setSelectedTopic(event.target.parentNode.id);
+    console.log("id="+event.target.parentNode.id);
     if (showQuiz) setShowQuiz(false);
+    
   };
 
-  const onClickedNode = (id) => {
-    axios
-      .get(SERVER_ADDRESS + "get-content", {
-        params: {
-          id: id,
-        },
-      })
-      .then((topicContent) => {
-        console.log("selected topic content");
-        console.log(topicContent.data);
-        setTopicContent(topicContent.data);
-      });
-    setSelectedTopic(id);
-    if (showQuiz) setShowQuiz(false);
+  
+  
+  
+ 
+
+  let topicCount = 0;
+  let count;
+  const handleTopic = (topic) => {
+    
+    if (topic.type === "header") {
+      topicCount = 0;
+      count = topic.value.split("#").length - 1;
+      const HeaderTag = `h${count + 1}`;
+      const header = topic.value.replaceAll("#", "");
+      return (
+        <Col md={{offset:count-1}}>
+      <HeaderTag >{header}</HeaderTag>
+      </Col>
+      );
+    } else {
+      topicCount++;
+      return (
+        <Col md={{offset:count-1}}>
+        <TopicForOverview
+          key={topic.value.id}
+          topic={topic.value}
+          nodeClick={onClickedTopic}
+          topicCount={topicCount}
+        />
+        </Col>
+      ); //<Topic topic={topic} />
+    }
   };
+
 
   const topicsToDisplay = topics.map((topic) => {
-    if (topic.id === 0) return null;
-
+      
     return (
-      <TopicForOverview
-        key={topic.id}
-        topic={topic}
-        nodeClick={onClickedTopic}
-      />
+      <div>
+      {handleTopic(topic)}
+      </div>
     ); //<Topic topic={topic} />
   });
 
   return (
-    <div style={{ height: 100 + "%" }}>
+    <div style={{ height: 100 + "%", maxHeight: 100 + "%" }}>
       <Container className="wrappedContainer" fluid>
         <Menu isAuth={props.isAuth} setIsAuth={props.setIsAuth} />
         <Navbar />
         <Row style={{ height: 95 + "%" }}>
-          <Col md={3} >
+          <Col md={3}  style={{ overflowY: "auto",  maxHeight: 95 + "%" }} >
             <div className="topicNav" style={{ height: 50 + "%" }}>
-              <h3>Table of Contents</h3>
+              <h1>{courseName}</h1>
+             <br></br>
               {topicsToDisplay}
             </div>
-            <div style={{ height: 50 + "%" }} ref={tocRef}>
-            <TreeGraph
-                  nodes={processedTopics}
-                  edges={processedEdges}
-                  nodeClick={onClickedNode}
-                  width = {tocWidth}
-                  height = {tocHeight}
-                />
-            </div>
+           
             
           </Col>
           <Col md={9} style={{ height: 95 + "%" }}>

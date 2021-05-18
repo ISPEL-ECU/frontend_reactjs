@@ -1,15 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
 
-import Menu from "../UI/Menu";
+import Menu from "../UI/Menu old";
 import Navbar from "../UI/Navbar";
 
 import Container from "react-bootstrap/Container";
 
 import "./IngredientList.css";
-import Area from "./Area";
+
 import axios from "axios";
-import Form from "react-bootstrap/Form";
-import FormGroup from "react-bootstrap/FormGroup";
+
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -18,25 +17,29 @@ import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import Alert from "react-bootstrap/Alert";
 
-import { useAuth } from "../../context/auth";
+
+
+import "katex/dist/katex.min.css";
+import Latex from "react-latex-next";
+
 
 import { SERVER_ADDRESS } from "../../constants/constants";
 
-const Areas = (props) => {
+const Questions = (props) => {
   const [source, setSource] = useState([]);
   const [answers, setAnswers] = useState([]);
 
-  const [result, setResult] = useState([]);
   const [questionId, setQuestionId] = useState();
   const [currentAnswer, setCurrentAnswer] = useState();
   const answersRef = useRef(null);
+  
   const [answerIsCorrect, setAnswerIsCorrect] = useState();
   const [displayMessage, setDisplayMessage] = useState(false);
   const [submitEnabled, setSubmitEnabled] = useState(false);
   const [forbidAnswerClick, setForbidAnswerClick] = useState(false);
-  const [title, setTitle] = useState("");
 
   const refresh = () => {
+    setAnswers([]);
     axios
       .get(SERVER_ADDRESS + "get-questions", {
         params: {
@@ -52,17 +55,21 @@ const Areas = (props) => {
         setSource(value.initialSets);
         setAnswers(value.results);
         setQuestionId(value.id);
-        setTitle(value.initialSets[0]);
-        const firstSet = new Set(value.initialSets[1]);
-        const secondSet = new Set(value.initialSets[2]);
-        const res = Array.from(new Set([...firstSet, ...secondSet])).sort(
-          (a, b) => a - b
-        );
-        setResult(res);
-        console.log(res);
+        // setTitle(value.title);
+        // const firstSet = new Set(value.initialSets[0]);
+        // const secondSet = new Set(value.initialSets[1]);
+        // const res = Array.from(new Set([...firstSet, ...secondSet])).sort(
+        //   (a, b) => a - b
+        // );
+        // setResult(res);
+        // console.log(res);
         console.log(value.results);
       });
   };
+
+  // useEffect(()=>{
+  //   questionRef.current.style.width = answersRef.current.offsetWidth;
+  // }, [answersRef]);
 
   useEffect(refresh, []);
 
@@ -79,19 +86,22 @@ const Areas = (props) => {
   const handleAnswers = answers.map((answer, ind) => {
     return (
       <ToggleButton
-        className="AnswersGroup"
+        className={ind % 2 === 0 ? "AnswersGroup-even" : "AnswersGroup-odd"}
         value={answer.toString()}
         type="radio"
         onClick={onRadioClickHandler}
         variant="outline-dark"
         name="groupOptions"
-        key={answer.toString()}
+        key={(answer + ind).toString()}
         id={answer.toString()}
         disabled={forbidAnswerClick}
+        border={0}
         block
       >
-        {String.fromCharCode(ind + 97) + ". " +
-                          "{" + answer.toString()+"}"}
+        <Latex>
+         
+            {answer.toString().replaceAll("\\$", "$")}
+        </Latex>
       </ToggleButton>
     );
   });
@@ -115,7 +125,7 @@ const Areas = (props) => {
         setSubmitEnabled(false);
         setForbidAnswerClick(true);
         Array.from(answersRef.current.children).forEach((element) => {
-          if (currentAnswer=== element.id) element.style.border = "solid";
+          if (currentAnswer === element.id) element.style.border = "solid";
           if (correctAnswer !== element.id) element.style.color = "red";
           else element.style.color = "green";
         });
@@ -123,66 +133,61 @@ const Areas = (props) => {
   };
 
   return (
-    <Container fluid style={{ height: 100 + "%", maxHeight: 100 + "%" }}>
-      <Form>
-        <Row>
-          <Col md={{ span: 4, offset: 4 }}>
-            <Card className="QuestionBody">
-            <Card.Body className="QuestionMain">
-                <Card.Title>
-                <h3>Practice question</h3>
-                
-              
-                {title}
-                </Card.Title>
-                <Card.Text>
-                {source.map((initValue, ind) => {
-                  if (ind > 0)
-                    return (
-                      <p>
-                        {String.fromCharCode(ind + 64) +
-                          " = " +
-                          "{" +
-                          initValue.toString()+"}"}
-                      </p>
-                    );
-                  return <p></p>;
-                })}
-                </Card.Text>
-              </Card.Body>
+    <Container style={{ height: 100 + "%", maxHeight: 100 + "%", overflowY:"auto" }}>
+      <Col lg="auto">
+        {/* <Card className="card-question" ref={questionRef}>
+        <Card.Body>
+          <Card.Title> */}
+        <h3 className="question-title">Practice question</h3>
+        {/* </Card.Title> */}
+        <Row className="justify-content-md-center">
+          <Col lg="auto" className="question-body">
+            <Card className="card-question-text">
+              {source.map((sourceString) => {
+                return (
+                  <p>
+                    {/* <MathComponent
+                        tex={String.raw`${sourceString.toString()}`}
+                        display={false}
+                      /> */}
+                    <Latex>
+                      {sourceString.toString().replaceAll("\\$", "$")}
+                    </Latex>
+                  </p>
+                );
+              })}
             </Card>
           </Col>
         </Row>
         <Row className="justify-content-md-center">
-          <Col md="auto">
-          <h4>Choose your answer:</h4>
-            <ToggleButtonGroup
-              ref={answersRef}
-              size="lg"
-              name="answers"
-              vertical="true"
-            >
-              
-              {answers ? handleAnswers : null}
-            </ToggleButtonGroup>
-          </Col>
-        </Row>
-
-        <Row className="justify-content-md-center">
-          <Col md="auto">
+          <Col lg="auto">
+            <Card className="card-question-answers">
+              <ToggleButtonGroup
+                ref={answersRef}
+                size="lg"
+                // border="solid"
+                name="answers"
+                vertical="true"
+              >
+                {answers && answers !== null ? handleAnswers : null}
+              </ToggleButtonGroup>
+            </Card>
             <Row>
-              <Col md="auto">
+              <Col className="submit-button-placeholder">
                 <Button
-                  variant="primary"
+                  className="quiz-button"
+                  variant={submitEnabled?"primary":"secondary"}
                   onClick={sendResults}
                   disabled={!submitEnabled}
                 >
-                  Submit answer
+                  Submit Answer
                 </Button>
               </Col>
-              <Col md="auto">
-                <Button variant="primary" onClick={refresh}
-                
+              <Col className="next-question-button quiz-button">
+                <Button
+                  variant="primary"
+                  className="quiz-button"
+                  onClick={refresh}
                 >
                   Next Question
                 </Button>
@@ -190,6 +195,7 @@ const Areas = (props) => {
             </Row>
           </Col>
         </Row>
+
         <Row className="justify-content-md-center">
           <Col md="auto">
             {displayMessage && answerIsCorrect ? (
@@ -204,9 +210,11 @@ const Areas = (props) => {
             ) : null}
           </Col>
         </Row>
-      </Form>
+        {/* </Card.Body>
+      </Card> */}
+      </Col>
     </Container>
   );
 };
 
-export default Areas;
+export default Questions;

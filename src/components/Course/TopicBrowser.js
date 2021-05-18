@@ -11,6 +11,7 @@ import Domains from "./Domains";
 import Areas from "./Areas";
 import Topics from "./BrowsedTopics";
 import Display from "./Display";
+import { useAuth } from "../../context/auth";
 
 
 import Card from "react-bootstrap/Card";
@@ -25,6 +26,7 @@ function TopicBrowser(props) {
   const [selectedArea, setSelectedArea] = useState("");
   const [selectedTopic, setSelectedTopic] = useState('');
   const [showSearch, setShowSearch] = useState(false);
+  const { authLevel } = useAuth();
 
   const changeDomainHandler = (domainId) => {
     setSelectedDomain(domainId);
@@ -97,10 +99,12 @@ function TopicBrowser(props) {
             </Form>
           </Col>
 
-          <Col sm={10} style={{ overflow: "auto" }}>
+          <Col sm={10}  style={{ height:95+"%", overflow: "auto" }}>
             <Display selectedTopic={selectedTopic} />
+             
           </Col>
         </Row>
+        
       </Container>
     </div>
   );

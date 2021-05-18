@@ -1,17 +1,10 @@
 import React from 'react';
-import { Graph } from "react-d3-graph";
+import Tree from "react-d3-tree";
 
 
-const Tree = React.memo(props => {
+const TreeGraph = (props => {
   
-  let nodes = props.nodes;
-  let edges = props.edges;
-
-  const data = {
-    nodes: nodes,
-    links: edges,
-   
-  };
+  const data = props.data;
 
 
   // define links as edges, e.g. if you have 5 topics
@@ -21,7 +14,7 @@ const Tree = React.memo(props => {
   const myConfig = {
     automaticRearrangeAfterDropNode: false,
     collapsible: false,
-    directed: true,
+    directed: false,
     focusAnimationDuration: 0.75,
     focusZoom: 10,
     freezeAllDragEvents: false,
@@ -31,7 +24,7 @@ const Tree = React.memo(props => {
     linkHighlightBehavior: false,
     maxZoom: 8,
     minZoom: 0.1,
-    initialZoom: 0.5,
+    initialZoom: 0.8,
     nodeHighlightBehavior: false,
     panAndZoom: false,
     staticGraph: false,
@@ -39,7 +32,7 @@ const Tree = React.memo(props => {
     width: props.width,
     d3: {
       alphaTarget: 0.05,
-      gravity: -1200,
+      gravity: -300,
       linkLength: 25,
       linkStrength: 1,
       disableLinkForce: false
@@ -93,20 +86,24 @@ const Tree = React.memo(props => {
   };
 
   
-
+  
 
 
   return (
-    <Graph
+    data.length>0?
+    <Tree
       id="graph-id" // id is mandatory
       data={data}
-      config={myConfig}
-      onClickNode={onClickNode}
+      orientation= "vertical"
+      PathFunc="elbow"
+      //initialDepth={1}
+      //config={myConfig}
+      //onClickNode={onClickNode}
       //onClickLink={onClickLink}
 
-    />
+    />:null
   )
 
 })
 
-export default Tree;
+export default TreeGraph;
