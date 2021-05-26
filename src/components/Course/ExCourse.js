@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useCallback, useState, useRef, useEffect } from "react";
 import axios from "axios";
 
 import Menu from "../UI/Menu";
@@ -219,7 +219,7 @@ function CourseBuilder(props) {
       .catch((err) => console.log(err));
   };
 
-  const HandleAreaSearch = () => {
+  const HandleAreaSearch = useCallback( () => {
     if (!showSearch) {
       return (
         <Areas
@@ -231,7 +231,7 @@ function CourseBuilder(props) {
     }
     setSelectedArea("%");
     return null;
-  };
+  }, [selectedDomain, showSearch]);
 
   return (
     <div className="App" style={{ height: 100 + "%" }}>

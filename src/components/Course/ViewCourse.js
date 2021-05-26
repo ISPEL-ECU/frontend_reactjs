@@ -14,7 +14,6 @@ import TopicForOverview from "./TopicForOverview";
 import Menu from "../UI/Menu";
 import Navbar from "../UI/Navbar";
 
-
 import { SERVER_ADDRESS } from "../../constants/constants";
 
 import Button from "react-bootstrap/Button";
@@ -25,7 +24,6 @@ import {
 } from "../../constants/constants";
 
 const Course = (props) => {
- 
   const [selectedTopic, setSelectedTopic] = useState([]);
   const [topics, setTopics] = useState([]);
   const [quizDisabled, setQuizDisabled] = useState("true");
@@ -39,8 +37,8 @@ const Course = (props) => {
 
   useEffect(() => {
     const id = props.match.params.courseId;
-    console.log('corseId='+id);
-   
+    console.log("corseId=" + id);
+
     axios
       .get(SERVER_ADDRESS + "get-course", {
         params: { courseId: id },
@@ -48,48 +46,70 @@ const Course = (props) => {
       .then((crs) => {
         setCourseName(crs.data.name);
         axios
-        .get(SERVER_ADDRESS + "get-topic-complex", {
-          params: {
-            ids: JSON.parse(crs.data.topics),
-          },
-          headers: {
-            Authorization: "Bearer " + authToken,
-          },
-        })
-        .then((completeTopics) => {
-          console.log("completeTopics");
-          console.log(completeTopics.data);
-          setTopics(completeTopics.data);
-        })
-        .catch((err) => console.log(err));
+          .get(SERVER_ADDRESS + "get-topic-complex", {
+            params: {
+              ids: JSON.parse(crs.data.topics),
+            },
+            headers: {
+              Authorization: "Bearer " + authToken,
+            },
+          })
+          .then((completeTopics) => {
+            if (completeTopics.data.length > 0) {
+              var BreakException = {};
+              try {
+                completeTopics.data.forEach((element) => {
+                  if (element.type === "topic") {
+                    checkExistingQuiz(element.value.id);
+                    setTopicContent(element.value.contentHtml);
+                    setSelectedTopic(element.value.id);
+                    // document.getElementById(element.value.id).style.backgroundColor =
+                    //   LIST_BACKGROUND_COLOR;
+                    //   document.getElementById(element.value.id.toString()).style.color = LIST_FONT_COLOR;
+                    // setPrevTopic(document.getElementById(element.value.id));
 
+                    throw BreakException;
+                  }
+                });
+              } catch (e) {
+                if (e !== BreakException) throw e;
+              }
+
+              console.log(completeTopics.data);
+
+              if (showQuiz) setShowQuiz(false);
+            }
+
+            console.log("completeTopics");
+            console.log(completeTopics.data);
+            setTopics(completeTopics.data);
+          })
+          .catch((err) => console.log(err));
       })
       .catch((err) => console.log(err));
   }, [authToken, props.match.params.courseId]);
 
-const checkExistingQuiz = (id) =>{
-  console.log("quiz check");
-  console.log(selectedTopic);
-  if (id){
+  const checkExistingQuiz = (id) => {
     console.log("quiz check");
-  axios
-    .get(SERVER_ADDRESS + "quiz-exist", {
-      params: { topicId: id },
-    })
-    .then((response) => {
-      console.log(response.data);
-      if (!response.data) {
-        setQuizDisabled(true);
-      } else {
-        setQuizDisabled(false);
-        setQuizId(response.data.quizId);
-      }
-    })
-    .catch((err) => console.log(err));
-}
-}
-
-  
+    console.log(selectedTopic);
+    if (id) {
+      console.log("quiz check");
+      axios
+        .get(SERVER_ADDRESS + "quiz-exist", {
+          params: { topicId: id },
+        })
+        .then((response) => {
+          console.log(response.data);
+          if (!response.data) {
+            setQuizDisabled(true);
+          } else {
+            setQuizDisabled(false);
+            setQuizId(response.data.quizId);
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+  };
 
   const onQuizClick = (event) => {
     setQuizDisabled(true);
@@ -106,7 +126,7 @@ const checkExistingQuiz = (id) =>{
     }
   };
 
-  const onClickedTopic = (content,event) => {
+  const onClickedTopic = (content, event) => {
     checkExistingQuiz(event.target.parentNode.id);
     if (prevTopic) {
       prevTopic.style.backgroundColor = "initial";
@@ -117,53 +137,40 @@ const checkExistingQuiz = (id) =>{
     setPrevTopic(event.target.parentNode);
     setTopicContent(content);
     setSelectedTopic(event.target.parentNode.id);
-    console.log("id="+event.target.parentNode.id);
+    console.log("id=" + event.target.parentNode.id);
     if (showQuiz) setShowQuiz(false);
-    
   };
-
-  
-  
-  
- 
 
   let topicCount = 0;
   let count;
   const handleTopic = (topic) => {
-    
     if (topic.type === "header") {
       topicCount = 0;
       count = topic.value.split("#").length - 1;
       const HeaderTag = `h${count + 1}`;
       const header = topic.value.replaceAll("#", "");
       return (
-        <Col md={{offset:count-1}}>
-      <HeaderTag >{header}</HeaderTag>
-      </Col>
+        <Col md={{ offset: count - 1 }}>
+          <HeaderTag>{header}</HeaderTag>
+        </Col>
       );
     } else {
       topicCount++;
       return (
-        <Col md={{offset:count-1}}>
-        <TopicForOverview
-          key={topic.value.id}
-          topic={topic.value}
-          nodeClick={onClickedTopic}
-          topicCount={topicCount}
-        />
+        <Col md={{ offset: count - 1 }}>
+          <TopicForOverview
+            key={topic.value.id}
+            topic={topic.value}
+            nodeClick={onClickedTopic}
+            topicCount={topicCount}
+          />
         </Col>
       ); //<Topic topic={topic} />
     }
   };
 
-
   const topicsToDisplay = topics.map((topic) => {
-      
-    return (
-      <div>
-      {handleTopic(topic)}
-      </div>
-    ); //<Topic topic={topic} />
+    return <div>{handleTopic(topic)}</div>; //<Topic topic={topic} />
   });
 
   return (
@@ -172,14 +179,12 @@ const checkExistingQuiz = (id) =>{
         <Menu isAuth={props.isAuth} setIsAuth={props.setIsAuth} />
         <Navbar />
         <Row style={{ height: 95 + "%" }}>
-          <Col md={3}  style={{ overflowY: "auto",  maxHeight: 95 + "%" }} >
+          <Col md={3} style={{ overflowY: "auto", maxHeight: 95 + "%" }}>
             <div className="topicNav" style={{ height: 50 + "%" }}>
               <h1>{courseName}</h1>
-             <br></br>
+              <br></br>
               {topicsToDisplay}
             </div>
-           
-            
           </Col>
           <Col md={9} style={{ height: 95 + "%" }}>
             <Row style={{ height: 98 + "%" }}>

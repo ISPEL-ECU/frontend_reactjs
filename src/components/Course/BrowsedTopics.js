@@ -8,12 +8,15 @@ import FormControl from "react-bootstrap/FormControl";
 import FormGroup from "react-bootstrap/esm/FormGroup";
 import ListGroup from "react-bootstrap/ListGroup";
 
-import {SERVER_ADDRESS} from "../../constants/constants";
+import { SERVER_ADDRESS } from "../../constants/constants";
 
 import Topic from "./BrowsedTopic";
 import { useAuth } from "../../context/auth";
 
-import {LIST_FONT_COLOR, LIST_BACKGROUND_COLOR} from "../../constants/constants";
+import {
+  LIST_FONT_COLOR,
+  LIST_BACKGROUND_COLOR,
+} from "../../constants/constants";
 
 const BrowsedTopics = React.memo((props) => {
   const [topics, setTopics] = useState([]);
@@ -24,7 +27,7 @@ const BrowsedTopics = React.memo((props) => {
   useEffect(() => {
     console.log("useEffect topics");
     axios
-      .get(SERVER_ADDRESS+"get-topics", {
+      .get(SERVER_ADDRESS + "get-topics", {
         params: {
           areaId:
             props.selectedArea && props.selectedArea !== ""
@@ -37,6 +40,9 @@ const BrowsedTopics = React.memo((props) => {
       })
       .then((topics) => {
         console.log("topics");
+        if (topics.data.length > 0) {
+          props.onSelectedTopic(topics.data[0].id);
+        }
         console.log(topics.data);
         setTopics(topics.data);
       });
@@ -51,10 +57,11 @@ const BrowsedTopics = React.memo((props) => {
   const searchHandler = (event) => {
     searchValueRef.current = event.target.value;
     axios
-      .get(SERVER_ADDRESS+"get-topics-search", {
+      .get(SERVER_ADDRESS + "get-topics-search", {
         params: { name: searchValueRef.current },
       })
       .then((tops) => {
+        props.onSelectedTopic(tops.data[0]);
         setTopics(tops.data);
       });
   };
@@ -103,8 +110,8 @@ const BrowsedTopics = React.memo((props) => {
         id={topic.id}
         name={topic.name}
         key={topic.id + topic.name}
-        teaser ={topic.teaser}
-        topicId = {topic.topicId}
+        teaser={topic.teaser}
+        topicId={topic.topicId}
         selectTopic={selectTopics}
       />
     );

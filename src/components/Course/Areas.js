@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 
 import "./IngredientList.css";
 import Area from "./Area";
@@ -14,12 +14,12 @@ const Areas = React.memo((props) => {
   const [areas, setAreas] = useState([]);
   const { authToken } = useAuth();
 
-  const onAreaChange = useCallback((areaId) => {
-    console.log('AreaID = '+areaId);
-    props.onChangeArea(areaId);
-    //event.preventDefault();
-    // ...
-  }, [props]);
+  // const onAreaChange = useCallback((areaId) => {
+  //   console.log('AreaID = '+areaId);
+  //   props.onChangeArea(areaId);
+  //   //event.preventDefault();
+  //   // ...
+  // }, [props]);
 
  
   useEffect(() => {
@@ -40,7 +40,7 @@ const Areas = React.memo((props) => {
         .then((areas) => {
           console.log("i am here " + props.showSearch);
           setAreas(areas.data);
-          if (areas.data.length > 0) onAreaChange(areas.data[0].id);
+          if (areas.data.length > 0) props.onChangeArea(areas.data[0].id);
           // console.log(domains);
         });
     }
@@ -58,7 +58,7 @@ const Areas = React.memo((props) => {
         as="select"
         id="areaSelect"
         style={{ display: "inline" }}
-        onChange={(event) => onAreaChange(event.target.value)}
+        onChange={(event) => props.onChangeArea(event.target.value)}
       >
         {areasToDisplay}
       </Form.Control>
