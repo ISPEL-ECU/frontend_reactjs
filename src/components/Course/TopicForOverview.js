@@ -8,7 +8,6 @@ import {
   LIST_BACKGROUND_COLOR,
 } from "../../constants/constants";
 
-
 const buildTable = (props) => {
   return (
     <Row>
@@ -19,10 +18,14 @@ const buildTable = (props) => {
           id={props.topic.id}
           onClick={(e) => props.nodeClick(props.topic.contentHtml, e)}
           style={{
-            backgroundColor: props.firstTopic
-              ? LIST_BACKGROUND_COLOR
-              : "initial",
-            color: props.firstTopic ? LIST_FONT_COLOR : "initial",
+            backgroundColor:
+              props.firstTopic || props.preselectedTopic === props.topic.id.toString()
+                ? LIST_BACKGROUND_COLOR
+                : "initial",
+            color:
+              props.firstTopic || props.preselectedTopic === props.topic.id.toString()
+                ? LIST_FONT_COLOR
+                : "initial",
           }}
         >
           <b>{props.topic.name}</b>
@@ -34,15 +37,14 @@ const buildTable = (props) => {
 };
 
 const TopicForOverview = (props) => {
-  useEffect(()=>{
-    if (props.setInitialTopic){
+  useEffect(() => {
+    if (props.preselectedTopic) {
+      props.setInitialTopic(props.preselectedTopic);
+    } else {
       props.setInitialTopic(props.topic.id);
     }
-    
-  
-  }, [])
-return (  
-  <div style={{ width: 100 + "%" }}>{buildTable(props)}</div>);
-}
+  }, []);
+  return <div style={{ width: 100 + "%" }}>{buildTable(props)}</div>;
+};
 
 export default TopicForOverview;

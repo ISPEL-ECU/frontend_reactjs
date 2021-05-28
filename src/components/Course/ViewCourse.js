@@ -38,6 +38,7 @@ const Course = (props) => {
 
   useEffect(() => {
     const id = props.match.params.courseId;
+    const topicId = props.match.params.topicId;
     console.log("corseId=" + id);
 
     axios
@@ -56,11 +57,21 @@ const Course = (props) => {
             },
           })
           .then((completeTopics) => {
+            if (topicId){
+              checkExistingQuiz(topicId);
+              console.log( completeTopics.data);
+              const currentTopic = completeTopics.data.find(element=>element.type==="topic"&&element.value.id.toString()===topicId);
+              console.log(currentTopic);
+              if (currentTopic)
+                setTopicContent(currentTopic.value.contentHtml);
+              setSelectedTopic(topicId);
+              
+            } else 
             if (completeTopics.data.length > 0) {
               var BreakException = {};
               try {
-                completeTopics.data.forEach((element) => {
-                  if (element.type === "topic") {
+                  completeTopics.data.forEach((element) => {
+                    if (element.type === "topic") {
                     checkExistingQuiz(element.value.id);
                     setTopicContent(element.value.contentHtml);
                     setSelectedTopic(element.value.id);
@@ -84,6 +95,7 @@ const Course = (props) => {
             console.log("completeTopics");
             console.log(completeTopics.data);
             setTopics(completeTopics.data);
+            
           })
           .catch((err) => console.log(err));
       })
@@ -163,7 +175,7 @@ const Course = (props) => {
       );
     } else {
       topicCount++;
-      if (firstTopic) {
+      if (firstTopic&&!props.match.params.topicId) {
         firstTopic=false;
       return (
         <Col md={{ offset: count - 1 }}>
@@ -187,6 +199,8 @@ const Course = (props) => {
               nodeClick={onClickedTopic}
               topicCount={topicCount}
               firstTopic={false}
+              preselectedTopic = {props.match.params.topicId}
+              setInitialTopic={setInitialTopic}
             />
           </Col>
         ); //<Topic topic={topic} />
