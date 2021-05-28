@@ -40,7 +40,7 @@ const TopicForOverview = (props) => {
   useEffect(() => {
     if (props.preselectedTopic) {
       props.setInitialTopic(props.preselectedTopic);
-    } else if (props.setInitialTopic) {
+    } else if (props.firstTopic) {
       props.setInitialTopic(props.topic.id);
     }
   }, []);
