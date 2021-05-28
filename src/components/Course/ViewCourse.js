@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { generatePath } from "react-router";
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -139,10 +140,16 @@ const Course = (props) => {
     setSelectedTopic(event.target.parentNode.id);
     console.log("id=" + event.target.parentNode.id);
     if (showQuiz) setShowQuiz(false);
+    const path = generatePath("/course/"+props.match.params.courseId+"/topic_id=:topic_id/", {
+      topic_id: event.target.parentNode.id
+    });
+    window.history.replaceState({'topic_id':event.target.parentNode.id},'', path);
+    //window.history.replace({'topic_id':event.target.parentNode.id},'', window.location.href+'?topic_id:'+event.target.parentNode.id);
   };
 
   let topicCount = 0;
   let count;
+  let firstTopic = true;
   const handleTopic = (topic) => {
     if (topic.type === "header") {
       topicCount = 0;
@@ -156,6 +163,8 @@ const Course = (props) => {
       );
     } else {
       topicCount++;
+      if (firstTopic) {
+        firstTopic=false;
       return (
         <Col md={{ offset: count - 1 }}>
           <TopicForOverview
@@ -163,11 +172,31 @@ const Course = (props) => {
             topic={topic.value}
             nodeClick={onClickedTopic}
             topicCount={topicCount}
+            firstTopic={true}
+            setInitialTopic={setInitialTopic}
           />
         </Col>
       ); //<Topic topic={topic} />
+      } else 
+      {
+        return (
+          <Col md={{ offset: count - 1 }}>
+            <TopicForOverview
+              key={topic.value.id}
+              topic={topic.value}
+              nodeClick={onClickedTopic}
+              topicCount={topicCount}
+              firstTopic={false}
+            />
+          </Col>
+        ); //<Topic topic={topic} />
+        }
     }
   };
+
+  const setInitialTopic = (firstTopicId) =>{
+    setPrevTopic(document.getElementById(firstTopicId));
+  }
 
   const topicsToDisplay = topics.map((topic) => {
     return <div>{handleTopic(topic)}</div>; //<Topic topic={topic} />
@@ -186,6 +215,7 @@ const Course = (props) => {
               {topicsToDisplay}
             </div>
           </Col>
+            {setInitialTopic}
           <Col md={9} style={{ height: 95 + "%" }}>
             <Row style={{ height: 98 + "%" }}>
               <ManagePreviewArea />
