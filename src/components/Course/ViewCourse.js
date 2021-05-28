@@ -140,7 +140,7 @@ const Course = (props) => {
     setSelectedTopic(event.target.parentNode.id);
     console.log("id=" + event.target.parentNode.id);
     if (showQuiz) setShowQuiz(false);
-    const path = generatePath("/course/"+props.match.params.courseId+"/topic_id=:topic_id/", {
+    const path = generatePath("/course/"+props.match.params.courseId+"/:topic_id/", {
       topic_id: event.target.parentNode.id
     });
     window.history.replaceState({'topic_id':event.target.parentNode.id},'', path);
