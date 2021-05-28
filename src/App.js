@@ -77,7 +77,7 @@ const App = (props) => {
           <NonPrivateRoute exact path="/" component={TopicBrowser} />
           <NonPrivateRoute exact path="/browse-topics" component={TopicBrowser} />
           <NonPrivateRoute exact path="/get-questions" component={Questions} />
-          <NonPrivateRoute path='/course/:courseId' component={ViewCourse}/>
+          <NonPrivateRoute path='/course/:courseId/:topicId?' component={ViewCourse}/>
           <NonPrivateRoute path='/excourse/:courseId' component={ViewExCourse}/>
           <NonPrivateRoute
             exact
