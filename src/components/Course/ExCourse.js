@@ -22,7 +22,10 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { Redirect } from "react-router";
 
-import { SERVER_ADDRESS } from "../../constants/constants";
+import {
+  SERVER_ADDRESS,
+  SERVER_ADDRESS_CONTENT,
+} from "../../constants/constants";
 
 function CourseBuilder(props) {
   const color_original = "#4c72ff";
@@ -123,9 +126,11 @@ function CourseBuilder(props) {
     }
     console.log(topics);
     setSelectedTopic(topic.contentHtml);
-    var win = window.open("http://38.123.149.95:3000/author/topic/"+topic.contentHtml, '_blank');
+    var win = window.open(
+      SERVER_ADDRESS_CONTENT + "author/topic/" + topic.contentHtml,
+      "_blank"
+    );
     win.focus();
-    
   };
 
   const processTreeData = () => {
@@ -134,7 +139,7 @@ function CourseBuilder(props) {
         name: courseName === "" ? "noname" : courseName,
         id: 0,
         color: color_root_node,
-        y: 50
+        y: 50,
       },
     ];
     let edges = [];
@@ -144,11 +149,12 @@ function CourseBuilder(props) {
           const childPosition = nodes.push({
             name: parentI + (i + 1) + ". " + currentNode.children[i].title,
             url:
-              "http://38.123.149.95:3000/author/topic/" +
+              SERVER_ADDRESS_CONTENT +
+              "author/topic/" +
               currentNode.children[i].id,
             id: currentNode.children[i].id,
             color: color_original,
-            y: (ind+1)*100+150
+            y: (ind + 1) * 100 + 150,
           });
           edges.push({
             source: currentNode.id,
@@ -159,7 +165,7 @@ function CourseBuilder(props) {
               currentNode.children[i],
               childPosition,
               parentI + (i + 1) + ".",
-              ind+1
+              ind + 1
             );
           }
         }
@@ -170,12 +176,12 @@ function CourseBuilder(props) {
       edges.push({ source: 0, target: currentNode.id });
       const currentPosition = nodes.push({
         name: i + 1 + "." + currentNode.title,
-        url: "http://38.123.149.95:3000/author/topic/" + currentNode.id,
+        url: SERVER_ADDRESS_CONTENT + "author/topic/" + currentNode.id,
         id: currentNode.id,
         teaser: currentNode.subtitle,
         color: color_original,
         y: 150,
-        x: i*200
+        x: i * 200,
       });
       processChildren(currentNode, currentPosition, i + 1 + ".", i);
     }
@@ -219,7 +225,7 @@ function CourseBuilder(props) {
       .catch((err) => console.log(err));
   };
 
-  const HandleAreaSearch = useCallback( () => {
+  const HandleAreaSearch = useCallback(() => {
     if (!showSearch) {
       return (
         <Areas
@@ -239,9 +245,9 @@ function CourseBuilder(props) {
         <Menu isAuth={props.isAuth} setIsAuth={props.setIsAuth} />
         <Navbar />
         {submitForm ? <Redirect to="/browse-excourses" /> : null}
-        <Row style={{ height: 95 + "%", maxHeight: 95 + "%"  }}>
+        <Row style={{ height: 95 + "%", maxHeight: 95 + "%" }}>
           <Col sm={2} style={{ height: 100 + "%" }}>
-            <Form style={{ height: 100 + "%", maxHeight: 95 + "%"   }}>
+            <Form style={{ height: 100 + "%", maxHeight: 95 + "%" }}>
               <Card style={{ height: 100 + "%", maxHeight: 95 + "%" }}>
                 <Name onNameHandler={onNameHandler} />
                 <h6>Course content:</h6>
@@ -256,8 +262,6 @@ function CourseBuilder(props) {
                   showSearch={showSearch}
                   onSelectedTopics={changeTopicHandler}
                 />
-              
-              
               </Card>
             </Form>
           </Col>
@@ -273,41 +277,37 @@ function CourseBuilder(props) {
                   }}
                 >
                   <Tree
-                  key={buildTree()}
-                  treeData={buildTree()}
-                  treeFunction={buildTree}
-                  setTreeData={setTreeData}
-                  setButtonDisabled={setButtonDisabled}
-                  selectedTopics={selectedTopics}
-                  onTopicExtracted={setTopics}
-                  onSelectedTopic={selectTopicHandler}
-                />
+                    key={buildTree()}
+                    treeData={buildTree()}
+                    treeFunction={buildTree}
+                    setTreeData={setTreeData}
+                    setButtonDisabled={setButtonDisabled}
+                    selectedTopics={selectedTopics}
+                    onTopicExtracted={setTopics}
+                    onSelectedTopic={selectTopicHandler}
+                  />
                 </div>
-                <div
-                  style={{ height: 5 + "%", width: 100 + "%" }}
-                  
-                >
-                    <Button
-                  variant="primary"
-                  onClick={applyCourseHandler}
-                  disabled={buttonDisabled}
-                >
-                  Apply
-                </Button>
-                  
+                <div style={{ height: 5 + "%", width: 100 + "%" }}>
+                  <Button
+                    variant="primary"
+                    onClick={applyCourseHandler}
+                    disabled={buttonDisabled}
+                  >
+                    Apply
+                  </Button>
                 </div>
               </Row>
             </Card>
           </Col>
           <Col sm={5} style={{ height: 100 + "%" }}>
             <Row style={{ height: 90 + "%" }} ref={tocRef}>
-            <TreeGraph
-                    nodes={processedTopics}
-                    edges={processedEdges}
-                    nodeClick={treeNodeClickHandler}
-                    width={tocWidth}
-                    height={tocHeight}
-                  />
+              <TreeGraph
+                nodes={processedTopics}
+                edges={processedEdges}
+                nodeClick={treeNodeClickHandler}
+                width={tocWidth}
+                height={tocHeight}
+              />
             </Row>
             <Row style={{ height: 10 + "%" }}>
               <Button variant="primary" size="sm" onClick={saveCourseHandler}>

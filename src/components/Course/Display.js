@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 
-
 import axios from "axios";
 import { useAuth } from "../../context/auth";
 
-import {SERVER_ADDRESS} from "../../constants/constants";
+import { SERVER_ADDRESS_CONTENT } from "../../constants/constants";
 
 const Display = React.memo((props) => {
   const [topic, setTopic] = useState("");
@@ -27,7 +26,6 @@ const Display = React.memo((props) => {
   //       setTopic(topic.data);
   //     });
   // }, [props.selectedTopic, authToken]);
-  
 
   return (
     <div
@@ -38,9 +36,9 @@ const Display = React.memo((props) => {
         title="Preview"
         style={{ maxHeight: 95 + "%", width: 100 + "%", overflow: "auto" }}
         src={
-          props.selectedTopic&&props.selectedTtopic !== ""
-            ? "http://38.123.149.95:3000/author/topic/" + props.selectedTopic
-            : "http://38.123.149.95:3000/author/topic/rmdhtml/preview.html"
+          props.selectedTopic && props.selectedTtopic !== ""
+            ? SERVER_ADDRESS_CONTENT + "author/topic/" + props.selectedTopic
+            : SERVER_ADDRESS_CONTENT + "author/topic/rmdhtml/preview.html"
         }
         id="frame"
         frameBorder="0"
