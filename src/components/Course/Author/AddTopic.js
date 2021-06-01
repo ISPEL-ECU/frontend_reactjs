@@ -6,6 +6,8 @@ import Area from "../Area";
 import Menu from "../../UI/Menu";
 import Navbar from "../../UI/Navbar";
 
+import LoadingOverlay from 'react-loading-overlay';
+
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -41,6 +43,7 @@ const AddTopic = (props) => {
   const [nameValid, setNameValid] = useState(false);
   const [teaserValid, setTeaserValid] = useState(false);
   const [htmlValid, setHtmlValid] = useState(false);
+  const [isOverlayActive, setOverlayActive] = useState(false)
 
   const setAreasForDomain = (domainId) => {
     if (!domainId) return [];
@@ -64,7 +67,7 @@ const AddTopic = (props) => {
   };
 
   useEffect(() => {
-    console.log("effect");
+    
     let initialTopicId = "";
     axios
       .get(SERVER_ADDRESS + "get-domains", {
@@ -74,7 +77,7 @@ const AddTopic = (props) => {
       })
       .then((dmns) => {
         setDomains(dmns.data);
-        console.log(dmns.data[0].id);
+        
         setSelectedDomain(dmns.data[0]);
         initialTopicId = dmns.data[0].shortName;
         return dmns.data[0].id;
@@ -88,7 +91,7 @@ const AddTopic = (props) => {
             },
           })
           .then((areas) => {
-            console.log(areas.data);
+            
             setAreas(areas.data);
             initialTopicId += ":" + areas.data[0].shortName;
             setSelectedArea(areas.data[0]);
@@ -124,15 +127,14 @@ const AddTopic = (props) => {
     const form = event.currentTarget;
 
     if (form.checkValidity() === false) {
-      console.log("not valid");
+     
       event.preventDefault();
       event.stopPropagation();
     } else {
-      console.log("valid");
-
+    
+      setOverlayActive(true);
       const data = new FormData();
-      console.log("area");
-      console.log(selectedArea.id);
+      
       data.append("domain", selectedDomain);
       data.append("area", selectedArea.id);
       data.append("name", topicName);
@@ -157,6 +159,7 @@ const AddTopic = (props) => {
             event.preventDefault();
             event.stopPropagation();
           }
+          setOverlayActive(false);
           setSubmitForm(true);
         })
         .catch((err) => {
@@ -267,6 +270,11 @@ const AddTopic = (props) => {
   };
 
   return (
+    <LoadingOverlay 
+    active = {isOverlayActive}
+    spinner
+    text="Uploading your content..."
+    >
     <div style={{ height: 100 + "%" }}>
       {submitForm ? <Redirect to="/browse-topics" /> : null}
       <Container className="wrappedContainer" fluid style={{ height: 100 + "%" }}>
@@ -447,6 +455,7 @@ const AddTopic = (props) => {
         </Form>
       </Container>
     </div>
+    </LoadingOverlay>
   );
 };
 

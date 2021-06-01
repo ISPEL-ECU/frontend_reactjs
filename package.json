@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.4.0",
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
     "d3": "5.16.0",
@@ -20,6 +21,7 @@
     "react-dom": "^16.8.6",
     "react-latex": "^2.0.0",
     "react-latex-next": "^2.0.0",
+    "react-loading-overlay": "^1.0.1",
     "react-pro-sidebar": "^0.6.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
