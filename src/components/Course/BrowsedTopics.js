@@ -46,7 +46,7 @@ const BrowsedTopics = React.memo((props) => {
         console.log(topics.data);
         setTopics(topics.data);
       });
-  }, [props.selectedArea, props.showSearch, authToken, props]);
+  }, [props.selectedArea, props.showSearch, authToken]);
 
   useEffect(() => {
     if (props.showSearch) {

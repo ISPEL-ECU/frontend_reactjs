@@ -41,10 +41,10 @@ const BrowsedTopics = React.memo((props) => {
   }, [props.selectedArea, props.showSearch, authToken]);
 
   useEffect(() => {
-    if (props.showSearch) {
+   
       inputRef.current.focus();
-    }
-  }, [props.showSearch, topics]);
+    
+  }, [topics]);
 
   const searchHandler = (event) => {
     searchValueRef.current = event.target.value;
