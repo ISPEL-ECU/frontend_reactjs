@@ -75,10 +75,6 @@ const ManageUser = (props) => {
     setUserLastName(event.target.value);
   };
 
-  const onUserEmailChangeHandler = (event) => {
-    setUserEmail(event.target.value);
-  };
-
   const onUserPasswordChangeHandler = (event) => {
     setUserPassword(event.target.value);
   };

@@ -2,31 +2,31 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 //bootstrap components
-import Form from "react-bootstrap/Form";
+
 import ListGroup from "react-bootstrap/ListGroup";
 
 import User from "./User";
 
 import { useAuth } from "../../context/auth";
 
-import {SERVER_ADDRESS} from "../../constants/constants";
+import { SERVER_ADDRESS } from "../../constants/constants";
 
-import {LIST_FONT_COLOR, LIST_BACKGROUND_COLOR} from "../../constants/constants";
+import {
+  LIST_FONT_COLOR,
+  LIST_BACKGROUND_COLOR,
+} from "../../constants/constants";
 
 const Topics = React.memo((props) => {
   const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState();
+
   const [prevUser, setPrevUser] = useState();
 
   const { authToken } = useAuth();
-  //
-  //http://38.123.149.95:3000/react/users
-  
-  //
+
   useEffect(() => {
     props.setUpdateUsers(false);
     axios
-      .get(SERVER_ADDRESS+"users", {
+      .get(SERVER_ADDRESS + "users", {
         headers: {
           Authorization: "Bearer " + authToken,
         },
@@ -38,10 +38,10 @@ const Topics = React.memo((props) => {
   }, [authToken, props.updateUsers]);
 
   const selectedUserHandler = (event) => {
-    const clickedUser = users.find((element) => element.id.toString() === event.target.id);
+    const clickedUser = users.find(
+      (element) => element.id.toString() === event.target.id
+    );
     props.selectedUserHandler(clickedUser);
-    setSelectedUser(clickedUser);
-
     if (prevUser) {
       prevUser.style.backgroundColor = "initial";
       prevUser.style.color = "initial";

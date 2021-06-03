@@ -4,15 +4,13 @@ import axios from "axios";
 import Menu from "../UI/Menu";
 import Navbar from "../UI/Navbar";
 
-import CourseList from "./BrowsedCourses";
-import CourseOverview from "./CourseOverwiew";
-import TreeGraph from "./Tree";
+
 
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import ListGroup from "react-bootstrap/ListGroup";
+
 
 import { useAuth } from "../../context/auth";
 
@@ -20,10 +18,6 @@ import { SERVER_ADDRESS } from "../../constants/constants";
 
 function CourseBuilder(props) {
   const [courses, setCourses] = useState([]);
-  const [topics, setTopics] = useState([]);
-  const [nodes, setNodes] = useState([]);
-  const [edges, setEdges] = useState([]);
-  const [courseName, setCourseName] = useState([]);
   const { authToken } = useAuth();
 
   useEffect(() => {
@@ -40,23 +34,8 @@ function CourseBuilder(props) {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [authToken]);
 
-  const courseClickHandler = (event) => {
-    console.log(courses);
-    console.log(event.target.id);
-    const currentCourse = courses.find(
-      (element) => element.id.toString() === event.target.id
-    );
-    console.log("course clicked");
-    console.log(currentCourse);
-    setCourseName(currentCourse.courseName);
-    setTopics(JSON.parse(currentCourse.topics));
-    setNodes(JSON.parse(currentCourse.nodes));
-    setEdges(JSON.parse(currentCourse.edges));
-  };
-
-  
 
   const coursesToDisplay = courses.map((course) => {
     return (

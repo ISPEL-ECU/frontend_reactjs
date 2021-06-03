@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 
-import Menu from "../UI/Menu old";
-import Navbar from "../UI/Navbar";
 
 import Container from "react-bootstrap/Container";
 

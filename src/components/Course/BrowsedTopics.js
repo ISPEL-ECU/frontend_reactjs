@@ -25,7 +25,7 @@ const BrowsedTopics = React.memo((props) => {
   const inputRef = useRef();
   const { authToken } = useAuth();
   useEffect(() => {
-    console.log("useEffect topics");
+    
     axios
       .get(SERVER_ADDRESS + "get-topics", {
         params: {
@@ -46,7 +46,7 @@ const BrowsedTopics = React.memo((props) => {
         console.log(topics.data);
         setTopics(topics.data);
       });
-  }, [props.selectedArea, props.showSearch, authToken]);
+  }, [props.selectedArea, props.showSearch, authToken, props]);
 
   useEffect(() => {
     if (props.showSearch) {
@@ -60,7 +60,7 @@ const BrowsedTopics = React.memo((props) => {
       .get(SERVER_ADDRESS + "get-topics-search", {
         params: { name: searchValueRef.current },
       })
-      .then((tops) => {
+      .then((tops) => { 
         props.onSelectedTopic(tops.data[0]);
         setTopics(tops.data);
       });

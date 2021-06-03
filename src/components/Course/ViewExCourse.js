@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import ListGroup from "react-bootstrap/ListGroup";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -135,17 +134,7 @@ const Course = (props) => {
     if (showQuiz) setShowQuiz(false);
   };
 
-  const topicsToDisplay = topics.map((topic) => {
-    if (topic.id === 0) return null;
-
-    return (
-      <TopicForOverview
-        key={topic.id}
-        topic={topic}
-        nodeClick={onClickedTopic}
-      />
-    ); //<Topic topic={topic} />
-  });
+  
 
   return (
     <div style={{ height: 100 + "%" }}>

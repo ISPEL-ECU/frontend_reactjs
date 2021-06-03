@@ -1,14 +1,7 @@
 import React, { useEffect } from "react";
 import TopicForOverview from "./TopicForOverview";
 
-import axios from "axios";
-import { useAuth } from "../../context/auth";
-
-import { SERVER_ADDRESS } from "../../constants/constants";
-
 const CourseOverview = React.memo((props) => {
-  const { authToken } = useAuth();
-  let currentArea;
 
   useEffect(() => {}, []);
   console.log("courseoverview");

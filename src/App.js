@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import { Router, Route, Switch } from "react-router-dom";
+import { Router,  Switch } from "react-router-dom";
 import history from "./history";
 
 import PrivateRoute from "./components/Auth/PrivateRoute";
@@ -75,7 +75,7 @@ const App = (props) => {
       <Router history={history}>
         <Switch>
           <NonPrivateRoute exact path="/" component={TopicBrowser} />
-          <NonPrivateRoute exact path="/browse-topics" component={TopicBrowser} />
+          <NonPrivateRoute exact path="/browse-topics/:topicId?" component={TopicBrowser} />
           <NonPrivateRoute exact path="/get-questions" component={Questions} />
           <NonPrivateRoute path='/course/:courseId/:topicId?' component={ViewCourse}/>
           <NonPrivateRoute path='/excourse/:courseId' component={ViewExCourse}/>

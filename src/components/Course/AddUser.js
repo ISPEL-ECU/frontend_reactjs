@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-import Menu from "../UI/Menu";
-import Navbar from "../UI/Navbar";
-
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -16,7 +13,6 @@ import { SERVER_ADDRESS } from "../../constants/constants";
 import { Redirect } from "react-router";
 
 const ManageUser = (props) => {
-  const [currentUser, setCurrentUser] = useState();
   const [roles, setRoles] = useState([]);
   const [userFirstName, setUserFirstName] = useState("");
   const [userLastName, setUserLastName] = useState("");
@@ -75,7 +71,7 @@ const ManageUser = (props) => {
           return response.data;
         })
         .then((user) => {
-          setCurrentUser(user);
+          
           setSubmitForm(true);
         })
         .catch((err) => console.log(err));

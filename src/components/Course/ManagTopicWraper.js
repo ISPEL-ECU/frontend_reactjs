@@ -20,6 +20,7 @@ function UserBrowser(props) {
  
   const [selectedTopic, setSelectedTopic] = useState(null);
 
+
   const onSelectedTopic = (id) =>{
     console.log("id is "+id);
     setSelectedTopic(id);
@@ -36,9 +37,10 @@ function UserBrowser(props) {
     return null;
   }
 
- 
+  
   return (
     <div className="App" style={{ height: 100 + "%", maxHeight: 100 + "%" }}>
+       
       <Container className="wrappedContainer" fluid >
         <Menu isAuth={props.isAuth} setIsAuth={props.setIsAuth} />
         <Navbar />

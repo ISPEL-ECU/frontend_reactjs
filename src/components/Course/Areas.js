@@ -44,7 +44,7 @@ const Areas = React.memo((props) => {
           // console.log(domains);
         });
     }
-  }, []);
+  }, [authToken, props]);
 
 
   const areasToDisplay = areas.map((area) => {
