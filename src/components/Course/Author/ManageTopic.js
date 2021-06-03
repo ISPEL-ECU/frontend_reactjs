@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-import Domain from "../Domain";
-import Area from "../Area";
-import Menu from "../../UI/Menu";
-import Navbar from "../../UI/Navbar";
-
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -23,26 +18,25 @@ const ManageTopic = (props) => {
   const [id, setId] = useState(props.selectedTopic);
   const [topicId, setTopicId] = useState("");
   const [topicName, setTopicName] = useState("");
-  const [domain, setDomains] = useState([]);
+
   const [selectedDomain, setSelectedDomain] = useState();
   const [selectedArea, setSelectedArea] = useState();
-  const [areas, setAreas] = useState([]);
+
   const [validated, setValidated] = useState(false);
-  const [keywords, setKeywords] = useState([]);
-  const [selectedKeyword, setSelectedkeyword] = useState();
-  const [aliases, setAliases] = useState([]);
+
   const [selectedAlias, setSelectedAlias] = useState();
   const [teaser, setTeaser] = useState();
   const [htmlContent, setHtmlContent] = useState();
   const [assets, setAssets] = useState();
   const [rmd, setRmd] = useState();
   const [privateTopic, setPrivateTopic] = useState(false);
-  const { authToken } = useAuth();
+  const { authToken, authLevel } = useAuth();
   const [submitForm, setSubmitForm] = useState(false);
   const [nameValid, setNameValid] = useState(false);
   const [teaserValid, setTeaserValid] = useState(false);
   const [htmlValid, setHtmlValid] = useState(false);
   const [originFile, setOriginFile] = useState();
+  const [delTask, setDelTask] = useState(false);
 
   useEffect(() => {
     console.log("we are in effect");
@@ -60,6 +54,7 @@ const ManageTopic = (props) => {
         console.log("answer received");
         console.log(topicData.data);
         setTopicName(topicData.data.name);
+        setTopicId(topicData.data.topicId);
         setTeaser(topicData.data.teaser);
         setOriginFile(topicData.data.contentHtml);
       })
@@ -119,7 +114,7 @@ const ManageTopic = (props) => {
     } else {
       setNameValid(false);
     }
-     setTopicName(event.target.value);
+    setTopicName(event.target.value);
     // let name = event.target.value.toLowerCase().replace(/ /g, "-");
     // let currentTopicId =
     //   selectedDomain.shortName + ":" + selectedArea.shortName + ":" + name;
@@ -131,9 +126,6 @@ const ManageTopic = (props) => {
     setPrivateTopic(event.target.value === "on" ? true : false);
   };
 
-  const onAliasChange = (event) => {
-    setSelectedAlias(event.target.value);
-  };
 
   const teaserHandler = (event) => {
     if (event.target.value.length > 0) {
@@ -153,6 +145,42 @@ const ManageTopic = (props) => {
     setHtmlContent(event.target.files[0]);
   };
 
+  /* if delTask is false, change the display properties of our
+   * two elements and change delTask to true, so that next time
+   * the function is called, the elements are hidden again
+   */
+
+  const handleConfirmationBox = (topicId) => {
+    if (!delTask) {
+      document.querySelector(".confirm-bg").style.display = "flex";
+      document.querySelector(".alert-container").style.display = "flex";
+      setDelTask(true);
+    } else {
+      document.querySelector(".confirm-bg").style.display = "none";
+      document.querySelector(".alert-container").style.display = "none";
+      setDelTask(false);
+    }
+  };
+
+  const handleDeleteTask = () => {
+    axios
+      .post(SERVER_ADDRESS + "delete-topic", null, {
+        params: {
+          id: props.selectedTopic,
+        },
+        headers: {
+          Authorization: "Bearer " + authToken,
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) setSubmitForm(true);
+      })
+      .catch((err) => {
+        alert(err);
+        console.log(err);
+      });
+  };
+
   const rmdHandler = (event) => {
     setRmd(event.target.files[0]);
   };
@@ -161,8 +189,50 @@ const ManageTopic = (props) => {
     setAssets(event.target.files);
   };
 
-  return (id)?(
+  const DeleteButton = () => (
+        <Form.Group as={Col} sm={1} className="float-right">
+          <Button
+            type="button"
+            variant="primary"
+            size="lg"
+            className="float-right"
+            onClick={handleConfirmationBox}
+          >
+            Delete
+          </Button>
+        </Form.Group>
+      );
+    
+
+
+  return id ? (
     <div style={{ height: 100 + "%" }}>
+      <div className="confirm-bg" onClick={handleConfirmationBox}></div>
+      <div className="alert-container">
+        <div className="confirmation-text">
+          Do you really want to delete this topic?
+        </div>
+        <div>
+          <Button
+            type="button"
+            variant="primary"
+            size="lg"
+            onClick={handleConfirmationBox}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="button"
+            variant="primary"
+            size="lg"
+            onClick={handleDeleteTask}
+          >
+            Delete
+          </Button>
+        </div>
+      </div>
+      <div className="confirm-bg">onClick={handleConfirmationBox}</div>
+
       {submitForm ? <Redirect to="/browse-topics" /> : null}
       <Container
         className="wrappedContainer"
@@ -320,6 +390,7 @@ const ManageTopic = (props) => {
           </Row>
           <Row>&nbsp;</Row>
           <Form.Row className="justify-content-md-right">
+            {authLevel==='1'?<DeleteButton/>:null}
             <Form.Group as={Col} sm={10} className="float-right">
               <Button
                 type="submit"
@@ -334,7 +405,7 @@ const ManageTopic = (props) => {
         </Form>
       </Container>
     </div>
-  ):null;
+  ) : null;
 };
 
 export default ManageTopic;
