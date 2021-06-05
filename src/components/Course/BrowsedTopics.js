@@ -21,6 +21,7 @@ import {
 const BrowsedTopics = React.memo((props) => {
   const [topics, setTopics] = useState([]);
   const [prevTopic, setPrevTopic] = useState();
+  const [currentTopics, setCurrentTopics] = useState([]);
   const searchValueRef = useRef("");
   const inputRef = useRef();
   const { authToken } = useAuth();
@@ -45,6 +46,7 @@ const BrowsedTopics = React.memo((props) => {
         }
         console.log(topics.data);
         setTopics(topics.data);
+        setCurrentTopics(topics.data);
       });
   }, [props.selectedArea, props.showSearch, authToken]);
 
@@ -56,14 +58,17 @@ const BrowsedTopics = React.memo((props) => {
 
   const searchHandler = (event) => {
     searchValueRef.current = event.target.value;
-    axios
-      .get(SERVER_ADDRESS + "get-topics-search", {
-        params: { name: searchValueRef.current },
-      })
-      .then((tops) => { 
-        props.onSelectedTopic(tops.data[0]);
-        setTopics(tops.data);
-      });
+    
+    const searchResult = currentTopics.filter( (element) => element.name.toLowerCase().includes(searchValueRef.current.toLowerCase()));
+    searchResult?setTopics(searchResult):setTopics([]);
+    // axios
+    //   .get(SERVER_ADDRESS + "get-topics-search", {
+    //     params: { name: searchValueRef.current },
+    //   })
+    //   .then((tops) => { 
+    //     props.onSelectedTopic(tops.data[0]);
+    //     setTopics(tops.data);
+    //   });
   };
 
   const Search = () => {

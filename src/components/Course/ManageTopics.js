@@ -18,11 +18,12 @@ import {LIST_FONT_COLOR, LIST_BACKGROUND_COLOR} from "../../constants/constants"
 const BrowsedTopics = React.memo((props) => {
   const [topics, setTopics] = useState([]);
   const [prevTopic, setPrevTopic] = useState();
+  const [currentTopics, setCurrentTopics] = useState([]);
   const searchValueRef = useRef("");
   const inputRef = useRef();
   const { authToken } = useAuth();
   useEffect(() => {
-    console.log("useEffect topics");
+    
     axios
       .get(SERVER_ADDRESS+"get-topics-manage", {
         params: {
@@ -34,9 +35,8 @@ const BrowsedTopics = React.memo((props) => {
         },
       })
       .then((topics) => {
-        console.log("topics");
-        console.log(topics.data);
         setTopics(topics.data);
+        setCurrentTopics(topics.data);
       });
   }, [props.selectedArea, props.showSearch, authToken]);
 
@@ -48,13 +48,17 @@ const BrowsedTopics = React.memo((props) => {
 
   const searchHandler = (event) => {
     searchValueRef.current = event.target.value;
-    axios
-      .get(SERVER_ADDRESS+"get-topics-search", {
-        params: { name: searchValueRef.current },
-      })
-      .then((tops) => {
-        setTopics(tops.data);
-      });
+
+    const searchResult = currentTopics.filter( (element) => element.name.toLowerCase().includes(searchValueRef.current.toLowerCase()));
+    searchResult?setTopics(searchResult):setTopics([]);
+
+    // axios
+    //   .get(SERVER_ADDRESS+"get-topics-search", {
+    //     params: { name: searchValueRef.current },
+    //   })
+    //   .then((tops) => {
+    //     setTopics(tops.data);
+    //   });
   };
 
   const Search = () => {
@@ -93,7 +97,7 @@ const BrowsedTopics = React.memo((props) => {
   };
 
   const topicsToDisplay = topics.map((topic) => {
-    console.log(topic.teaser);
+    
     return (
       <Topic
         id={topic.id}
