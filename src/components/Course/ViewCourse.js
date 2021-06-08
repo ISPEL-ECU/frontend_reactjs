@@ -179,21 +179,21 @@ const Course = (props) => {
         firstTopic=false;
       return (
         <Col md={{ offset: count - 1 }}>
-          <TopicForOverview
+          {<TopicForOverview
             key={topic.value.id}
             topic={topic.value}
             nodeClick={onClickedTopic}
             topicCount={topicCount}
             firstTopic={true}
             setInitialTopic={setInitialTopic}
-          />
+          />}
         </Col>
       ); //<Topic topic={topic} />
       } else 
       {
         return (
           <Col md={{ offset: count - 1 }}>
-            <TopicForOverview
+            {topic.value?<TopicForOverview
               key={topic.value.id}
               topic={topic.value}
               nodeClick={onClickedTopic}
@@ -201,7 +201,16 @@ const Course = (props) => {
               firstTopic={false}
               preselectedTopic = {props.match.params.topicId}
               setInitialTopic={setInitialTopic}
-            />
+            />:<TopicForOverview
+            key={"deleted topic"}
+            topic={null}
+            topicID={topic.id}
+            nodeClick={null}
+            topicCount={topicCount}
+            firstTopic={false}
+            //preselectedTopic = {props.match.params.topicId}
+            setInitialTopic={false}
+          />}
           </Col>
         ); //<Topic topic={topic} />
         }
