@@ -18,6 +18,7 @@ import {SERVER_ADDRESS} from "../../constants/constants";
 const Topics = React.memo(props => {
   const [topics, setTopics] = useState([]);
   const [selectedTopics, setSelectedTopics] = useState([]);
+  const [currentTopics, setCurrentTopics] = useState([]);
   const searchValueRef = useRef('');
   const inputRef = useRef();
   const { authToken } = useAuth();
@@ -35,6 +36,7 @@ const Topics = React.memo(props => {
         console.log("topics");
         console.log(topics.data);
         setTopics(topics.data);
+        setCurrentTopics(topics.data);
       });
   }, [props.selectedArea, props.showSearch]);
 
@@ -45,19 +47,24 @@ const Topics = React.memo(props => {
   }, [props.showSearch,topics]);
 
   const searchHandler = (event) =>{
-    searchValueRef.current =  event.target.value;
-    axios.get(SERVER_ADDRESS+"get-topics-search", 
-    { params:
-       { name:searchValueRef.current,
-       }
-       ,
-       headers: {
-        Authorization: 'Bearer ' + authToken,
-      }
-      })
-      .then(tops => {
-        setTopics(tops.data);
-      });
+    
+    searchValueRef.current = event.target.value;
+
+    const searchResult = currentTopics.filter( (element) => element.name.toLowerCase().includes(searchValueRef.current.toLowerCase()));
+    searchResult?setTopics(searchResult):setTopics([]);
+
+    // axios.get(SERVER_ADDRESS+"get-topics-search", 
+    // { params:
+    //    { name:searchValueRef.current,
+    //    }
+    //    ,
+    //    headers: {
+    //     Authorization: 'Bearer ' + authToken,
+    //   }
+    //   })
+    //   .then(tops => {
+    //     setTopics(tops.data);
+    //   });
   }
 
   const Search = (() => {
