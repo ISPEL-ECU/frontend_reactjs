@@ -18,6 +18,7 @@ import {LIST_FONT_COLOR, LIST_BACKGROUND_COLOR} from "../../constants/constants"
 const ContentsTable = React.memo((props) => {
   const [topics, setTopics] = useState([]);
   const [prevTopic, setPrevTopic] = useState();
+  const [currentTopics, setCurrentTopics] = useState([]);
   const searchValueRef = useRef("");
   const inputRef = useRef();
   const { authToken } = useAuth();
@@ -39,6 +40,7 @@ const ContentsTable = React.memo((props) => {
         console.log("topics");
         console.log(topics.data);
         setTopics(topics.data);
+        setCurrentTopics(topics.data);
       });
   }, [props.selectedArea, props.showSearch, authToken]);
 
@@ -49,14 +51,21 @@ const ContentsTable = React.memo((props) => {
   }, [props.showSearch, topics]);
 
   const searchHandler = (event) => {
+   
+     
     searchValueRef.current = event.target.value;
-    axios
-      .get(SERVER_ADDRESS+"get-topics-search", {
-        params: { name: searchValueRef.current },
-      })
-      .then((tops) => {
-        setTopics(tops.data);
-      });
+
+    const searchResult = currentTopics.filter( (element) => element.name.toLowerCase().includes(searchValueRef.current.toLowerCase()));
+    searchResult?setTopics(searchResult):setTopics([]);
+
+
+    // axios
+    //   .get(SERVER_ADDRESS+"get-topics-search", {
+    //     params: { name: searchValueRef.current },
+    //   })
+    //   .then((tops) => {
+    //     setTopics(tops.data);
+    //   });
   };
 
   const Search = () => {
