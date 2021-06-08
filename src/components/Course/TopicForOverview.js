@@ -31,7 +31,7 @@ const TopicForOverview = (props) => {
         <Col sm={{ offset: 1 }}>
           <div style={{fontStyle:"italic", color: "red"}}>
             <b>Topic {authLevel&&parseInt(authLevel)<3?'"'+props.topicID+'"':null} was deleted</b>
-            <p></p>
+            <p>{authLevel&&parseInt(authLevel)<3?"Please restore the topic with this id":null}</p>
           </div>
         </Col>
       </Row>
