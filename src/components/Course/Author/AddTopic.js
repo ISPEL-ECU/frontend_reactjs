@@ -144,7 +144,7 @@ const AddTopic = (props) => {
       data.append("teaser", teaser);
       data.append("contentUpload", htmlContent);
       if (assets) data.append("assetsUpload", assets);
-      if (rmd) data.append("rdmUpload", rmd);
+      if (rmd) data.append("rmdUpload", rmd);
       data.append("userId", localStorage.getItem("userId"));
 
       await axios
