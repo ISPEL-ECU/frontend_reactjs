@@ -22,7 +22,7 @@ function UserBrowser(props) {
   return (
     <div className="App" style={{ height: 100 + "%", maxHeight: 100 + "%" }}>
       <Container fluid style={{ height: 100 + "%", maxHeight: 100 + "%" }}>
-        <Menu isAuth={props.isAuth} setIsAuth={props.setIsAuth} />
+       
         <Navbar />
 
         <Row style={{ height: 95 + "%" }}>

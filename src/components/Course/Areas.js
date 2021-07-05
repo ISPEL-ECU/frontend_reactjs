@@ -12,6 +12,7 @@ import {SERVER_ADDRESS} from "../../constants/constants";
 
 const Areas = React.memo((props) => {
   const [areas, setAreas] = useState([]);
+  const [preselectedArea, setPreselectedArea] = useState();
   const { authToken } = useAuth();
 
   // const onAreaChange = useCallback((areaId) => {
@@ -40,26 +41,50 @@ const Areas = React.memo((props) => {
         .then((areas) => {
           console.log("i am here " + props.showSearch);
           setAreas(areas.data);
-          if (areas.data.length > 0) props.onChangeArea(areas.data[0].id);
+          if (props.preselectedArea){
+            props.onChangeArea(props.preselectedArea);
+          } else
+          if (areas.data.length > 0 ) props.onChangeArea(areas.data[0].id);
           // console.log(domains);
         });
     }
   }, [authToken]);
 
-
+useEffect(()=>{
+setPreselectedArea(props.preselectedArea);
+},[props.preselectedArea]);
   const areasToDisplay = areas.map((area) => {
     return <Area id={area.id} name={area.name} key={area.id + area.name} />;
   });
-
+  if (preselectedArea){
+    return (
+      <FormGroup>
+        <Form.Label className="side-menu-label">Select Area</Form.Label>
+        <Form.Control
+          as="select"
+          id="areaSelect"
+          className="side-menu-form-control"
+          style={{ display: "inline" }}
+          onChange={(event) => {
+            setPreselectedArea(null);
+            props.onChangeArea(event.target.value)}}
+          value = {props.preselectedArea}
+          >
+          {areasToDisplay}
+        </Form.Control>
+      </FormGroup>
+    );
+  }
   return (
     <FormGroup>
-      <Form.Label>Select Area</Form.Label>
+      <Form.Label className="side-menu-label">Select Area</Form.Label>
       <Form.Control
         as="select"
         id="areaSelect"
+        className="side-menu-form-control"
         style={{ display: "inline" }}
         onChange={(event) => props.onChangeArea(event.target.value)}
-      >
+        >
         {areasToDisplay}
       </Form.Control>
     </FormGroup>

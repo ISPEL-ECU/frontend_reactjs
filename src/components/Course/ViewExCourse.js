@@ -9,9 +9,11 @@ import axios from "axios";
 import Questions from "./Questions";
 import Display from "./Display";
 import TopicForOverview from "./TopicForExOverview";
-import Menu from "../UI/Menu";
 import Navbar from "../UI/Navbar";
 import TreeGraph from "./Tree";
+
+import { slide as Menu } from "react-burger-menu";
+import Burger from "./Burger_svg";
 
 import { SERVER_ADDRESS } from "../../constants/constants";
 
@@ -35,6 +37,7 @@ const Course = (props) => {
   const [processedEdges, setProcessedEdges] = useState([]);
   const [tocWidth, setTocWidth] = useState();
   const [tocHeight, setTocHeight] = useState();
+  const [areMenusOpen, setMenusOpen] = useState(true);
   const tocRef = useRef(null);
 
   useEffect(() => {
@@ -129,6 +132,7 @@ const Course = (props) => {
         console.log("selected topic content");
         console.log(topicContent.data);
         setTopicContent(topicContent.data);
+        setMenusOpen(false);
       });
     setSelectedTopic(id);
     if (showQuiz) setShowQuiz(false);
@@ -139,22 +143,21 @@ const Course = (props) => {
   return (
     <div style={{ height: 100 + "%" }}>
       <Container className="wrappedContainer" fluid>
-        <Menu isAuth={props.isAuth} setIsAuth={props.setIsAuth} />
         <Navbar />
-        <Row style={{ height: 95 + "%", maxHeight: 95 + "%"}}>
-          <Col md={4} style={{ height: 95 + "%", maxHeight: 95 + "%"}} >
-           <div style={{ height: 95 + "%" }} ref={tocRef}>
+        <Menu isOpen={areMenusOpen} customBurgerIcon={<Burger />} width={'100%'} onOpen={()=>setMenusOpen(true)}>
+        <div style={{ height: 95 + "%" }} ref={tocRef}>
             <TreeGraph
                   nodes={processedTopics}
                   edges={processedEdges}
                   nodeClick={onClickedNode}
                   width = {tocWidth}
                   height = {tocHeight}
+                  textColor = "white"
                 />
             </div>
-            
-          </Col>
-          <Col md={8} style={{ height: 95 + "%" }}>
+        </Menu>
+        <Row style={{ height: 95 + "%", maxHeight: 95 + "%"}}>
+          <Col md={12} style={{ height: 95 + "%" }}>
             <Row style={{ height: 98 + "%" }}>
               <ManagePreviewArea />
             </Row>

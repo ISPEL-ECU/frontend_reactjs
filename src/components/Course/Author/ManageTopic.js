@@ -233,7 +233,7 @@ const ManageTopic = (props) => {
       </div>
       <div className="confirm-bg">onClick={handleConfirmationBox}</div>
 
-      {submitForm ? <Redirect to="/browse-topics" /> : null}
+      {submitForm ? <Redirect to={"/browse-topics/"+id} /> : null}
       <Container
         className="wrappedContainer"
         fluid

@@ -285,7 +285,7 @@ const AddTopic = (props) => {
           fluid
           style={{ height: 100 + "%" }}
         >
-          <Menu isAuth={props.isAuth} setIsAuth={props.setIsAuth} />
+          
           <Navbar />
 
           <Form validated={validated} onSubmit={handleSubmit}>

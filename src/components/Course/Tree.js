@@ -46,7 +46,7 @@ const Tree = React.memo(props => {
     },
     node: {
       color: "#d3d3d3",
-      fontColor: "black",
+      fontColor: props.textColor,
       fontSize: 14,
       fontWeight: "normal",
       highlightColor: "SAME",

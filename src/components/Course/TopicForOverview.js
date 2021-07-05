@@ -29,7 +29,7 @@ const TopicForOverview = (props) => {
     return (
       <Row>
         <Col sm={{ offset: 1 }}>
-          <div style={{fontStyle:"italic", color: "red"}}>
+          <div className="side-menu-label" style={{fontStyle:"italic", color: "red"}}>
             <b>Topic {authLevel&&parseInt(authLevel)<3?'"'+props.topicID+'"':null} was deleted</b>
             <p>{authLevel&&parseInt(authLevel)<3?"Please restore the topic with this id":null}</p>
           </div>
@@ -48,11 +48,11 @@ const TopicForOverview = (props) => {
               backgroundColor:
                 props.firstTopic || props.preselectedTopic === props.topic.id.toString()
                   ? LIST_BACKGROUND_COLOR
-                  : "initial",
+                  : "#fffffff",
               color:
                 props.firstTopic || props.preselectedTopic === props.topic.id.toString()
                   ? LIST_FONT_COLOR
-                  : "initial",
+                  : "#fffffff",
             }}
           >
             <b>{props.topic.name}</b>

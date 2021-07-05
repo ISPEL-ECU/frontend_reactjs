@@ -9,18 +9,20 @@ import { useAuth } from "../../context/auth";
 
 import axios from "axios";
 
-import Questions from "./Questions";
+import Questions from "./QuestionsJS";
 import Display from "./Display";
 import TopicForOverview from "./TopicForOverview";
-import Menu from "../UI/Menu";
+
 import Navbar from "../UI/Navbar";
+import { slide as Menu } from "react-burger-menu";
+import Burger from "./Burger_svg";
 
 import { SERVER_ADDRESS } from "../../constants/constants";
 
 import Button from "react-bootstrap/Button";
 
 import {
-  LIST_FONT_COLOR,
+  LIST_FONT_COLOR, 
   LIST_BACKGROUND_COLOR,
 } from "../../constants/constants";
 
@@ -143,7 +145,7 @@ const Course = (props) => {
     checkExistingQuiz(event.target.parentNode.id);
     if (prevTopic) {
       prevTopic.style.backgroundColor = "initial";
-      prevTopic.style.color = "initial";
+      prevTopic.style.color = "#fffffff";
     }
     event.target.parentNode.style.backgroundColor = LIST_BACKGROUND_COLOR;
     event.target.parentNode.style.color = LIST_FONT_COLOR;
@@ -222,24 +224,24 @@ const Course = (props) => {
   }
 
   const topicsToDisplay = topics.map((topic) => {
-    return <div>{handleTopic(topic)}</div>; //<Topic topic={topic} />
+    return <div >{handleTopic(topic)}</div>; //<Topic topic={topic} />
   });
 
   return (
     <div style={{ height: 100 + "%", maxHeight: 100 + "%" }}>
       <Container className="wrappedContainer" fluid>
-        <Menu isAuth={props.isAuth} setIsAuth={props.setIsAuth} />
         <Navbar />
-        <Row style={{ height: 95 + "%" }}>
-          <Col md={3} style={{ overflowY: "auto", maxHeight: 95 + "%" }}>
-            <div className="topicNav" style={{ height: 50 + "%" }}>
+        <Menu isOpen customBurgerIcon={<Burger />}>
+        <div className="side-menu-label" style={{ height: 50 + "%" }}>
               <h1>{courseName}</h1>
               <br></br>
               {topicsToDisplay}
             </div>
-          </Col>
+         </Menu>
+        <Row style={{ height: 95 + "%" }}>
+          
             {setInitialTopic}
-          <Col md={9} style={{ height: 95 + "%" }}>
+          <Col md={12} style={{ height: 95 + "%" }}>
             <Row style={{ height: 98 + "%" }}>
               <ManagePreviewArea />
             </Row>

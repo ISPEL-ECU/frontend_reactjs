@@ -56,7 +56,7 @@ function Login(props) {
 
   return (
     <Container fluid style={{ height: 100 + "%" }}>
-      <Menu isAuth={props.isAuth} setIsAuth={props.setIsAuth} />
+      
       <Navbar />
       <Container className="text-center">
         <Row>

@@ -18,7 +18,7 @@ return (
         </Tooltip>
       }
     >
-    <ListGroup.Item action={true} id={props.id} onClick={props.selectTopic}>
+    <ListGroup.Item className = "side-menu-button" action={true} id={props.id} onClick={props.selectTopic}>
         {props.name}
         <br></br> 
         {authLevel?(props.topicId):null}

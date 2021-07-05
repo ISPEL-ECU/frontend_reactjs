@@ -7,16 +7,25 @@
 
 .bm-burger-button {
   position: fixed;
-  width: 36px;
-  height: 4%;
+  width: 1.5em;
+  height: 1.5em;
   left: 36px;
-  top: 5px;
+  vertical-align: middle;
+  top: 1rem;
+  background: 50%/100% 100% no-repeat;
+  color: rgba(255,255,255,.5);
+
+}
+
+path.burger-line{
+  stroke:rgba(255,255,255,.5);
+  stroke-width: 6;
 }
 
 /* Color/shape of burger icon bars */
 
 .bm-burger-bars {
-  background: #ffffff;
+  background: rgba(255,255,255,.5);
 }
 
 .no-border {
@@ -61,16 +70,18 @@ Note: Beware of modifying this element as it can break the animations - you shou
 .bm-menu-wrap {
   position: fixed;
   height: 100%;
+  width: 100%;
 }
 
 /* General sidebar styles */
 
 .bm-menu {
-  background-image: url(backgroundM.jpg);
+  
   background-size: cover;
-  /* background: #000000;  */
-  padding: 2.5em 1.5em 0;
+  background-color: #343a40!important;
+  padding: 2.5em 0.1em 0;
   font-size: 1.5em;
+  width: 100%;
 }
 
 .bm-menu a {
@@ -93,8 +104,9 @@ Note: Beware of modifying this element as it can break the animations - you shou
 /* Wrapper for item list */
 
 .bm-item-list {
-  color: #b8b7ad;
+  color: #343a40!important;
   padding: 0.8em;
+  border-style: none;
 }
 
 /* Individual item */
@@ -115,6 +127,8 @@ body {
     Georgia, serif;
   margin: 0;
   height: 100%;
+  width: 100%;
+  
 }
 
 .App {
@@ -123,6 +137,7 @@ body {
 
 #root {
   height: 100%;
+  width: 100%;
 }
 
 button {
@@ -171,8 +186,9 @@ button:focus {
 }
 
 .bg-ecu {
-  background-image: url(background.jpg);
-  background-color: #582c83;
+  
+  background-color: #343a40!important;
+  color: #ffffff;
   padding-right: 0;
 }
 
@@ -182,6 +198,21 @@ button:focus {
   color: #ffffff;
 }
 
+
+
+.navbar-dark .navbar-nav .nav-link{
+  color: rgba(255,255,255,.8);
+}
+
+
+.nav-link{
+  font-size: 1rem;
+  color: #bebcbc;
+}
+
+.navbar {
+  width:auto!important;
+}
 body {
   background-color: #fffff8;
 }
@@ -271,6 +302,7 @@ table#topicsOverview {
 }
 div.table-of-content {
   cursor: pointer;
+  color: #ffffff;
 }
 
 .wrappedContainer {
@@ -445,4 +477,28 @@ input[name="answers"] {
 .cancel-button:hover {
   background-color: #b2b2b2;
   cursor: pointer;
+}
+
+.side-menu-card{
+  background-color: #343a40!important;
+  border-style: none;
+}
+
+.side-menu-label,  .side-menu-button {
+  color: #ffffff;
+  background-color: #343a40;
+}
+
+.side-menu-button.list-group-item-action:hover {
+  color: #ffffff;
+  background-color: #343a40;
+}
+
+.side-menu-form-control {
+  color: #ffffff;
+  background-color: #343a40;
+}
+
+.form-check-input {
+  background-color: #343a40;
 }

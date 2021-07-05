@@ -11,7 +11,7 @@ function CourseBuilder(props) {
   return (
     <div className="App" style={{ height: 100 + "%" }}>
       <Container fluid style={{ height: 100 + "%" }}>
-        <Menu />
+        
         <Navbar />
         <Row style={{ height: 95 + "%" }}>
           <Col sm={12} style={{ height: 100 + "%" }}>

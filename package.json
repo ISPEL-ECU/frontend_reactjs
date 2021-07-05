@@ -26,7 +26,9 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.0.1",
-    "react-sortable-tree": "^2.8.0"
+    "react-sortable-tree": "^2.8.0",
+    "react-venn-selectable": "^0.1.5",
+    "venn.js": "^0.2.20"
   },
   "scripts": {
     "start": "react-scripts start",

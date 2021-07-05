@@ -242,7 +242,7 @@ function CourseBuilder(props) {
   return (
     <div className="App" style={{ height: 100 + "%" }}>
       <Container className="wrappedContainer" fluid>
-        <Menu isAuth={props.isAuth} setIsAuth={props.setIsAuth} />
+       
         <Navbar />
         {submitForm ? <Redirect to="/browse-excourses" /> : null}
         <Row style={{ height: 95 + "%", maxHeight: 95 + "%" }}>

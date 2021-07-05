@@ -8,6 +8,7 @@ import FormControl from "react-bootstrap/FormControl";
 import FormGroup from "react-bootstrap/esm/FormGroup";
 import ListGroup from "react-bootstrap/ListGroup";
 
+import { generatePath } from "react-router";
 import { SERVER_ADDRESS } from "../../constants/constants";
 
 import Topic from "./BrowsedTopic";
@@ -41,7 +42,7 @@ const BrowsedTopics = React.memo((props) => {
       })
       .then((topics) => {
         console.log("topics");
-        if (topics.data.length > 0) {
+        if (topics.data.length > 0&&!props.preselectedTopic) {
           props.onSelectedTopic(topics.data[0].id);
         }
         console.log(topics.data);
@@ -101,10 +102,14 @@ const BrowsedTopics = React.memo((props) => {
     props.onSelectedTopic(event.target.id);
     if (prevTopic) {
       prevTopic.style.backgroundColor = "initial";
-      prevTopic.style.color = "initial";
+      //prevTopic.style.color = "initial";
     }
     event.target.style.backgroundColor = LIST_BACKGROUND_COLOR;
     event.target.style.color = LIST_FONT_COLOR;
+    const path = generatePath("/browse-topics/:topic_id/", {
+      topic_id: event.target.id
+    });
+    window.history.replaceState({'topic_id':event.target.id},'', path);
     setPrevTopic(event.target);
     event.preventDefault();
   };
@@ -114,6 +119,7 @@ const BrowsedTopics = React.memo((props) => {
       <Topic
         id={topic.id}
         name={topic.name}
+        
         key={topic.id + topic.name}
         teaser={topic.teaser}
         topicId={topic.topicId}

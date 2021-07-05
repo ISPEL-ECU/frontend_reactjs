@@ -55,7 +55,7 @@ function CourseBuilder(props) {
   return (
     <div style={{ height: 100 + "%" }}>
       <Container className="wrappedContainer" fluid >
-        <Menu isAuth={props.isAuth} setIsAuth={props.setIsAuth} />
+        
         <Navbar />
 
         <Row style={{ height: 95 + "%", overflow: "auto" }}>
