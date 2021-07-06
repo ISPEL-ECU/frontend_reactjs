@@ -252,7 +252,7 @@ const Course = (props) => {
                   hidden={quizDisabled}
                   onClick={onQuizClick}
                 >
-                  Practice
+                  Practice Questions
                 </Button>
               </Col>
             </Row>
