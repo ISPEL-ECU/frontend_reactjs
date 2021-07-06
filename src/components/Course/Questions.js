@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 
-
 import Container from "react-bootstrap/Container";
 
 import "./IngredientList.css";
@@ -16,11 +15,10 @@ import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import Alert from "react-bootstrap/Alert";
 import Image from "react-bootstrap/Image";
 
-
+import RangeSlider from "react-bootstrap-range-slider";
 
 import "katex/dist/katex.min.css";
 import Latex from "react-latex-next";
-
 
 import { SERVER_ADDRESS } from "../../constants/constants";
 
@@ -32,37 +30,38 @@ const Questions = (props) => {
   const [currentAnswer, setCurrentAnswer] = useState();
   const answersRef = useRef(null);
   const clickedRef = useRef(null);
-  
+
   const [answerIsCorrect, setAnswerIsCorrect] = useState();
   const [displayMessage, setDisplayMessage] = useState(false);
   const [submitEnabled, setSubmitEnabled] = useState(false);
   const [forbidAnswerClick, setForbidAnswerClick] = useState(false);
   const [questionType, setQuestionType] = useState();
-  
-  
+  const [questionDifficulty, setQuestionDifficulty] = useState(1);
 
-  const refresh = () => {
+  const refresh = (difficulty) => {
     setAnswers([]);
     axios
       .get(SERVER_ADDRESS + "get-questions", {
         params: {
           quizId: props.quizId,
+          difficulty: difficulty ? difficulty : questionDifficulty,
         },
       })
       .then((response) => {
         setDisplayMessage(false);
         setForbidAnswerClick(false);
         setSubmitEnabled(false);
-        
+
         const value = response.data;
         setSource(value.initialSets);
         setQuestionType(value.questionFormat);
         setAnswers(value.results);
         setQuestionId(value.id);
         Array.from(answersRef.current.childNodes).forEach((element) => {
-          element.childNodes[0].checked=false;
-          element.childNodes[0].defaultChecked=false;
-          element.attributes[2].nodeValue = element.attributes[2].nodeValue.replace('active', '');
+          element.childNodes[0].checked = false;
+          element.childNodes[0].defaultChecked = false;
+          element.attributes[2].nodeValue =
+            element.attributes[2].nodeValue.replace("active", "");
         });
 
         // setTitle(value.title);
@@ -73,8 +72,13 @@ const Questions = (props) => {
         // );
         // setResult(res);
         // console.log(res);
-       
       });
+  };
+
+  const handleSlider = (event) => {
+    const difficulty = event.target.value;
+    setQuestionDifficulty(difficulty);
+    refresh(difficulty);
   };
 
   // useEffect(()=>{
@@ -83,69 +87,61 @@ const Questions = (props) => {
 
   useEffect(refresh, []);
 
-  const nextQuestionHandler = ()=>{
-
+  const nextQuestionHandler = () => {
     refresh();
-  }
+  };
 
   const onRadioClickHandler = (event) => {
-    
     if (!event.target.disabled) {
-      
-      event.target.ref=clickedRef;
+      event.target.ref = clickedRef;
       const answer = event.target.value;
-     
-     
+
       setCurrentAnswer(answer);
       setSubmitEnabled(true);
-
     }
   };
 
   const handleAnswers = answers.map((answer, ind) => {
-    if (questionType==='1'){
-    return (
-      <ToggleButton
-        className={ind % 2 === 0 ? "AnswersGroup-even" : "AnswersGroup-odd"}
-        value={answer.toString()}
-        type="radio"
-        onClick={onRadioClickHandler}
-        variant="outline-dark"
-        name="groupOptions"
-        key={(answer + ind).toString()}
-        id={answer.toString()}
-        disabled={forbidAnswerClick}
-        border={0}
-        block
-      >
-        <Latex>
-         
-            {answer.toString().replaceAll("\\$", "$")}
-        </Latex>
-      </ToggleButton>
-    );} else {
-      
+    if (questionType === "1") {
       return (
-
         <ToggleButton
           className={ind % 2 === 0 ? "AnswersGroup-even" : "AnswersGroup-odd"}
-          value={answer.toString().slice(0,256)}
+          value={answer.toString()}
           type="radio"
-      
+          onClick={onRadioClickHandler}
           variant="outline-dark"
           name="groupOptions"
-          key={(answer.slice(0,256) + ind).toString()}
-          id={answer.toString().slice(0,256)}
+          key={(answer + ind).toString()}
+          id={answer.toString()}
+          disabled={forbidAnswerClick}
+          border={0}
+          block
+        >
+          <Latex>{answer.toString().replaceAll("\\$", "$")}</Latex>
+        </ToggleButton>
+      );
+    } else {
+      return (
+        <ToggleButton
+          className={ind % 2 === 0 ? "AnswersGroup-even" : "AnswersGroup-odd"}
+          value={answer.toString().slice(0, 256)}
+          type="radio"
+          variant="outline-dark"
+          name="groupOptions"
+          key={(answer.slice(0, 256) + ind).toString()}
+          id={answer.toString().slice(0, 256)}
           disabled={forbidAnswerClick}
           border={0}
           block
           checked={false}
           onChange={onRadioClickHandler}
         >
-         
-           
-              <Image src={answer} thumbnail  id={answer.toString().slice(0,256)} style={{width:"150px", height:"150px"}}/>
-         
+          <Image
+            src={answer}
+            thumbnail
+            id={answer.toString().slice(0, 256)}
+            style={{ width: "150px", height: "150px" }}
+          />
         </ToggleButton>
       );
     }
@@ -184,17 +180,15 @@ const Questions = (props) => {
             tex={String.raw`${sourceString.toString()}`}
             display={false}
           /> */}
-        <Latex>
-          {sourceString.toString().replaceAll("\\$", "$")}
-        </Latex>
+        <Latex>{sourceString.toString().replaceAll("\\$", "$")}</Latex>
       </p>
     );
-  })
+  });
 
-  const QuestionText = ()=>{
+  const QuestionText = () => {
     // console.log(questionType);
     // if (questionType ==='1') {
-      return textQuestions;
+    return textQuestions;
     // } else {
     //   return(
     //     <div>
@@ -203,78 +197,101 @@ const Questions = (props) => {
     //     </div>
     //   )
     // }
-    
-  }
+  };
+
+  const wrapperStyle = { width: 400, margin: 50 };
 
   return (
-    <Container style={{ height: 100 + "%", maxHeight: 100 + "%", overflowY:"auto" }}>
-      <Col lg="auto">
-        {/* <Card className="card-question" ref={questionRef}>
+    <Container
+      fluid
+      style={{ height: 100 + "%", maxHeight: 100 + "%", overflowY: "auto" }}
+    >
+      <Row>
+        <Col md="10">
+          <Col lg="auto">
+            {/* <Card className="card-question" ref={questionRef}>
         <Card.Body>
           <Card.Title> */}
-        <h3 className="question-title">Practice question</h3>
-        {/* </Card.Title> */}
-        <Row className="justify-content-md-center">
-          <Col lg="auto" className="question-body">
-            <Card className="card-question-text">
-              <QuestionText/>
-            </Card>
-          </Col>
-        </Row>
-        <Row className="justify-content-md-center">
-          <Col lg="auto">
-            <Card className="card-question-answers">
-              <ToggleButtonGroup
-                ref={answersRef}
-                size="lg"
-                // border="solid"
-                name="answers"
-                vertical="true"
-              >
-                {answers && answers !== null ? handleAnswers : null}
-              </ToggleButtonGroup>
-            </Card>
-            <Row>
-              <Col className="submit-button-placeholder">
-                <Button
-                  className="quiz-button"
-                  variant={submitEnabled?"primary":"secondary"}
-                  onClick={sendResults}
-                  disabled={!submitEnabled}
-                >
-                  Submit Answer
-                </Button>
+            <h3 className="question-title">Practice question</h3>
+            {/* </Card.Title> */}
+            <Row className="justify-content-md-center">
+              <Col lg="auto" className="question-body">
+                <Card className="card-question-text">
+                  <QuestionText />
+                </Card>
               </Col>
-              <Col className="next-question-button quiz-button">
-                <Button
-                  variant="primary"
-                  className="quiz-button"
-                  onClick={nextQuestionHandler}
-                >
-                  Next Question
-                </Button>
+            </Row>
+            <Row className="justify-content-md-center">
+              <Col lg="auto">
+                <Card className="card-question-answers">
+                  <ToggleButtonGroup
+                    ref={answersRef}
+                    size="lg"
+                    // border="solid"
+                    name="answers"
+                    vertical="true"
+                  >
+                    {answers && answers !== null ? handleAnswers : null}
+                  </ToggleButtonGroup>
+                </Card>
+                <Row>
+                  <Col className="submit-button-placeholder">
+                    <Button
+                      className="quiz-button"
+                      variant={submitEnabled ? "primary" : "secondary"}
+                      onClick={sendResults}
+                      disabled={!submitEnabled}
+                    >
+                      Submit Answer
+                    </Button>
+                  </Col>
+                  <Col className="next-question-button quiz-button">
+                    <Button
+                      variant="primary"
+                      className="quiz-button"
+                      onClick={nextQuestionHandler}
+                    >
+                      Next Question
+                    </Button>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+
+            <Row
+              className="justify-content-md-center"
+              
+            >
+              <Col md="auto">
+                {displayMessage && answerIsCorrect ? (
+                  <Alert key="alertKey" variant="success">
+                    "Your answer is correct"
+                  </Alert>
+                ) : null}
+                {displayMessage && !answerIsCorrect ? (
+                  <Alert key="alertKey" variant="danger">
+                    "Your answer is wrong"
+                  </Alert>
+                ) : null}
               </Col>
             </Row>
           </Col>
-        </Row>
-
-        <Row className="justify-content-md-center">
-          <Col md="auto">
-            {displayMessage && answerIsCorrect ? (
-              <Alert key="alertKey" variant="success">
-                "Your answer is correct"
-              </Alert>
-            ) : null}
-            {displayMessage && !answerIsCorrect ? (
-              <Alert key="alertKey" variant="danger">
-                "Your answer is wrong"
-              </Alert>
-            ) : null}
-          </Col>
-        </Row>
-        {/* </Card.Body>
-      </Card> */}
-      </Col>
+        </Col>
+        <Col md="2">
+          
+          <h3 className="question-title">Select difficulty level</h3>
+          
+              <RangeSlider
+                value={questionDifficulty}
+                onChange={(changeEvent) => handleSlider(changeEvent)}
+                min={1}
+                max={4}
+                step={1}
+                tooltip="on"
+              />
+          
+        </Col>
+      </Row>
     </Container>
   );
 };

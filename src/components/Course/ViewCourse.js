@@ -9,7 +9,7 @@ import { useAuth } from "../../context/auth";
 
 import axios from "axios";
 
-import Questions from "./QuestionsJS";
+import Questions from "./Questions";
 import Display from "./Display";
 import TopicForOverview from "./TopicForOverview";
 
