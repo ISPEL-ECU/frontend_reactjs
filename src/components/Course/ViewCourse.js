@@ -231,7 +231,7 @@ const Course = (props) => {
     <div style={{ height: 100 + "%", maxHeight: 100 + "%" }}>
       <Container className="wrappedContainer" fluid>
         <Navbar />
-        <Menu isOpen customBurgerIcon={<Burger />}>
+        <Menu disableAutoFocus isOpen customBurgerIcon={<Burger />}>
         <div className="side-menu-label" style={{ height: 50 + "%" }}>
               <h1>{courseName}</h1>
               <br></br>
