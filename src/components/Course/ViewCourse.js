@@ -238,7 +238,7 @@ const Course = (props) => {
               {topicsToDisplay}
             </div>
          </Menu>
-        <Row style={{ height: 95 + "%" }}>
+        <Row style={{ height: 93 + "%" }}>
           
             {setInitialTopic}
           <Col md={12} style={{ height: 95 + "%" }}>
