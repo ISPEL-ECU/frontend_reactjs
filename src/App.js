@@ -24,6 +24,10 @@ import ViewCourse from "./components/Course/ViewCourse";
 import ViewExCourse from "./components/Course/ViewExCourse";
 import NoMatch from "./components/Course/404";
 import ManageTopic from "./components/Course/ManagTopicWraper";
+import AddQuestionBank from "./components/Course/Author/AddQuestionBank";
+import AddQuestionToBank from "./components/Course/Author/AddQuestionToBank";
+import AddQuestionsToBank from "./components/Course/Author/AddQuestionsToBank";
+
 
 const App = (props) => {
   const existingToken = localStorage.getItem("token");
@@ -96,6 +100,9 @@ const App = (props) => {
            <PrivateRoute exact path="/manage-account" component={ManageAccount} />
            <PrivateRoute exact path="/add-user" component={AddUser} />
           <PrivateRoute exact path="/add-topic" component={AddTopic} />
+          <PrivateRoute exact path="/add-questionbank" component={AddQuestionBank} />
+          <PrivateRoute exact path="/add-questionstobank" component={AddQuestionsToBank} />
+          <PrivateRoute exact path="/add-bankquestion" component={AddQuestionToBank} />
           <PrivateRoute exact path="/manage-topics" component={ManageTopic} />
           <NonPrivateRoute path="/login">
             <Login />

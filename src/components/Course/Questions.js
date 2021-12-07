@@ -16,7 +16,7 @@ import Alert from "react-bootstrap/Alert";
 import Image from "react-bootstrap/Image";
 
 import RangeSlider from "react-bootstrap-range-slider";
-
+import Pagination from "react-bootstrap/Pagination";
 import "katex/dist/katex.min.css";
 import Latex from "react-latex-next";
 
@@ -37,7 +37,7 @@ const Questions = (props) => {
   const [forbidAnswerClick, setForbidAnswerClick] = useState(false);
   const [questionType, setQuestionType] = useState();
   const [questionDifficulty, setQuestionDifficulty] = useState(1);
-
+  
   const refresh = (difficulty) => {
     setAnswers([]);
     axios
@@ -76,7 +76,7 @@ const Questions = (props) => {
   };
 
   const handleSlider = (event) => {
-    const difficulty = event.target.value;
+    const difficulty = event;
     setQuestionDifficulty(difficulty);
     refresh(difficulty);
   };
@@ -102,7 +102,6 @@ const Questions = (props) => {
   };
 
   const handleAnswers = answers.map((answer, ind) => {
-    if (questionType === "1") {
       return (
         <ToggleButton
           className={ind % 2 === 0 ? "AnswersGroup-even" : "AnswersGroup-odd"}
@@ -120,31 +119,7 @@ const Questions = (props) => {
           <Latex>{answer.toString().replaceAll("\\$", "$")}</Latex>
         </ToggleButton>
       );
-    } else {
-      return (
-        <ToggleButton
-          className={ind % 2 === 0 ? "AnswersGroup-even" : "AnswersGroup-odd"}
-          value={answer.toString().slice(0, 256)}
-          type="radio"
-          variant="outline-dark"
-          name="groupOptions"
-          key={(answer.slice(0, 256) + ind).toString()}
-          id={answer.toString().slice(0, 256)}
-          disabled={forbidAnswerClick}
-          border={0}
-          block
-          checked={false}
-          onChange={onRadioClickHandler}
-        >
-          <Image
-            src={answer}
-            thumbnail
-            id={answer.toString().slice(0, 256)}
-            style={{ width: "150px", height: "150px" }}
-          />
-        </ToggleButton>
-      );
-    }
+    
   });
 
   const sendResults = () => {
@@ -277,19 +252,20 @@ const Questions = (props) => {
             </Row>
           </Col>
         </Col>
-        <Col md="2">
+        <Col md="2"> 
+          <h3 className="question-title">Difficulty Level</h3>
           
-          <h3 className="question-title">Select difficulty level</h3>
-          
-              <RangeSlider
-                value={questionDifficulty}
-                onChange={(changeEvent) => handleSlider(changeEvent)}
-                min={1}
-                max={4}
-                step={1}
-                tooltip="on"
-              />
-          
+            <Pagination size="lg"> 
+              <Pagination.Item key={1} active ={1 === questionDifficulty} onClick={() => handleSlider(1)}>
+                {1}
+              </Pagination.Item>
+              <Pagination.Item key={2} active ={2 === questionDifficulty} onClick={() => handleSlider(2)}>
+                {2}
+              </Pagination.Item>
+              <Pagination.Item key={3} active ={3 === questionDifficulty} onClick={() => handleSlider(3)}>
+                {3}
+              </Pagination.Item>
+              </Pagination>
         </Col>
       </Row>
     </Container>
