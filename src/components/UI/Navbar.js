@@ -44,6 +44,9 @@ const TopNavbar = (props) => {
               }}
             >
               <NavDropdown.Item href="/add-topic">Add topic</NavDropdown.Item>
+              <NavDropdown.Item href="/add-questionbank">Add Question Bank</NavDropdown.Item>
+              <NavDropdown.Item href="/add-bankquestion">Add Question For Bank</NavDropdown.Item>
+              <NavDropdown.Item href="/add-questionstobank">Add Questions To Bank</NavDropdown.Item>
               <NavDropdown.Item href="/create-course">
                 Create PeLDS course
               </NavDropdown.Item>
@@ -89,6 +92,9 @@ const TopNavbar = (props) => {
             }}
           >
             <NavDropdown.Item href="/add-topic">Add topic</NavDropdown.Item>
+            <NavDropdown.Item href="/add-questionbank">Add Question Bank</NavDropdown.Item>
+            <NavDropdown.Item href="/add-bankquestion">Add Question For Bank</NavDropdown.Item>
+            <NavDropdown.Item href="/add-questionstobank">Add Questions To Bank</NavDropdown.Item>
             <NavDropdown.Item href="/create-course">
               Create PeLDS course
             </NavDropdown.Item>

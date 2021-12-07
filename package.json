@@ -15,6 +15,7 @@
     "rc-slider": "^9.7.2",
     "react": "^16.8.6",
     "react-bootstrap": "^1.4.3",
+    "react-bootstrap-pagination": "^1.0.7",
     "react-bootstrap-range-slider": "^2.0.2",
     "react-burger-menu": "^3.0.3",
     "react-d3-graph": "^2.6.0",
@@ -31,7 +32,8 @@
     "react-scripts": "3.0.1",
     "react-sortable-tree": "^2.8.0",
     "react-venn-selectable": "^0.1.5",
-    "venn.js": "^0.2.20"
+    "venn.js": "^0.2.20",
+    "webpack": "^4.29.6"
   },
   "scripts": {
     "start": "react-scripts start",
